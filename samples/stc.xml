@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xsi:type="vs:StandardSTC" status="active"
+          created="2000-01-01T09:00:00" updated="2000-01-01T09:00:00"
+          xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0"
+          xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.1"
+          xmlns:stc="http://www.ivoa.net/xml/STC/stc-v1.30.xsd" 
+          xmlns:xlink="http://www.w3.org/1999/xlink" 
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <validationLevel validatedBy="ivo://nvo.ncsa/registry"> 4 </validationLevel>
+    <title>Standard Space-time Coordinate Systems</title>
+    <shortName>STC</shortName>
+    <identifier>ivo://STClib/CoordSys</identifier>
+
+    <curation>
+      <publisher ivo-id="ivo://cfa.harvard/CFA">
+         Harvard-Smithsonian Center for Astrophysics
+      </publisher>
+      <creator>
+        <name>Arnold Rots</name>
+      </creator>
+      <contributor>Dr. Raymond Plante</contributor>
+      <date role="created">2006-06-01</date>
+      <contact>
+        <name>Arnold Rots</name>
+	<email>arots@hea.cfa.harvard.edu</email>
+      </contact>
+    </curation>
+
+    <content>
+      <subject>world coordinate systems</subject>
+      <description>
+         This represents a set of standard Coordinate Systems that may 
+         be used to referenced in coverage descriptions.  This includes
+         UTC-FK5-TOPO, a common FK5-based system.  
+      </description>
+      <referenceURL>http://hea-www.harvard.edu/~arots/nvometa/v1.30/</referenceURL>
+      <type>BasicData</type>
+      <contentLevel>University</contentLevel>
+      <contentLevel>Research</contentLevel>
+
+    </content>
+
+    <stcDefinitions>
+       <AstroCoordSystem id="UTC-FK5-TOPO" 
+                         xmlns="http://www.ivoa.net/xml/STC/stc-v1.30.xsd">
+          <TimeFrame>
+             <TimeScale>UTC</TimeScale>
+             <TOPOCENTER/>
+          </TimeFrame>
+          <SpaceFrame>
+             <FK5>
+                <Equinox>J2000.0</Equinox>
+             </FK5>
+             <TOPOCENTER/>
+             <SPHERICAL coord_naxes="2"/>
+          </SpaceFrame>
+       </AstroCoordSystem>
+
+    </stcDefinitions>
+
+</resource>
