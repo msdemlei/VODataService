@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.ivoa.net/xml/ExtendedTableMetadata/v0.1" 
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns:vxt="http://www.ivoa.net/xml/ExtendedTableMetadata/v0.1" 
+           xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.1" 
+           xmlns:vm="http://www.ivoa.net/xml/VOMetadata/v0.1"
+           elementFormDefault="unqualified" attributeFormDefault="unqualified"
+           version="0.1">
+
+   <xs:annotation>
+      <xs:appinfo>
+        <vm:schemaName>ExtendedTableMetadata</vm:schemaName>
+        <vm:schemaPrefix>xs</vm:schemaPrefix>
+        <vm:targetPrefix>vxt</vm:targetPrefix>
+      </xs:appinfo>
+      <xs:documentation>
+        An extension to VODataService that enables richer descriptions
+        of tables.
+      </xs:documentation>
+   </xs:annotation>
+
+   <xs:import namespace="http://www.ivoa.net/xml/VODataService/v1.1"
+              schemaLocation="http://www.ivoa.net/xml/VODataService/v1.1"/>
+
+   <xs:complexType name="RichTableSchema">
+      <xs:annotation>
+         <xs:documentation>
+           A detailed description of a logically-related set of tables,
+           supported functions/procedures, and joining tips.  
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:complexContent>
+         <xs:extension base="vs:TableSchema">
+            <xs:sequence>
+ 
+               <xs:element name="function" type="vxt:Function" 
+                           minOccurs="0" maxOccurs="unbounded">
+                 <xs:annotation>
+                   <xs:documentation>
+                     A non-standard function or stored procedure that can be
+                     used in queries with one or more of the tables in this
+                     table set (subject to application or service
+                     limitations).  
+                   </xs:documentation>
+                   <xs:documentation>
+                     No assumptions should be made as to the applicability
+                     of this function with table components from other table
+                     sets.  
+                   </xs:documentation>
+                   <xs:documentation>
+                     Any restrictions on the use of this function should be 
+                     captured in the "description" child element.  
+                   </xs:documentation>
+                 </xs:annotation>
+               </xs:element>
+         
+               <xs:element name="join" type="vxt:RelationalJoin"
+                           minOccurs="0" maxOccurs="unbounded">
+                 <xs:annotation>
+                   <xs:documentation>
+                     A tip or recommendation on the columns that can be used to
+                     join two tables.  
+                   </xs:documentation>
+                   <xs:documentation>
+                     Often the two columns represent an explicit primary key
+                     column from one table and a foreign key from another; 
+                     however, these need not be strictly so.  
+                   </xs:documentation>
+                 </xs:annotation>
+               </xs:element>
+            </xs:sequence>
+
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+  <xs:complexType name="Function">
+    <xs:annotation>
+      <xs:documentation>
+        A function that can be used in a query (typically in ADQL or SQL).
+        Functions declared in the default catalog and schema are global.
+      </xs:documentation>
+    </xs:annotation>
+    
+    <xs:sequence>
+      <xs:element name="name" type="xs:token">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the function.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="xs:token" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A description of what the function does.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="returnType" type="vs:TableDataType">
+        <xs:annotation>
+          <xs:documentation>
+            The data type returned by the function.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="returnUnit" type="xs:token"
+        minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The unit in which the returned value of the function is measured.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="param" type="vs:TableParam" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>
+            A parameter that must be passed to the function.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="RelationalJoin">
+    <xs:annotation>
+      <xs:documentation>
+        A potential join between two tables.
+      </xs:documentation>
+    </xs:annotation>
+    
+    <xs:sequence>
+      <xs:element name="name" type="xs:token" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A name to identify the join.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="columnPair" minOccurs="1" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>
+            A pair of columns, one in each of the two, joined tables,
+            to uses a keys in the join.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="columnReference" type="xs:token" minOccurs="2" maxOccurs="2">
+              <xs:annotation>
+                <xs:documentation>
+                  The fully-qualified name of a column on which to join.
+                  The qualification must include the table name, the schema name
+                  (unless the table is in the default schema) and the catalog name
+                  (unless the table is in the default catalog).
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="description" type="xs:token">
+        <xs:annotation>
+          <xs:documentation>
+            A description of the join stating its semantics.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+
+</xs:schema>
