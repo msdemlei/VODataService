@@ -130,94 +130,94 @@
               <description>
                  ADIL Image Identifier - Unique identifier for image, as assigned 
                  by the ADIL</description>
-              <dataType xsi:type="vs:VOTable" arraysize="*">char</dataType>
+              <dataType xsi:type="vs:VOTableType" arraysize="*">char</dataType>
            </column>
            <column>
               <name>Image Name</name>
               <description>Image Filename, as provide by author</description>
-              <dataType xsi:type="vs:VOTable" arraysize="*">char</dataType>
+              <dataType xsi:type="vs:VOTableType" arraysize="*">char</dataType>
            </column>
            <column>
               <name>Source Name</name>
               <description>Target Source of Image</description>
               <ucd>ID_MAIN</ucd>
-              <dataType xsi:type="vs:VOTable" arraysize="*">char</dataType>
+              <dataType xsi:type="vs:VOTableType" arraysize="*">char</dataType>
            </column>
            <column>
               <name>RA (Center)</name>
               <description>RA of Image Center (J2000)</description>
               <unit>degrees</unit>
               <ucd>POS_EQ_RA_MAIN</ucd>
-              <dataType xsi:type="vs:VOTable">float</dataType>
+              <dataType xsi:type="vs:VOTableType">float</dataType>
            </column>
            <column>
               <name>Dec (Center)</name>
               <description>Dec of Image Center (J2000)</description>
               <unit>degrees</unit>
               <ucd>POS_EQ_DEC_MAIN</ucd>
-              <dataType xsi:type="vs:VOTable">float</dataType>
+              <dataType xsi:type="vs:VOTableType">float</dataType>
            </column>
            <column>
               <name>Number of Axes</name>
               <description>Number of axes in the image</description>
               <ucd>VOX:Image_Naxes</ucd>
-              <dataType xsi:type="vs:VOTable">int</dataType>
+              <dataType xsi:type="vs:VOTableType">int</dataType>
            </column>
            <column>
               <name>Naxis</name>
               <description>Size of Image for each dimension</description>
               <ucd>VOX:Image_Naxis</ucd>
-              <dataType xsi:type="vs:VOTable">int</dataType>
+              <dataType xsi:type="vs:VOTableType">int</dataType>
            </column>
            <column>
               <name>Scale</name>
               <description>Scale of Image</description>
               <unit>degrees/pixel</unit>
               <ucd>VOX:Image_Scale</ucd>
-              <dataType xsi:type="vs:VOTable">double</dataType>
+              <dataType xsi:type="vs:VOTableType">double</dataType>
            </column>
            <column>
               <name>Image Format</name>
               <description>Format of Image</description>
               <ucd>VOX:Image_Format</ucd>
-              <dataType xsi:type="vs:VOTable" arraysize="*">char</dataType>
+              <dataType xsi:type="vs:VOTableType" arraysize="*">char</dataType>
            </column>
            <column>
               <name>Central Frequency</name>
               <description>Frequency at center of the image wavehand</description>
               <unit>Hz</unit>
               <ucd>VOX:BandPass_RefValue</ucd>
-              <dataType xsi:type="vs:VOTable">double</dataType>
+              <dataType xsi:type="vs:VOTableType">double</dataType>
            </column>
            <column>
               <name>Description</name>
               <description>Image Description</description>
               <ucd>VOX:Image_Title</ucd>
-              <dataType xsi:type="vs:VOTable" arraysize="*">char</dataType>
+              <dataType xsi:type="vs:VOTableType" arraysize="*">char</dataType>
            </column>
            <column>
               <name>Source Types</name>
               <description>a list of Source Types associated with this image</description>
-              <dataType xsi:type="vs:VOTable" arraysize="*">char</dataType>
+              <dataType xsi:type="vs:VOTableType" arraysize="*">char</dataType>
            </column>
            <column>
               <name>Telescopes</name>
               <description>a list of Telescopes used to create this image</description>
               <ucd>TEL_ID</ucd>
-              <dataType xsi:type="vs:VOTable" arraysize="*">char</dataType>
+              <dataType xsi:type="vs:VOTableType" arraysize="*">char</dataType>
            </column>
            <column>
               <name>Observation Epoch</name>
               <description>Upper bound on the epoch of the observations</description>
               <unit>years</unit>
               <ucd>NVOX:Image_Epoch</ucd>
-              <dataType xsi:type="vs:VOTable">double</dataType>
+              <dataType xsi:type="vs:VOTableType">double</dataType>
            </column>
            <column>
               <name>URL</name>
               <description>The URL for downloading image</description>
               <ucd>VOX:Image_AccessReference</ucd>
-              <dataType xsi:type="vs:VOTable" arraysize="*">char</dataType>
+              <dataType xsi:type="vs:VOTableType" arraysize="*">char</dataType>
            </column>
         </table>
       </schema>

@@ -1,0 +1,107 @@
+<ri:Resource xmlns="" 
+             xsi:type="vs:CatalogService" status="active" 
+             updated="2008-04-29T14:51:54" created="2005-10-14T01:46:00"
+             xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0" 
+             xmlns:stc="http://www.ivoa.net/xml/STC/stc-v1.30.xsd" 
+             xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0" 
+             xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.1" 
+             xmlns:xlink="http://www.w3.org/1999/xlink" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <title>The LSST Catalog</title>
+  <shortName>lsst</shortName>
+  <identifier>ivo://arch.lsst/catalog</identifier>
+  <curation>
+    <publisher>The Large Synoptic Survey Telescope Archive</publisher>
+    <contact>
+      <name>Archive Curator</name>
+      <email>contact@lsst.org</email>
+    </contact>
+  </curation>
+  <content>
+    <subject>redshift</subject>
+    <subject>galaxies</subject>
+    <description>
+      This is a huge catalog of observations and detections of
+      astronical sources.  It is comprised of multiple relational
+      tables with foreign keys connecting them.
+    </description>
+    <referenceURL>http://archive.lsst.org/help/catalog.html</referenceURL>
+    <type>Catalog</type>
+    <contentLevel>Research</contentLevel>
+  </content>
+  <capability>
+    <interface xsi:type="vs:ParamHTTP">
+      <accessURL use="base">http://archive.lsst.org/cgi-bin/search?</accessURL>
+      <queryType>GET</queryType>
+      <resultType>application/xml+votable</resultType>
+    </interface>
+  </capability>
+  <coverage>
+
+    <stc:STCResourceProfile>
+       <stc:AstroCoordSystem xlink:type="simple"
+                             xlink:href="ivo://STClib/CoordSys#UTC-FK5-TOPO" 
+                             id="UTC-FK5-TOPO"/> 
+
+       <stc:AstroCoordArea coord_system_id="UTC-FK5-TOPO">
+          <stc:AllSky/>
+       </stc:AstroCoordArea>
+    </stc:STCResourceProfile>
+    
+    <waveband>Optical</waveband>
+  </coverage>
+
+  <tableset>
+    <schema>
+      <name> LSST </name>
+      <table>
+         <name> LSST.Filters </name>
+         <description> a description of the filters used in observations </description>
+         <column>
+            <name>ID</name>
+            <description>the unique numeric identifier for the filter</description>
+            <dataType xsi:type="vs:TAPType">INTEGER</dataType>
+         </column>
+         <column>
+            <name>name</name>
+            <description>the displayable name for the filter</description>
+            <dataType xsi:type="vs:TAPType">VARCHAR</dataType>
+         </column>
+      </table>
+      <table>
+         <name> LSST.Observations </name>
+         <description> a listing of the observations made </description>
+         <column>
+            <name>filterID</name>
+            <description>
+              the key into the Filter table pointing to the filter used
+              in the observation.
+            </description>
+            <dataType xsi:type="vs:TAPType">INTEGER</dataType>
+         </column>
+         <column>
+            <name>obsID</name>
+            <description>
+              the unique identifier for this observation.
+            </description>
+            <dataType xsi:type="vs:TAPType">VARCHAR</dataType>
+         </column>
+
+         <foreignKey>
+            <targetTable> LSST.Filters </targetTable>
+            <fkColumn>
+               <fromColumn> filterID </fromColumn>
+               <targetColumn> ID </targetColumn>
+            </fkColumn>
+            <description> 
+              a pointer to the metadata for the filter used during this 
+              observation
+            </description>
+            <utype> OBS:filter </utype>
+         </foreignKey>
+      </table>
+    </schema>
+  </tableset>
+
+</ri:Resource>

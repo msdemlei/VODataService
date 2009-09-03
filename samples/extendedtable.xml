@@ -83,7 +83,7 @@
              A sequential data-point number applicable to this list only.
           </description>
           <ucd>meta.number</ucd>
-          <dataType xsi:type="vs:TAP">INTEGER</dataType>
+          <dataType xsi:type="vs:TAPType">INTEGER</dataType>
         </column>
         <column>
           <name>Name in Publication</name>
@@ -92,7 +92,7 @@
              to which the data apply.
           </description>
           <ucd>meta.id;name</ucd>
-          <dataType xsi:type="vs:TAP">VARCHAR</dataType>
+          <dataType xsi:type="vs:TAPType">VARCHAR</dataType>
         </column>
         <column>
           <name>Published Velocity</name>
@@ -102,27 +102,27 @@
           </description>
           <unit>km/sec</unit>
           <ucd>src.spect.dopplerVeloc</ucd>
-          <dataType xsi:type="vs:TAP">INTEGER</dataType>
+          <dataType xsi:type="vs:TAPType">INTEGER</dataType>
         </column>
       </table>
 
       <function>
         <name>coord1</name>
-        <returnType xsi:type="vs:TAP">REAL</returnType>
+        <returnType xsi:type="vs:TAPType">REAL</returnType>
         <returnUnit>degrees</returnUnit>
         <param>
           <name>pos</name>
-          <dataType xsi:type="vs:TAP">VARCHAR</dataType>
+          <dataType xsi:type="vs:TAPType">VARCHAR</dataType>
         </param>
       </function>
 
       <function>
         <name>area</name>
-        <returnType xsi:type="vs:TAP">REAL</returnType>
+        <returnType xsi:type="vs:TAPType">REAL</returnType>
         <returnUnit>degrees</returnUnit>
         <param>
           <name>region</name>
-          <dataType xsi:type="vs:TAP" extendedType="region" 
+          <dataType xsi:type="vs:TAPType" extendedType="region" 
                     extendedSchema="http://www.ivoa.net/xml/adqlFunc/v1.0">
               REGION</dataType>
         </param>

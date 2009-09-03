@@ -423,7 +423,7 @@ of a service returning tabular data,
 <pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;ri:Resource xmlns="" 
              <font color="red">xsi:type="vs:CatalogService"</font> status="active" 
-             updated="2008-04-29T14:51:54Z" created="2005-10-14T01:46:00Z"
+             updated="2008-04-29T14:51:54" created="2005-10-14T01:46:00"
              xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0" 
              xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0" 
              <font color="purple">xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.1" 
@@ -465,7 +465,7 @@ of a service returning tabular data,
   &lt;capability&gt;
     <font color="green">&lt;interface xsi:type="vs:ParamHTTP"&gt;
       &lt;accessURL use="base"&gt;
-         http://nedwww.ipac.caltech.edu/cgi-bin/nph-datasearch?search_type=Redshifts&amp;
+         http://nedwww.ipac.caltech.edu/cgi-bin/nph-datasearch?search_type=Redshifts&amp;amp;
       &lt;/accessURL&gt;
       &lt;queryType&gt;GET&lt;/queryType&gt;
       &lt;resultType&gt;application/xml+votable&lt;/resultType&gt;
@@ -499,7 +499,7 @@ of a service returning tabular data,
   <font color="#d00000">&lt;tableset&gt;
     &lt;schema&gt;
       &lt;name&gt;default&lt;/name&gt;
-      &lt;table role="out"&gt;
+      &lt;table type="output"&gt;
         &lt;name&gt;default&lt;/name&gt;
         &lt;column&gt;
           &lt;name&gt;No.&lt;/name&gt;
@@ -507,7 +507,7 @@ of a service returning tabular data,
              A sequential data-point number applicable to this list only.
           &lt;/description&gt;
           &lt;ucd&gt;meta.number&lt;/ucd&gt;
-          &lt;dataType&gt;int&lt;/dataType&gt;
+          &lt;dataType xsi:type="vs:VOTableType"&gt;int&lt;/dataType&gt;
         &lt;/column&gt;
         &lt;column&gt;
           &lt;name&gt;Name in Publication&lt;/name&gt;
@@ -515,7 +515,7 @@ of a service returning tabular data,
              The object's name in NED's standard format, of the object to which the data apply.
           &lt;/description&gt;
           &lt;ucd&gt;meta.id;name&lt;/ucd&gt;
-          &lt;dataType&gt;string&lt;/dataType&gt;
+          &lt;dataType xsi:type="vs:VOTableType"&gt;string&lt;/dataType&gt;
         &lt;/column&gt;
         &lt;column&gt;
           &lt;name&gt;Published Velocity&lt;/name&gt;
@@ -524,10 +524,10 @@ of a service returning tabular data,
           &lt;/description&gt;
           &lt;unit&gt;km/sec&lt;/unit&gt;
           &lt;ucd&gt;src.spect.dopplerVeloc&lt;/ucd&gt;
-          &lt;dataType&gt;int&lt;/dataType&gt;
+          &lt;dataType xsi:type="vs:VOTableType"&gt;int&lt;/dataType&gt;
         &lt;/column&gt;
       &lt;/table&gt;
-    &lt;schema&gt;
+    &lt;/schema&gt;
   &lt;/tableset&gt;</font>
 &lt;/ri:Resource&gt;
 </pre></td></tr></tbody></table>
@@ -1954,8 +1954,7 @@ description.
 The <code>vs:ForeignKey</code> type allows one to describe foreign
 keys in a table that allow it to be joined effectively with another
 table.  A foreign key is a set of columns that map to a corresponding
-set of columns in another table.  A <code>vs:ForeignKey</code>
-description assumes a "current" table that need not be named.  
+set of columns in another table.  
 </p>
 
 <div class="schemaOuter">
@@ -1968,10 +1967,24 @@ description assumes a "current" table that need not be named.
       &lt;xs:element name="targetTable" type="xs:token"/&gt;
       &lt;xs:element name="fkColumn" type="vs:FKColumn" 
                   minOccurs="1" maxOccurs="unbounded"/&gt;
+      &lt;xs:element name="description" type="xs:token" minOccurs="0"/&gt;
+      &lt;xs:element name="utype" type="xs:token" minOccurs="0"/&gt;
    &lt;/xs:sequence&gt;
 &lt;/xs:complexType&gt;
 </pre>
 </div></div>
+
+<p>
+In this model, the source of the foreign
+key the current table being described (i.e. represented by the
+<code>&lt;table&gt</code> element that contains the
+<code>vs:ForeignKey</code> description, and thus doesn't need to be
+named explicitly).  The key described points to the table given by the
+<code>&lt;targetTable&gt</code> child element.  Each child
+<code>&lt;fkColumn&gt</code> element then gives a pair of columns, one
+from the source table and one from the target table, that can be
+constrained to be equal in a query that joins the two tables.  
+</p>
 
 <p>
 <table border="2" width="100%">
@@ -2014,6 +2027,40 @@ description assumes a "current" table that need not be named.
               <td valign="top">There should be one
                  <code>&lt;fkColumn&gt;</code> element for each column
                  that makes up the foreign key.</td> 
+          </tr></tbody></table>
+      </td></tr>
+  <tr><td valign="top">description</td>
+      <td valign="top"><table border="0" width="100%">
+          <tbody><tr bgcolor="#f5f5f5"><td nowrap="nowrap" valign="top"><em>Value type:</em></td>
+              <td valign="top"> string: <code>xs:token</code></td>
+          </tr>
+          <tr bgcolor="#dddddd"><td nowrap="nowrap" valign="top"><em>Semantic Meaning:</em></td>
+              <td valign="top" width="90%">a free-text description of what this key points to
+                  and what the relationship means</td> 
+          </tr>
+          <tr bgcolor="#f5f5f5"><td nowrap="nowrap" valign="top"><em>Occurrences:</em></td>
+              <td valign="top">optional</td>
+          </tr></tbody></table>
+      </td></tr>
+  <tr><td valign="top">utype</td>
+      <td valign="top"><table border="0" width="100%">
+          <tbody><tr bgcolor="#f5f5f5"><td nowrap="nowrap" valign="top"><em>Value type:</em></td>
+              <td valign="top"> string: <code>xs:token</code></td>
+          </tr>
+          <tr bgcolor="#dddddd"><td nowrap="nowrap" valign="top"><em>Semantic Meaning:</em></td>
+              <td valign="top" width="90%">an identifier for a concept
+                  in a data model that the association enabled by this
+                  key represents.</td>
+          </tr>
+          <tr bgcolor="#f5f5f5"><td nowrap="nowrap" valign="top"><em>Occurrences:</em></td>
+              <td valign="top">optional</td>
+          </tr>
+          <tr bgcolor="#dddddd"><td nowrap="nowrap" valign="top"><em>Comments:</em></td>
+              <td valign="top">
+               The format defined in the VOTable standard, section 4.1
+               [<a href="#VOTable">VOTable</a>] is strongly
+               recommended; see <a href="#n:utypefmt">"Note on UType
+               Format"</a> above. </td>  
           </tr></tbody></table>
       </td></tr>
 </tbody>
@@ -2891,7 +2938,7 @@ defined to have the VOTable-defined type, double
    &lt;name&gt; Dec &lt;/name&gt;
    &lt;description&gt; the J2000 declination of the object &lt;/description&gt;
    &lt;ucd&gt; pos.eq.dec &lt;/ucd&gt;
-   &lt;dataType xsi:type="vs:VOTable"&gt; double &lt;/dataType&gt;
+   &lt;dataType xsi:type="vs:VOTableType"&gt; double &lt;/dataType&gt;
 &lt;/column&gt;
 </pre>
 </div></div>
@@ -2971,8 +3018,8 @@ for faster search against its values.</td></tr>
 
 <p>
 The VODataService schema defines two XML types that derive from
-<code>vs:TableDataType</code>:  <code>vs:VOTable</code> and
-<code>vs:TAP</code>.  
+<code>vs:TableDataType</code>:  <code>vs:VOTableType</code> and
+<code>vs:TAPType</code>.  
 </p>
 
 <p>
@@ -2983,7 +3030,7 @@ The VODataService schema defines two XML types that derive from
                xsi:type</th><th>Definition</th>
 </tr></thead>
 <tbody>
-  <tr><td valign="top">vs:VOTable</td>
+  <tr><td valign="top">vs:VOTableType</td>
       <td valign="top"><table border="0" width="100%">
           <tbody>
           <tr bgcolor="#f5f5f5"><td nowrap="nowrap" valign="top"><em>Semantic Meaning:</em></td>
@@ -3008,7 +3055,7 @@ The VODataService schema defines two XML types that derive from
                   <code>char</code> with <code>arraysize="*"</code></td>  
           </tr></tbody></table>
       </td></tr>
-  <tr><td valign="top">vs:TAP</td>
+  <tr><td valign="top">vs:TAPType</td>
       <td valign="top"><table border="0" width="100%">
           <tbody>
           <tr bgcolor="#f5f5f5"><td nowrap="nowrap" valign="top"><em>Semantic Meaning:</em></td>
@@ -3041,14 +3088,14 @@ The VODataService schema defines two XML types that derive from
 </p>
 
 <p>
-The <code>vs:TAP</code> XML type provides an additional attribute,
+The <code>vs:TAPType</code> XML type provides an additional attribute,
 <code>size</code> corresponding to the "size" column from the
 TAP_SCHEMA.columns defined by <a href="#TAP">TAP</a>:
 </p>
 
 <table border="2" width="100%">
 <thead>
-  <tr><th colspan="2" align="left">Additional Attribute for the vs:TAP
+  <tr><th colspan="2" align="left">Additional Attribute for the vs:TAPType
 set of column data types</th>
   </tr><tr><th>Attribute</th><th>Definition</th>
 </tr></thead>
@@ -3084,38 +3131,38 @@ set of column data types</th>
 <a name="post-request">
 </a><div class="exampleHeader">Example</div>
 <div class="exampleWrapper">a representation of a string type using the
-<code>vs:VOTable</code> set of types:
+<code>vs:VOTableType</code> set of types:
 </div>
 <div class="exampleInner" style="background-color: rgb(213, 222, 227);">
 <pre>&lt;column&gt;
    &lt;name&gt; id &lt;/name&gt;
    &lt;description&gt; the object identifier &lt;/description&gt;
    &lt;ucd&gt; meta.id &lt;/ucd&gt;
-   &lt;dataType xsi:type="vs:VOTable" arraysize="*"&gt; char &lt;/dataType&gt;
+   &lt;dataType xsi:type="vs:VOTableType" arraysize="*"&gt; char &lt;/dataType&gt;
 &lt;/column&gt;
 </pre>
 </div>
 <div class="exampleWrapper">the same column described using the
-<code>vs:TAP</code> set of types:
+<code>vs:TAPType</code> set of types:
 </div>
 <div class="exampleInner" style="background-color: rgb(213, 222, 227);">
 <pre>&lt;column&gt;
    &lt;name&gt; id &lt;/name&gt;
    &lt;description&gt; the object identifier &lt;/description&gt;
    &lt;ucd&gt; meta.id &lt;/ucd&gt;
-   &lt;dataType xsi:type="vs:TAP"&gt; VARCHAR &lt;/dataType&gt;
+   &lt;dataType xsi:type="vs:TAPType"&gt; VARCHAR &lt;/dataType&gt;
 &lt;/column&gt;
 </pre>
 </div>
 <div class="exampleWrapper">the same column again described using the
-<code>vs:TAP</code> set of types, assuming a fixed-length string:
+<code>vs:TAPType</code> set of types, assuming a fixed-length string:
 </div>
 <div class="exampleInner" style="background-color: rgb(213, 222, 227);">
 <pre>&lt;column&gt;
    &lt;name&gt; id &lt;/name&gt;
    &lt;description&gt; the object identifier &lt;/description&gt;
    &lt;ucd&gt; meta.id &lt;/ucd&gt;
-   &lt;dataType xsi:type="vs:TAP" size="8" &gt; CHAR &lt;/dataType&gt;
+   &lt;dataType xsi:type="vs:TAPType" size="8" &gt; CHAR &lt;/dataType&gt;
 &lt;/column&gt;
 </pre>
 </div></div>
@@ -3127,7 +3174,7 @@ can support any non-abstract type legally derived from
 <code>vs:TableDataType</code>.  However, in the context of a
 <code>vs:DataCollection</code> or <code>vs:CatalogService</code>
 resource description, it is strongly recommended either
-<code>vs:VOTable</code> or <code>vs:TAP</code> (or some other IVOA
+<code>vs:VOTableType</code> or <code>vs:TAPType</code> (or some other IVOA
 standard type derived from <code>vs:TableDataType</code>) be used to
 ensure maximum interoperability.  When the actual column type is not
 well matched to a type from one of these standard sets, authors are
@@ -3138,7 +3185,7 @@ TAP_SCHEMA types and VOTable types.  Thus, in the context of a
 <code>vs:CatalogService</code> resource description that supports a
 TAP capability (perhaps in addition to other catalog services like
 Simple Cone Search [<a href="#TAP">SCS</a>]), use of the
-<code>vs:TAP</code> data type is preferred.
+<code>vs:TAPType</code> data type is preferred.
 </p>
 
 <p>
@@ -3147,12 +3194,12 @@ Simple Cone Search [<a href="#TAP">SCS</a>]), use of the
 <dl>
   <dt> <strong>Note:</strong> </dt>
   <dd> The motivation for providing two standard data type sets,
-       <code>vs:VOTable</code> and <code>vs:TAP</code>, is to maximize
+       <code>vs:VOTableType</code> and <code>vs:TAPType</code>, is to maximize
        the ease of generating the table description, particular as
        part of the VO Standard Interface [<a href="#VOSI">VOSI</a>]
        and for legacy services.  The table description for
        "stand-alone" SIA, SCS, and SSA services can be readily
-       generated using the <code>vs:VOTable</code> data types from
+       generated using the <code>vs:VOTableType</code> data types from
        these interface's respective metadata queries.  Newer services
        supporting TAP could generate its description using its
        TAP_SCHEMA queries.
@@ -3189,7 +3236,7 @@ Simple Cone Search [<a href="#TAP">SCS</a>]), use of the
            xmlns:stc="http://www.ivoa.net/xml/STC/stc-v1.30.xsd" 
            xmlns:vm="http://www.ivoa.net/xml/VOMetadata/v0.1"
            elementFormDefault="unqualified" attributeFormDefault="unqualified"
-           version="1.1wd8"&gt;
+           version="1.1pr1"&gt;
 
    &lt;xs:annotation&gt;
       &lt;xs:appinfo&gt;
@@ -4242,7 +4289,7 @@ Simple Cone Search [<a href="#TAP">SCS</a>]), use of the
       &lt;/xs:simpleContent&gt;
    &lt;/xs:complexType&gt;
 
-   &lt;xs:complexType name="VOTable"&gt;
+   &lt;xs:complexType name="VOTableType"&gt;
       &lt;xs:annotation&gt;
          &lt;xs:documentation&gt;
             a data type supported explicitly by the VOTable format
@@ -4297,7 +4344,7 @@ Simple Cone Search [<a href="#TAP">SCS</a>]), use of the
       &lt;/xs:simpleContent&gt;
    &lt;/xs:complexType&gt;
 
-   &lt;xs:complexType name="TAP"&gt;
+   &lt;xs:complexType name="TAPType"&gt;
       &lt;xs:annotation&gt;
          &lt;xs:documentation&gt;
             a data type supported explicitly by the Table Access 
@@ -4417,6 +4464,28 @@ Simple Cone Search [<a href="#TAP">SCS</a>]), use of the
            &lt;/xs:annotation&gt;
          &lt;/xs:element&gt;
 
+         &lt;xs:element name="description" type="xs:token" minOccurs="0"&gt;
+            &lt;xs:annotation&gt;
+               &lt;xs:documentation&gt;
+                  a free-text description of what this key points to
+                  and what the relationship means.  
+               &lt;/xs:documentation&gt;
+            &lt;/xs:annotation&gt;
+         &lt;/xs:element&gt;
+
+         &lt;xs:element name="utype" type="xs:token" minOccurs="0"&gt;
+            &lt;xs:annotation&gt;
+               &lt;xs:documentation&gt;
+                  an identifier for a concept in a data model that
+                  the association enabled by this key represents.  
+               &lt;/xs:documentation&gt;
+               &lt;xs:documentation&gt;
+                  The format defined in the VOTable standard is highly
+                  recommended. 
+               &lt;/xs:documentation&gt;
+            &lt;/xs:annotation&gt;
+         &lt;/xs:element&gt;
+
       &lt;/xs:sequence&gt;
    &lt;/xs:complexType&gt;
 
@@ -4507,7 +4576,17 @@ differing metadata are formed.
 <a name="appC">
 <h2>Appendix C:  Change History</h2></a>
 
-<em>None yet applicable.</em>
+<h4>Changes since WD-20090508 (v1.10):</h4>
+
+<ul>
+  <li> corrected errors in example in <a href="#intro">Introduction</a> </li>
+  <li> added <code>&lt;description&gt;</code> and
+       <code>&lt;utype&gt;</code> elements to the
+       <code>vs:ForeignKey</code> type for consistency with TAP. </li>
+  <li> changed type names <code>vs:TAP</code> to
+       <code>vs:TAPType</code> and <code>vs:VOTable</code>
+       <code>vs:VOTableType</code>. </li>
+</ul>
 
 <h2><a id="References">References</a></h2>
 
@@ -4542,7 +4621,7 @@ differing metadata are formed.
        October 2004, <code>http://www.w3.org/TR/xmlschema-0/</code>
 
   </dd><dt> <a name="sia">[SIA]</a>
-  </dt><dd> Tody, Doug and Plante, Ray 1997, <cite>
+  </dt><dd> Tody, Doug and Plante, Ray 2004, <cite>
        <a href="http://www.ivoa.net/Documents/WD/SIA/sia-20040524.html">
        Simple Image Access Specification Version 1.0</a></cite>, IVOA
        Working Draft, 
