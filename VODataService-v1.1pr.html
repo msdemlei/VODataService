@@ -55,18 +55,20 @@ div.schemaHeader { font-weight: bold;
 Collections and Services<br> 
 Version 1.1</h1>
 
-<h2>IVOA Proposed Recommendation 3 Sept 2009</h2>
+<h2>IVOA Proposed Recommendation 12 April 2010</h2>
 
 <dl>
   <dt>This version:</dt>
-  <dd><a href="http://www.ivoa.net/Documents/VODataService/20090903">
-      http://www.ivoa.net/Documents/VODataService/20090903</a></dd>
+  <dd><a href="http://www.ivoa.net/Documents/VODataService/20100412">
+      http://www.ivoa.net/Documents/VODataService/20100412</a></dd>
   <dt>Latest version:</dt>
   <dd><a href="http://www.ivoa.net/Documents/VODataService">
       http://www.ivoa.net/Documents/VODataService</a></dd>
 
   <dt>Previous versions:</dt>
-  <dd><a href="http://www.ivoa.net/Documents/WD/ReR/VODataService-20090508.html">
+  <dd>PR: <a href="http://www.ivoa.net/Documents/VODataService/20090903">
+      http://www.ivoa.net/Documents/VODataService/20090903</a></dd>
+  <dd>WD: <a href="http://www.ivoa.net/Documents/WD/ReR/VODataService-20090508.html">
       http://www.ivoa.net/Documents/WD/ReR/VODataService-20090508.html</a></dd>
        
   <dt>Authors:</dt>
@@ -241,12 +243,12 @@ required.
 <p>
 The VOResource standard [<a href="#VOR">VOR</a>] provides a means of
 encoding IVOA Resource Metadata [<a href="#RM">RM</a>] in XML.
-VOResource uses XML Schema [<a href="#schema">schema</a>] define
+VOResource uses XML Schema [<a href="#schema">schema</a>] to define
 most of the XML syntax rules (while a few of the syntax rules are
 outside the scope of Schema).  VOResource also describes mechanisms
 for creating extensions to the core VOResource metadata.  This allows
 for the standardization of new metadata for describing specialized
-kinds of resources in piecemeal way without deprecating the core
+kinds of resources in a piecemeal way without deprecating the core
 schema or other extensions.  This document defines one such extension
 referred to as <strong>VODataService</strong>.  
 </p>
@@ -256,22 +258,23 @@ The purpose of this extension is to define common XML Schema
 types--particularly new resource types--that are useful for describing
 data collections and services that access data.  In particular, it
 allows one to describe the data's <em>coverage</em>:  the parts of the
-sky the data is associated with and the time and frequency ranges that
+sky with which the data are associated and the time and frequency ranges that
 were observed or modeled to create the data.  It also allows one to
 describe tables in detail.  In particular, one can describe each of
-the columns of a table--providing, for example, its name, type, UCD,
+the columns of a table--providing, for example, its name, type, UCD
+[<a href="#UCD">UCD</a>], 
 and textual description.  When this metadata is part of a resource
-description in a registry [<a href="VOR">VOR</a>], it becomes possible
+description in a registry [<a href="#VOR">VOR</a>], it becomes possible
 to discover tables that contains particular kinds of data.  
 </p>
 
 <p>
 It is intended that VODataService will be central to describing
 services that support standard IVOA data access layer protocols such
-as Simple Image Access [<a href="SIA">SIA</a>] and Simple Cone Search
-[<a href="SCS">SCS</a>].  While other VOResource extensions would
+as Simple Image Access [<a href="#SIA">SIA</a>] and Simple Cone Search
+[<a href="#SCS">SCS</a>].  While other VOResource extensions would
 define the protocol-specific metadata (encapsulated as a standard
-<em>capability</em> [<a href="VOR">VOR</a>]), the general service
+<em>capability</em> [<a href="#VOR">VOR</a>]), the general service
 resource description would share the common data concepts such as
 coverage and tabular data.  Note, however, that a service described
 using the VODataService schema need not support any standard
@@ -288,7 +291,7 @@ and VOResource itself.
 </p>
 
 <a name="model">
-<h2>The VODataService Data Model</h2></a>
+<h2>2. The VODataService Data Model</h2></a>
 
 <p>
 The VODataService extension in general enables the description of two
@@ -305,7 +308,7 @@ given object.
 </a><div class="exampleHeader">Example</div>
 <div class="exampleWrapper">A description
 of a service returning tabular data,
-<a href="http://www.ivoa.net/Documents/WD/ReR/catalogservice.xml">catalogservice.xml</a></div>
+<a href="http://www.ivoa.net/Documents/VODataService/20100412/catalogservice.xml">catalogservice.xml</a></div>
 <div class="exampleInner">
 <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td>
 <pre>
@@ -537,7 +540,8 @@ This example illustrates some of the features of the VODataService
 extension:
 <ol>
   <li> <font color="purple">the extra namespaces associated with
-       VODataService metadata; if STC coverage information is not
+       VODataService metadata; if STC coverage information
+       [<a href="#STC">STC</a>] is not
        included, then only the VODataService namespaced is needed. </font> </li>
   <li> <font color="red">the specific type of resource indicated by
        the value of the <code>xsi:type</code> attribute; in this case
@@ -600,15 +604,14 @@ recommends using the VODataService namespace URI as its location URL
 <p></p>
 
 <p>
-The prefix, <code>vs</code>, is used by convention as the
-prefix defined for the VODataService schema; however, instance documents
-may use any prefix of the author's choosing.  In applications where
-common use of prefixes is recommended (such as with the Registry
-Interface specification [<a href="#RI">RI</a>]), use of the
-<code>vs</code> prefix is recommended.  Note also that in this
-document, the <code>vr</code> prefix is used to label, as shorthand, a
-type or element name that is defined in the VOResource schema, as in
-<code>vr:Resource</code>. 
+The prefix, <code>vs</code>, is used by convention as the prefix
+defined for the VODataService schema; however, instance documents may
+use any prefix.  In applications where common use of prefixes is
+recommended (such as with the Registry Interface specification [<a
+href="#RI">RI</a>]), use of the <code>vs</code> prefix is recommended.
+Note also that in this document, the <code>vr</code> prefix is used to
+label, as shorthand, a type or element name that is defined in the
+VOResource schema, as in <code>vr:Resource</code>.
 </p>
 
 <p>
@@ -651,16 +654,16 @@ directly from <code>vr:Resource</code>:
   <dt> <code>vs:DataCollection</code> </dt>
   <dd> This resource declares the existence of a collection of data, what
        it represents, and how to get it.  The access to the data may be
-       limited to access a human-readable web page (given by
+       limited to a human-readable web page (given by
        <code>content/referenceURL</code>); however, if the
-       constituents of the collection are available statically via a
+       contents of the collection are available statically via a
        URL (e.g. an FTP URL to a directory containing all the files),
        that URL can be provided.  It can also provide pointers to
        other IVOA registered services that can be used to access the data.
        </dd>
 
   <dt> <code>vs:StandardSTC</code>
-  <dd> This resource type declares one or more coordinate systems describe
+  <dd> This resource type declares one or more coordinate systems described
        using STC [<a href="#STC">STC</a>] such that each can be
        assigned a globally unique identifier (based on the IVOA
        identifier for the resource record itself).  This identifier
@@ -699,7 +702,7 @@ The other two resource types represent specialized services:
 In general, <a name="d:coverage"><code>coverage</code></a> refers to
 the extent that data samples the measurement range of the sky (space),
 frequency, and time.  The coverage metadata (encoded via the
-<code>vs:Coverage</code> type) has two parts to it.  The first part
+<code>vs:Coverage</code> type) has two parts.  The first part
 allows a full STC profile description (via the imported STC element,
 <code>&lt;stc:STCResourceProfile&gt;</code>).  The second part
 captures key coverage metadata defined in the IVOA Resource Metadata
@@ -716,15 +719,16 @@ describing coverage not only in space, time, and frequency but also
 velocity and redshift.  The profile contains up to three types of
 component descriptions ([<a href="#STC">STC</a>], section 4.1):
 coordinate systems, coordinate values, and coordinate areas or ranges.
-The first component describes the coordinate systems that coordinate
-values, areas, and regions are referenced to.  While any arbitrary
+The first component describes the coordinate systems to which coordinate
+values, areas, and regions are referenced.  While any arbitrary
 system can be described in this first part, it is expected that most
 VODataService instances will provide a simple pointer to a predefined
 system in a registered <code>vs:StandardSTC</code> record (using the
 mechanism summarized in section 3.1.2 below).  The coordinate values
 part will usually be used to describe the coordinate resolution,
-errors, or typical sizes.  The coordinate areas part describes the
-actual coverage over any of the coordinates.  
+errors, or typical sizes.  The coordinate areas part describes actual
+regions or ranges covered by the resource in any of the given
+coordinate systems.  
 </p>
 
 <p><a name="table_set"></a>
@@ -785,16 +789,16 @@ in terms of the RM definition.
 <p>
 A <strong>data collection</strong>, which is describable with the
 <code>vs:DataCollection</code> resource type, is a logical
-group of data which, in general, is composed of one or more accessible
+group of data composed of one or more accessible
 datasets.  A collection can contain any combination of images,
 spectra, catalogs, time-series, or other data.  (In contrast, we talk
-about a <em>dataset</em> as being a collection of digitally-encoded
-data that is normally accessible as a single unit, e.g. a file.)
+about a <em>dataset</em> as being a set of digitally-encoded
+data that is normally accessible as a single unit--e.g., a file.)
 </p>
 
 <p>
 The <code>vs:DataCollection</code> type adds seven additional metadata
-elements beyond the core VOResource metadata [<a href="#VO">VO</a>].  
+elements beyond the core VOResource metadata [<a href="#VOR">VOR</a>].  
 </p>
 
 <div class="schemaOuter">
@@ -929,7 +933,7 @@ held in and over the resource.</td>
               <td valign="top">Format</td>
           </tr>
           <tr bgcolor="#f5f5f5"><td nowrap="nowrap" valign="top"><em>Value type:</em></td>
-              <td valign="top">string with <a href="#a:Format">optional
+              <td valign="top">string with <a href="#a:isMIMEType">optional
   isMIMEType attribute</a>, <a href="#s:Format"><code>vs:Format</code></a></td>
           </tr>
           <tr bgcolor="#dddddd"><td nowrap="nowrap" valign="top"><em>Semantic Meaning:</em></td>
@@ -941,7 +945,9 @@ held in and over the resource.</td>
           </tr>
           <tr bgcolor="#dddddd"><td nowrap="nowrap" valign="top"><em>Comments:</em></td>
               <td valign="top">MIME types should be used for
-                      network-retrievable, digital data.  Non-MIME
+                      network-retrievable, digital data, and the
+                      <code>isMIMEType</code> attribute should be set
+                      to explicitly to "true".  Non-MIME 
                       type values are used for media that cannot be
                       retrieved over the network--e.g. CDROM, poster,
                       slides, video cassette, etc.</td> 
@@ -953,7 +959,7 @@ held in and over the resource.</td>
               <td valign="top">Coverage</td>
           </tr>
           <tr bgcolor="#f5f5f5"><td nowrap="nowrap" valign="top"><em>Value type:</em></td>
-              <td valign="top"> composite; <a href="#s:Coverage"><code>vs:Coverage</code></a></td>
+              <td valign="top"> composite; <a href="#cover"><code>vs:Coverage</code></a></td>
           </tr>
           <tr bgcolor="#dddddd"><td nowrap="nowrap" valign="top"><em>Semantic Meaning:</em></td>
               <td valign="top" width="90%">Extent of the content of
@@ -966,7 +972,7 @@ held in and over the resource.</td>
   <tr><td valign="top">tableset</td>
       <td valign="top"><table border="0" width="100%">
           <tbody><tr bgcolor="#f5f5f5"><td nowrap="nowrap" valign="top"><em>Value type:</em></td>
-              <td valign="top"> composite; <a href="#s:TableSet"><code>vs:TableSet</code></a></td>
+              <td valign="top"> composite; <a href="#table"><code>vs:TableSet</code></a></td>
           </tr>
           <tr bgcolor="#dddddd"><td nowrap="nowrap" valign="top"><em>Semantic Meaning:</em></td>
               <td valign="top" width="90%">A description of tables
@@ -982,7 +988,7 @@ that are part of this collection.</td>
               <td valign="top">Service.AccessURL</td>
           </tr>
           <tr bgcolor="#f5f5f5"><td nowrap="nowrap" valign="top"><em>Value type:</em></td>
-              <td valign="top">URL with <a href="#a:accessURL">optional use attribute</a>: <a href="http://www.ivoa.net/Documents/REC/ReR/VOResource-20080222.html#d:AccessURL"><code>vr:AccessURL</code></a></td>
+              <td valign="top">URL with optional <code>use</code> attribute</a>: <a href="http://www.ivoa.net/Documents/REC/ReR/VOResource-20080222.html#d:AccessURL"><code>vr:AccessURL</code></a></td>
           </tr>
           <tr bgcolor="#dddddd"><td nowrap="nowrap" valign="top"><em>Semantic Meaning:</em></td>
               <td valign="top" width="90%">The URL can be used to
@@ -995,6 +1001,32 @@ download the data contained in this data collection.</td>
 </tbody>
 </table>
 </p>
+
+<p>
+The <a name="d:Format"></a><code>vs:Format</code> type is used for
+providing a value to the <code>&lt;format&gt;</code> element:
+</p>
+
+<div class="schemaOuter">
+<a name="s:Format">
+</a><div class="schemaHeader">vs:Format Type Schema Definition</a></div>
+<div class="schemaInner">
+<pre>&lt;xs:complexType name="Format"&gt;
+      &lt;xs:simpleContent&gt;
+         &lt;xs:extension base="xs:token"&gt;
+           &lt;xs:attribute name="isMIMEType" type="xs:boolean" default="false"/&gt;
+         &lt;/xs:extension&gt;
+      &lt;/xs:simpleContent&gt;
+   &lt;/xs:complexType&gt;</pre>
+</div></div>
+
+<p>
+The <a name="a:isMIMEType"></a> <code>isMIMEType</code> attribute
+provides a flag to indicate if the value represents an actual
+MIME-type: if it is, this attribute should be explicitly set to
+"true".  
+</p>
+
 
 <p>
 See <a href="#table">section 3.3</a> for a specification of
@@ -1101,7 +1133,7 @@ service that provides access to astronomical data.  This service adds
 to the core VOResource service metadata the ability to associate an
 observing facility and/or instrument with the data as well as describe
 the coordinate coverage of data via its child <code>&lt;coverage&gt</code>
-element.  Note that while these elements are all optional, resource
+element.  Note that while these elements are all optional, a resource
 of this type still implies access to astronomical data.
 </p>
 
@@ -1191,8 +1223,8 @@ The use and meaning of the <code>&lt;facility&gt;</code> and
 </p>
 
 <p>
-The contents of the <code>&lt;coverage&gt;</code> element is detailed
-in <a href="s:Coverage">section 3.2</a>.
+The contents of the <code>&lt;coverage&gt;</code> element are detailed
+in <a href="#cover">section 3.2</a>.
 </p>
 
 <a name="CatalogService">
@@ -1235,7 +1267,7 @@ tabular data may optionally be described via a
 </div></div>
 
 <p>
-The definition of <code>&lt;tableset&gt;</code> element places forces certain
+The definition of <code>&lt;tableset&gt;</code> element forces certain
 names within its description to be unique; these constraints are explained
 further in <a href="#s:unique">3.3.1</a>.
 </p>
@@ -1273,7 +1305,7 @@ sky, frequency, and time.
 </p>
 
 <div class="schemaOuter">
-<a name="s:DataCollection">
+<a name="s:Coverage">
 </a><div class="schemaHeader">vs:Coverage Type Schema Definition</a></div>
 <div class="schemaInner">
 <pre>&lt;xs:complexType name="Coverage"&gt;
@@ -1743,7 +1775,8 @@ Each table in a schema is described in detail using the
               <td valign="top">
                In general, the format of the qualified name may
                   depend on the on the context; however, when the
-                  table is intended to be queryable via ADQL, then the
+                  table is intended to be queryable via ADQL
+                  [<a href="#ADQL">ADQL</a>], then the
                   catalog and schema qualifiers are delimited from the
                   table name with dots (.).
                <p />
@@ -1914,8 +1947,8 @@ the role a table plays in the schema:
 
 <p>
 The definitions of the <code>&lt;tableset&gt;</code> elements used in
-the <code><a href="#d:DataCollection">vs:DataCollection</a></code> and
-<code><a href="#d:CatalogService">vs:CatalogService</a></code> types
+the <code><a href="#DataCollection">vs:DataCollection</a></code> and
+<code><a href="#CatalogService">vs:CatalogService</a></code> types
 constrain certain names to be unique.  In particular, all schema names
 within a <code>&lt;tableset&gt;</code> element must be unique, and all
 table names within a <code>&lt;tableset&gt;</code> element must be
@@ -1976,11 +2009,11 @@ set of columns in another table.
 
 <p>
 In this model, the source of the foreign
-key the current table being described (i.e. represented by the
+key is the current table being described (i.e. represented by the
 <code>&lt;table&gt</code> element that contains the
 <code>vs:ForeignKey</code> description, and thus doesn't need to be
-named explicitly).  The key described points to the table given by the
-<code>&lt;targetTable&gt</code> child element.  Each child
+named explicitly).  The key that is described points to the table
+given by the <code>&lt;targetTable&gt</code> child element.  Each child
 <code>&lt;fkColumn&gt</code> element then gives a pair of columns, one
 from the source table and one from the target table, that can be
 constrained to be equal in a query that joins the two tables.  
@@ -2068,7 +2101,7 @@ constrained to be equal in a query that joins the two tables.
 </p>
 
 <div class="schemaOuter">
-<a name="s:vs:FKColumn">
+<a name="s:FKColumn">
 </a><div class="schemaHeader">vs:FKColumn Type Schema Definition</a></div>
 <div class="schemaInner">
 <pre>
@@ -2168,7 +2201,7 @@ observation table pointing into a filter table.
 <h4>3.3.3.  Extending Table Metadata</h4></a>
 
 It is envisioned that it may be useful in the future to provide richer
-metadata for describing tables within a VOResource description that
+metadata for describing tables within a VOResource description than
 what are defined in this document.  This document recommends the
 use of the following extension mechanisms when richer descriptions are
 desired:
@@ -2201,7 +2234,7 @@ desired:
 
   <li> Use the <code>extendedType</code> attribute of the
        <code>&lt;dataType&gt;</code> element (see 
-       <a href="#extdatatypes">section 3.5.3</a>)
+       <a href="#tbldatatypes">section 3.5.3</a>)
        to indicate a more specific data type then those defined by the
        <code>vs:TableParam</code> type.  </li>
 </ol>
@@ -2210,7 +2243,7 @@ desired:
 <h3>3.4.  Interface Type Extension: ParamHTTP</h3></a>
 
 <p>
-The <code>vs:ParamHTTP</code> type is specialized service interface
+The <code>vs:ParamHTTP</code> type is a specialized service interface
 description that extends the VOResource <code>vr:Interface</code> type 
 (as recommended by [<a href="#VOR">VOR</a>], section 2.3.2).  It
 describes a service interface that is invoke over HTTP via a GET or a
@@ -2277,6 +2310,8 @@ element.
                         minOccurs="0" maxOccurs="1"/&gt;
             &lt;xs:element name="param" type="vs:InputParam" minOccurs="0" 
                          maxOccurs="unbounded"/&gt;
+            &lt;xs:element name="testQuery" type="xs:string" minOccurs="0" 
+                        maxOccurs="unbounded"/&gt;
 
          &lt;/xs:sequence&gt;
       &lt;/xs:extension&gt;
@@ -2337,7 +2372,7 @@ indicate that both GET and POST are supported </td>
       <td valign="top"><table border="0" width="100%">
           <tbody><tr bgcolor="#f5f5f5"><td nowrap="nowrap" valign="top"><em>Value type:</em></td>
               <td valign="top">composite:
-                  <code><a href="#s:InputParam">vs:InputParam</a></code>
+                  <code><a href="#inputparam">vs:InputParam</a></code>
               </td>
           </tr>
           <tr bgcolor="#dddddd"><td nowrap="nowrap" valign="top"><em>Semantic Meaning:</em></td>
@@ -2351,6 +2386,28 @@ indicate that both GET and POST are supported </td>
           <tr bgcolor="#dddddd"><td nowrap="nowrap" valign="top"><em>Comments:</em></td>
               <td valign="top">See <a href="#param">section 3.5</a> for the 
               description of this element's contents. </td> 
+          </tr></tbody></table>
+      </td></tr>
+  <tr><td valign="top">testQuery</td>
+      <td valign="top"><table border="0" width="100%">
+          <tbody><tr bgcolor="#f5f5f5"><td nowrap="nowrap" valign="top"><em>Value type:</em></td>
+              <td valign="top">a string in MIME type format:  
+<code>xs:token</code> </td>
+          </tr>
+          <tr bgcolor="#dddddd"><td nowrap="nowrap" valign="top"><em>Semantic Meaning:</em></td>
+              <td valign="top" width="90%">an ampersand-delimited list of
+                       arguments that can be used to test this service 
+                       interface; when provided as the input to this interface,
+                       it will produce a legal, non-null response. </td>
+          </tr>
+          <tr bgcolor="#f5f5f5"><td nowrap="nowrap" valign="top"><em>Occurrences:</em></td>
+              <td valign="top">optional; multiple occurrences allowed</td>
+          </tr>
+          <tr bgcolor="#dddddd"><td nowrap="nowrap" valign="top"><em>Comments:</em></td>
+              <td valign="top">When the interface supports GET, then the full 
+                       query URL is formed by the concatonation of the 
+                       base URL (given by the accessURL) and the value 
+                       given by this testQuery element.   </td> 
           </tr></tbody></table>
       </td></tr>
 </tbody>
@@ -2541,7 +2598,7 @@ XML types associated with their <code>&lt;dataType&gt;</code> elements
 derive from a common parent, <code>vs:DataType</code>.
 
 <div class="schemaOuter">
-<a name="s:BaseParam">
+<a name="s:DataType">
 </a><div class="schemaHeader">vs:DataType Type Schema Definition</a></div>
 <div class="schemaInner">
 <pre>&lt;xs:complexType name="DataType"&gt;
@@ -2569,18 +2626,18 @@ there are no restrictions on the names that may be included.
 A data type description can be augmented via a common set of
 <code>vs:DataType</code> attributes, defined below.  The
 <code>arraysize</code> attribute indicates the parameter is an array
-of values of the named type.  It's value describes the shape of the
+of values of the named type.  Its value describes the shape of the
 array, and the <code>delim</code> attribute may be used to indicate
 the delimiter that should appear between elements of an array value.
 Depending on the application context, these attribute may not be
-enough to effectively parse the array values, in which case, more
+enough to effectively parse the array values, in which case more
 information must be brought to bear either through assumptions about
 a particular derived <code>vs:DataType</code> or through additional
 attributes.  
 </p>
 
 <p>
-More descriptive information about the type can be provided via the
+More descriptive information about the type can be provided via
 <code>extendedType</code> and <code>extendedSchema</code>, which
 provide an alternate data type name.  It's expected that this name
 will only be understood by a special subset of applications.  The name
@@ -2725,7 +2782,7 @@ Actual parameters are normally described with types derived from
 <code>vs:BaseParam</code>.  The <code>vs:InputParam</code> is intended
 for describing an input parameter to a service or function.  The
 allowed data type names (given in the metadata table below) do not
-imply a size or precise format; rather, it is intended to be
+imply a size or precise format; rather, they are intended to be
 sufficient for describing an input paramter to a simple REST-like
 service or a function in a weakly-typed (e.g. scripting) language.  
 </p>
@@ -2751,8 +2808,8 @@ service or a function in a weakly-typed (e.g. scripting) language.
 </div></div>
 
 <p>
-By fixing the <code>&lt;dataType&gt;</code> child element to of the
-<code>vs:SimpleDataType</code>, the possbile types are restricted to
+By fixing the <code>&lt;dataType&gt;</code> child element to that of the
+<code>vs:SimpleDataType</code>, the possible types are restricted to
 predefined set appropriate for input parameters.
 </p>
 
@@ -2920,7 +2977,7 @@ element with a name drawn from a standard set of names.  The
 <code>vs:TableParam</code> type is not restricted to a single standard
 set, and the VODataService schema defines two standard sets: one
 corresponding to VOTable data types [<a href="#VOTable">VOTable</a>]
-and one for Table Access Protocol types.  Because the
+and one for Table Access Protocol types.  Because
 its XML type, <code>vs:TableDataType</code> is abstract, the
 <code>&lt;dataType&gt;</code> element MUST include an
 <code>xsi:type</code> attribute to indicate which standard set of type
@@ -3089,7 +3146,7 @@ The VODataService schema defines two XML types that derive from
 
 <p>
 The <code>vs:TAPType</code> XML type provides an additional attribute,
-<code>size</code> corresponding to the "size" column from the
+<code>size</code>, corresponding to the "size" column from the
 TAP_SCHEMA.columns defined by <a href="#TAP">TAP</a>:
 </p>
 
@@ -3173,7 +3230,7 @@ In general, the <code>vs:TableParam</code>'s <code>&lt;dataType&gt;</code>
 can support any non-abstract type legally derived from
 <code>vs:TableDataType</code>.  However, in the context of a
 <code>vs:DataCollection</code> or <code>vs:CatalogService</code>
-resource description, it is strongly recommended either
+resource description, it is strongly recommended that either
 <code>vs:VOTableType</code> or <code>vs:TAPType</code> (or some other IVOA
 standard type derived from <code>vs:TableDataType</code>) be used to
 ensure maximum interoperability.  When the actual column type is not
@@ -3236,7 +3293,7 @@ Simple Cone Search [<a href="#TAP">SCS</a>]), use of the
            xmlns:stc="http://www.ivoa.net/xml/STC/stc-v1.30.xsd" 
            xmlns:vm="http://www.ivoa.net/xml/VOMetadata/v0.1"
            elementFormDefault="unqualified" attributeFormDefault="unqualified"
-           version="1.1pr1"&gt;
+           version="1.1pr2"&gt;
 
    &lt;xs:annotation&gt;
       &lt;xs:appinfo&gt;
@@ -3778,6 +3835,24 @@ Simple Cone Search [<a href="#TAP">SCS</a>]), use of the
                     &lt;xs:documentation&gt;
                        a description of a input parameter that can be 
                        provided as a name=value argument to the service.  
+                    &lt;/xs:documentation&gt;
+                  &lt;/xs:annotation&gt;
+               &lt;/xs:element&gt;
+
+               &lt;xs:element name="testQuery" type="xs:string" minOccurs="0" 
+                           maxOccurs="unbounded"&gt;
+                  &lt;xs:annotation&gt;
+                    &lt;xs:documentation&gt;
+                       a ampersand-delimited list of arguments that
+                       can be used to test this service interface; 
+                       when provided as the input to this interface,
+                       it will produce a legal, non-null response.
+                    &lt;/xs:documentation&gt;
+                    &lt;xs:documentation&gt;
+                       When then interface supports GET, then the full 
+                       query URL is formed by the concatonation of the 
+                       base URL (given by the accessURL) and the value 
+                       given by this testQuery element.  
                     &lt;/xs:documentation&gt;
                   &lt;/xs:annotation&gt;
                &lt;/xs:element&gt;
@@ -4576,6 +4651,12 @@ differing metadata are formed.
 <a name="appC">
 <h2>Appendix C:  Change History</h2></a>
 
+<h4>Changes since PR-20090903:</h4>
+
+<ul>
+  <li> added <code>&lt:testQuery&gt;</code> to <code>vs:ParamHTTP</code>
+</ul>
+
 <h4>Changes since WD-20090508 (v1.10):</h4>
 
 <ul>
@@ -4591,6 +4672,22 @@ differing metadata are formed.
 <h2><a id="References">References</a></h2>
 
 <dl>
+  <dt> <a name="ADQL">[ADQL]</a> </dt>
+  <dd> Ortiz, I., Lusted, J., Dowler, P., Szalay, A., Shirasaki, Y.,
+       Nieto-Santisteban, M., Ohishi, M., O'Mullane, W., Osuna, P. 2008,<cite>
+       <a href="http://www.ivoa.net/Documents/latest/ADQL.html">
+       IVOA Astronomical Data Query Language</a></cite>, v2.00, IVOA
+       Recommendation,
+       <code>http://www.ivoa.net/Documents/latest/ADQL.html</code>
+       </dd>
+       
+  <dt> <a name="HTTP">[HTTP]</a> </dt>
+  <dd> Fielding, R., Gettys, J, Mogul, J., Frystyk, H., Masinter, L.,
+       Leach, P., Berners-Lee, T. 1999.
+       <cite><a href="http://www.ietf.org/rfc/rfc2616.txt">
+       Hypertext Transfer Protocol -- HTTP/1.1</a></cite>, IETF RFC 2616,
+       <code>http://www.ietf.org/rfc/rfc2616.txt</code> </dd>
+
   <dt> <a name="should">[RFC 2119]</a> </dt>
   <dd> Bradner, S. 1997. <cite><a href="http://www.ietf.org/rfc/rfc2119.txt">
        Key words for use in RFCs to Indicate Requirement
@@ -4620,12 +4717,18 @@ differing metadata are formed.
        Part 0: Primer Second Edition</a></cite>, W3C Recommendation 28
        October 2004, <code>http://www.w3.org/TR/xmlschema-0/</code>
 
-  </dd><dt> <a name="sia">[SIA]</a>
-  </dt><dd> Tody, Doug and Plante, Ray 2004, <cite>
-       <a href="http://www.ivoa.net/Documents/WD/SIA/sia-20040524.html">
+  </dd><dt> <a name="SCS">[SCS]</a>
+  </dt><dd> Williams, Roy, Hanisch, Robert, Szalay, Alex and Plante, Ray 2008, <cite>
+       <a href="http://www.ivoa.net/Documents/REC/DAL/ConeSearch-20080222.html">
+       Simple Cone Search Version 1.03</a></cite>, IVOA Recommendation, 
+       <code>http://www.ivoa.net/Documents/REC/DAL/ConeSearch-20080222.html</code>.
+
+  </dd><dt> <a name="SIA">[SIA]</a>
+  </dt><dd> Tody, Doug, Plante, Ray, and Harrison, Paul 2009, <cite>
+       <a href="http://www.ivoa.net/Documents/SIA/20091116/">
        Simple Image Access Specification Version 1.0</a></cite>, IVOA
-       Working Draft, 
-       <code>http://www.ivoa.net/Documents/WD/SIA/sia-20040524.html</code>.
+       Recommendation, 
+       <code>http://www.ivoa.net/Documents/SIA/20091116/</code>.
 
   <dt> <a name="STC">[STC]</a> </dt>
   <dd> Rots, Arnold 2007, <cite>
@@ -4637,6 +4740,13 @@ differing metadata are formed.
   <dd> Date, C.J. and Darwin, Hugh 1997, <code>A Guide to the SQL
        Standard</code>, Fourth Edition, (Addison-Wesley, Longman Inc.:
        Reading), p 24. </dd>
+
+  <dt> <a name="TAP">[TAP]</a> </dt>
+  <dd> Dowler, P., Rixon, G., Tody, D. 2010, <cite>
+       <a href="http://www.ivoa.net/Documents/TAP/">Table Access
+       Protocol</a></cite>, v1.0, IVOA Proposed Recommendation,
+       <code>http://www.ivoa.net/Documents/TAP/</code>
+       </dd>
        
   <dt> <a name="UCD">[UCD]</a> </dt>
   <dd> Martinez, A.P., Derriere, S., Delmotte, N., Gray, N., Mann, R.,
@@ -4657,6 +4767,13 @@ differing metadata are formed.
        v1.03, IVOA Recommendation,
        <code>http://www.ivoa.net/Documents/REC/ReR/VOResource-20080222.html</code>
        </dd>
+
+  <dt> <a name="VOSI">[VOSI]</a>
+  <dd> Graham, M. and Rixon, G. 2010, <cite>
+       <a href="http://www.ivoa.net/Documents/VOSI/20100311/PR-VOSI-1.0-20100311.html">
+       IVOA Support Interfaces</a></cite>, v1.00 20101129, IVOA Proposed
+       Recommendation,
+       <code>http://www.ivoa.net/Documents/VOSI/20100311/PR-VOSI-1.0-20100311.html</code> </dd>
 
   </dd><dt> <a name="VOTable">[VOTable]</a>
   </dt><dd>  Ochsenbein, F., Williams, R., Davenhall, C., Durand, D.,
