@@ -55,7 +55,7 @@ div.schemaHeader { font-weight: bold;
 Collections and Services<br> 
 Version 1.1</h1>
 
-<h2>IVOA Proposed Recommendation 12 April 2010</h2>
+<h2>IVOA Proposed Recommendation XX May 2010</h2>
 
 <dl>
   <dt>This version:</dt>
@@ -66,6 +66,8 @@ Version 1.1</h1>
       http://www.ivoa.net/Documents/VODataService</a></dd>
 
   <dt>Previous versions:</dt>
+  <dd>PR: <a href="http://www.ivoa.net/Documents/VODataService/20100412">
+      http://www.ivoa.net/Documents/VODataService/20100412</a></dd>
   <dd>PR: <a href="http://www.ivoa.net/Documents/VODataService/20090903">
       http://www.ivoa.net/Documents/VODataService/20090903</a></dd>
   <dd>WD: <a href="http://www.ivoa.net/Documents/WD/ReR/VODataService-20090508.html">
@@ -141,10 +143,14 @@ http://www.ivoa.net/Documents/. </p>
 Information Technology Research Program under Cooperative Agreement
 AST0122449 with The Johns Hopkins University, from the
 <a href="http://www.pparc.ac.uk/">UK Particle Physics and Astronomy
-Research Council (PPARC)</a>, and from the
-<a href="http://fp6.cordis.lu/fp6/home.cfm">Eurpean Commission's Sixth
-Framework Program</a> via the <a href="http://www.astro-opticon.org/">
-Optical Infrared Coordination Network (OPTICON)</a>.  </p>
+Research Council (PPARC)</a>, from the Eurpean Commission's (EC)
+<a href="http://cordis.europa.eu/fp6/">Sixth
+Framework Programme</a> via the <a href="http://www.astro-opticon.org/">
+Optical Infrared Coordination Network (OPTICON)</a>, and from EC's
+<a href="http://cordis.europa.eu/fp7/">Seventh Framework Programme</a>
+via its
+<a href="http://cordis.europa.eu/fp7/ict/e-infrastructure/home_en.html">
+eInfrastructure Science Repositories initiative</a>.  </p>
 
 <a name="conf">
 <h3>Conformance-related definitions</h3></a>
@@ -172,7 +178,7 @@ XML Schema [<a href="#schema">schema</a>] documents (see
 conformance to the syntax described in those Schema documents.  This
 document describes additional syntax constraints that cannot be
 enforced solely by the rules of XML Schema; thus, in this document,
-use of the term validation includes the extra checks that goes beyond
+use of the term validation includes the extra checks that go beyond
 common Schema-aware parsers which ensure conformance with this
 document.  
 </p>
@@ -180,8 +186,8 @@ document.
 <a name="synnot">
 <h3>Syntax Notation Using XML Schema</h3></a>
 
-<p>The eXtensible Markup Language, or XML, is document syntax for marking
-textual information with named tags and is defined by the
+<p>The eXtensible Markup Language, or XML, is a document syntax for
+marking textual information with named tags and is defined by the
 World Wide Web Consortium (W3C) Recommendation,
 <a href="http://www.w3.org/TR/REC-xml">XML 1.0</a>
 [<a href="#xml">XML</a>].  The set of XML tag names and the syntax
@@ -197,10 +203,10 @@ however, documentation nodes have been left out for the sake of brevity.
 </p>
 
 <p>
-Reference to specific elements and types defined in the VOResource
+References to specific elements and types defined in the VOResource
 schema include the namespaces prefix, <code>vr</code>, as in
 <code>vr:Resource</code> (a type defined in the VOResource schema).
-Reference to specific elements and types defined in the VODataService
+References to specific elements and types defined in the VODataService
 extension schema include the namespaces prefix, <code>vs</code>, as in
 <code>vs:DataCollection</code> (a type defined in the VODataService schema).
 Use of the <code>vs</code> prefix in compliant instance documents is 
@@ -248,7 +254,7 @@ most of the XML syntax rules (while a few of the syntax rules are
 outside the scope of Schema).  VOResource also describes mechanisms
 for creating extensions to the core VOResource metadata.  This allows
 for the standardization of new metadata for describing specialized
-kinds of resources in a piecemeal way without deprecating the core
+kinds of resources in a modular way without deprecating the core
 schema or other extensions.  This document defines one such extension
 referred to as <strong>VODataService</strong>.  
 </p>
@@ -265,7 +271,7 @@ the columns of a table--providing, for example, its name, type, UCD
 [<a href="#UCD">UCD</a>], 
 and textual description.  When this metadata is part of a resource
 description in a registry [<a href="#VOR">VOR</a>], it becomes possible
-to discover tables that contains particular kinds of data.  
+to discover tables that contain particular kinds of data.  
 </p>
 
 <p>
@@ -668,7 +674,7 @@ directly from <code>vr:Resource</code>:
        assigned a globally unique identifier (based on the IVOA
        identifier for the resource record itself).  This identifier
        can then be referenced in any other STC description in lieu of
-       a fully described coordinate system.  Coordinate system
+       a fully described coordinate system.  Coordinate systems
        described in this way become reusable standards once they are
        registered in an IVOA registry.
 </dl>
@@ -764,7 +770,7 @@ include not only the mime-type of the returned response, it can also
 enumerate the input arguments that are supported by the service
 implementation.  Much like table columns, one can indicate for each
 argument the name, the UCD, the data type, the units, whether it is
-required, and a textual description the argument.  Note that this does
+required, and a textual description of the argument.  Note that this does
 not capture any interdependencies between arguments.  For example, it
 cannot indicate if one argument only makes sense in the presence of
 another argument.  
@@ -789,7 +795,7 @@ in terms of the RM definition.
 <p>
 A <strong>data collection</strong>, which is describable with the
 <code>vs:DataCollection</code> resource type, is a logical
-group of data composed of one or more accessible
+group of data comprising one or more accessible
 datasets.  A collection can contain any combination of images,
 spectra, catalogs, time-series, or other data.  (In contrast, we talk
 about a <em>dataset</em> as being a set of digitally-encoded
@@ -4651,11 +4657,19 @@ differing metadata are formed.
 <a name="appC">
 <h2>Appendix C:  Change History</h2></a>
 
+<h4>Changes since PR-20100412:</h4>
+
+<ul>
+  <li> Post-TCG review correction of grammaical errors </li>
+</ul>
+
 <h4>Changes since PR-20090903:</h4>
 
 <ul>
-  <li> added <code>&lt:testQuery&gt;</code> to <code>vs:ParamHTTP</code> </li>
-  <li> in text, added explanation of <code>vs:Format</code> </li>
+  <li> <a href="#paramif">S3.4</a>:  added <code>&lt:testQuery&gt;</code>
+       to <code>vs:ParamHTTP</code> </li>
+  <li> <a href="#paramif">S3.1.1</a>:  in text, added explanation of
+       <code>vs:Format</code> </li>
   <li> grammatical clean-up </li>
 </ul>
 
@@ -4782,7 +4796,7 @@ differing metadata are formed.
        Fernique, P., Giaretta, D., Hanisch, R., McGlynn, T., Szalay, A.,
        Taylor, M.B., Wicenec, A. 2008, <cite>
        <a href="http://www.ivoa.net/Documents/WD/VOTable/VOTable-20080914.html">
-       VOTable Format Definition</a>, version 1.20, IVOA Working Draft,
+       VOTable Format Definition</a>, version 1.20, IVOA Recommendation,
        <code>http://www.ivoa.net/Documents/WD/VOTable/VOTable-20080914.html</code>
 
   </dd><dt> <a name="xml">[xml]</a>
