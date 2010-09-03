@@ -55,12 +55,12 @@ div.schemaHeader { font-weight: bold;
 Collections and Services<br> 
 Version 1.1</h1>
 
-<h2>IVOA Proposed Recommendation XX May 2010</h2>
+<h2>IVOA Proposed Recommendation 07 July 2010</h2>
 
 <dl>
   <dt>This version:</dt>
-  <dd><a href="http://www.ivoa.net/Documents/VODataService/201005XX">
-      http://www.ivoa.net/Documents/VODataService/201005XX</a></dd>
+  <dd><a href="http://www.ivoa.net/Documents/VODataService/20100707">
+      http://www.ivoa.net/Documents/VODataService/20100707</a></dd>
   <dt>Latest version:</dt>
   <dd><a href="http://www.ivoa.net/Documents/VODataService">
       http://www.ivoa.net/Documents/VODataService</a></dd>
@@ -258,6 +258,41 @@ kinds of resources in a modular way without deprecating the core
 schema or other extensions.  This document defines one such extension
 referred to as <strong>VODataService</strong>.  
 </p>
+
+<h3><a name="arch">1.1. The Role in the IVOA Architecture</a></h3>
+
+The IVOA Architecture [<a href="#Arch">Arch</a>] provides a high-level
+view of how IVOA standards work together to connect users and
+applications with providers of data and services, as depicted in the
+diagram in Fig. 1.    
+
+<p>
+<center>
+<font size="-1">
+<img src="IVOAArchitecture-Level1-20100517.png" width="664"/> <br />
+<blockquote>
+<strong>Figure 1.  The IVOA Architecture.</strong>  The Registry
+enables applications in the User Layer to discover archives and
+services in the Resource Layer.  
+</blockquote>
+</font>
+</center>
+</p>
+
+
+In this architecture, users can leverage a variety of tools (from the
+User Layer) to discover archives and services of interest (represented
+in the Resource Layer); registries provides the means for this
+discovery.  A registry is a repository of descriptions of resources
+that can be searched based on the metadata in those descriptions.  The
+Resource Metadata standard [<a href="#RM">RM</a>] defines the core
+concepts used in the resource descriptions, and the VOResource
+standard [<a href="#VOR">VOR</a>] defines the XML format.  As an
+extension of VOResource, the VODataService standard, defined in this
+document, specifically supports descriptions of data collections and
+services.  
+
+<h3><a name="purpose">1.2. Purpose</a></h3>
 
 <p>
 The purpose of this extension is to define common XML Schema
@@ -1444,8 +1479,8 @@ coverage.
                  <tr><td valign="top"><code>UV</code></td>
                      <td valign="top">
                        0.1 micron &lt;= wavelength &lt;= 0.3 microns; <br />
-                       100 nm &lt;= wavelength &lt;= 3000 nm; <br />
-                       1000 Angstroms &lt;= wavelength &lt;= 30000 Angstroms
+                       100 nm &lt;= wavelength &lt;= 300 nm; <br />
+                       1000 Angstroms &lt;= wavelength &lt;= 3000 Angstroms
                      </td></tr>
                  <tr><td valign="top"><code>EUV</code></td>
                      <td valign="top">
