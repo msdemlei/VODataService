@@ -55,12 +55,12 @@ div.schemaHeader { font-weight: bold;
 Collections and Services<br> 
 Version 1.1</h1>
 
-<h2>IVOA Proposed Recommendation 07 July 2010</h2>
+<h2>IVOA Proposed Recommendation 14 September 2010</h2>
 
 <dl>
   <dt>This version:</dt>
-  <dd><a href="http://www.ivoa.net/Documents/VODataService/20100707">
-      http://www.ivoa.net/Documents/VODataService/20100707</a></dd>
+  <dd><a href="http://www.ivoa.net/Documents/VODataService/20100814">
+      http://www.ivoa.net/Documents/VODataService/20100914</a></dd>
   <dt>Latest version:</dt>
   <dd><a href="http://www.ivoa.net/Documents/VODataService">
       http://www.ivoa.net/Documents/VODataService</a></dd>
@@ -109,7 +109,7 @@ an extension of the core resource metadata encoding standard known as
 VOResource [<a href="#VOR">Plante et al. 2008</a>] using XML Schema.
 The specialized resource types defined by the VODataService schema
 allow one to describe how the data underlying the resource cover the
-sky as well as frequency and time.  This coverage description
+sky as well as cover frequency and time.  This coverage description
 leverages heavily the Space-Time Coordinates (STC) standard schema
 [<a href="#STC">Rots 2007</a>].  VODataService also enables detailed
 descriptions of tables that includes information useful to the
@@ -223,6 +223,10 @@ required.
   <li><a href="#conf">Conformance-related definitions</a></li>
   <li><a href="#synnot">Syntax Notation Using XML Schema</a></li>
   <li><a href="#Intro">1. Introduction</a></li>
+       <ul class="toc">
+         <li> <a href="#arch">1.1. The Role in the IVOA Architecture</a></li>
+         <li> <a href="#model">1.2. Purpose</a></li>
+       </ul>
   <li><a href="#model">2. The VOResource Data Model</a>
        <ul class="toc">
          <li> <a href="#ns">2.1. The Schema Namespace and Location</a></li>
@@ -269,11 +273,13 @@ diagram in Fig. 1.
 <p>
 <center>
 <font size="-1">
-<img src="IVOAArchitecture-Level1-20100517.png" width="664"/> <br />
+<img src="vodataservice-in-arch.png" width="756"/> <br />
 <blockquote>
-<strong>Figure 1.  The IVOA Architecture.</strong>  The Registry
-enables applications in the User Layer to discover archives and
-services in the Resource Layer.  
+<strong>Figure 1.  VODataService in the IVOA Architecture.</strong>
+The Registry enables applications in the User Layer to discover
+archives and services in the Resource Layer.  The metadata and data
+model standards (in blue text and boxes) gives structure to the
+information that enables that discovery.  
 </blockquote>
 </font>
 </center>
@@ -4723,6 +4729,11 @@ differing metadata are formed.
 <h2><a id="References">References</a></h2>
 
 <dl>
+  <dt> <a name="Arch">[Arch]</a> </dt>
+  <dd> Arviset, Christophe and the IVOA Tehcnical Coordination Group
+       2010, <cite>The IVOA in 2010: Technical Assessment and
+       Roadmap</cite>, v1.0, IVOA Note, <i>in preparation.</i>
+  
   <dt> <a name="ADQL">[ADQL]</a> </dt>
   <dd> Ortiz, I., Lusted, J., Dowler, P., Szalay, A., Shirasaki, Y.,
        Nieto-Santisteban, M., Ohishi, M., O'Mullane, W., Osuna, P. 2008,<cite>
