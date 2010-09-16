@@ -55,19 +55,17 @@ div.schemaHeader { font-weight: bold;
 Collections and Services<br> 
 Version 1.1</h1>
 
-<h2>IVOA Proposed Recommendation 16 September 2010</h2>
+<h2>IVOA Proposed Recommendation 14 September 2010</h2>
 
 <dl>
   <dt>This version:</dt>
-  <dd><a href="http://www.ivoa.net/Documents/VODataService/20100916">
-      http://www.ivoa.net/Documents/VODataService/20100916</a></dd>
+  <dd><a href="http://www.ivoa.net/Documents/VODataService/20100814">
+      http://www.ivoa.net/Documents/VODataService/20100914</a></dd>
   <dt>Latest version:</dt>
   <dd><a href="http://www.ivoa.net/Documents/VODataService">
       http://www.ivoa.net/Documents/VODataService</a></dd>
 
   <dt>Previous versions:</dt>
-  <dd>PR: <a href="http://www.ivoa.net/Documents/VODataService/20100814">
-      http://www.ivoa.net/Documents/VODataService/20100914</a></dd>
   <dd>PR: <a href="http://www.ivoa.net/Documents/VODataService/20100412">
       http://www.ivoa.net/Documents/VODataService/20100412</a></dd>
   <dd>PR: <a href="http://www.ivoa.net/Documents/VODataService/20090903">
@@ -1391,24 +1389,6 @@ encouraged.
 </p>
 
 <p>
-</p><blockquote>
-<table bgcolor="#dddddd" border="2" cellpadding="5"><tbody><tr><td>
-<dl>
-  <dt> <strong>Note:</strong> </dt>
-  <dd> The STC scheme provides rich mark-up for expressing the
-       details of the coverage.  In particular, the mark-up is quite
-       flexible in the units that can be used.  For example, spectral
-       coverage can be given in terms of frequency, wavelength, or
-       energy.  While it is recommended that the overall description
-       given in the <code>&lt;stc:STCResourceProfile&gt;</code> be
-       fairly general and approximate, leveraging the richness for a
-       detailed description is allowed.  </dd>
-</dl>
-</td></tr></tbody></table>
-</blockquote>
-<p></p>
-
-<p>
 The remaining elements provide some summary information about the
 coverage. 
 </p>
@@ -2683,8 +2663,8 @@ derive from a common parent, <code>vs:DataType</code>.
 </div></div>
 
 <p>
-The content of an element of type <code>vs:DataType</code> is the name
-of the data type for the current parameter.  When the element is explicitly
+The content of a data type element of this type is the name of the
+data type for the current parameter.  When the element is explicitly
 a <code>vs:DataType</code> (as opposed to one of its derived types),
 there are no restrictions on the names that may be included.  
 </p>
@@ -4744,25 +4724,6 @@ differing metadata are formed.
   <li> changed type names <code>vs:TAP</code> to
        <code>vs:TAPType</code> and <code>vs:VOTable</code>
        <code>vs:VOTableType</code>. </li>
-</ul>
-
-<h4>Changes since WD-20100412:</h4>
-
-<ul>
-  <li> fix numerous typos discovered in TCG review </li>
-  <li> added section 1.1 to describe role of standard in the VO
-       architecture, including diagram.  </li>
-  <li> corrected frequency range for the UV waveband </li>
-  <li> corrected links to reference documents </li>
-</ul>
-
-<h4>Changes since WD-20100914:</h4>
-
-<ul>
-  <li> added change history for WD-20100412. </li>
-  <li> added Note about STC mark-up in 3.2 </li>
-  <li> reworded sentence describing content of <code>vs:DataType</code> in
-       section 3.5. </li>
 </ul>
 
 <h2><a id="References">References</a></h2>
