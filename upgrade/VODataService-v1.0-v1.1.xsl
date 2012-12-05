@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0" 
                 xmlns:vg="http://www.ivoa.net/xml/VORegistry/v1.0" 
-                xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.0" 
+                xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.1" 
                 xmlns:cs="http://www.ivoa.net/xml/ConeSearch/v1.0" 
                 xmlns:sia="http://www.ivoa.net/xml/SIA/v1.0" 
                 xmlns:sn="http://www.ivoa.net/xml/OpenSkyNode/v0.2" 
                 xmlns:stc="http://www.ivoa.net/xml/STC/stc-v1.30.xsd" 
-                xmlns:vg2="http://www.ivoa.net/xml/VORegistry/v0.3" 
-                xmlns:vr2="http://www.ivoa.net/xml/VOResource/v0.10" 
-                xmlns:vs2="http://www.ivoa.net/xml/VODataService/v0.5" 
-                xmlns:cs2="http://www.ivoa.net/xml/ConeSearch/v0.3" 
-                xmlns:sia2="http://www.ivoa.net/xml/SIA/v0.7" 
-                xmlns:sn2="http://www.ivoa.net/xml/OpenSkyNode/v0.1" 
-                xmlns:vc="http://www.ivoa.net/xml/VOCommunity/v0.2" 
-                xmlns:vc2="http://www.ivoa.net/xml/VOCommunity/v0.2" 
+                xmlns:vs2="http://www.ivoa.net/xml/VODataService/v1.0" 
                 xmlns:xlink="http://www.w3.org/1999/xlink" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
                 xmlns:xs="http://www.w3.org/2001/XMLSchema" 
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-                exclude-result-prefixes="#all" 
-                version="2.0">
+                version="1.0">
 
    <!-- 
      -  Stylesheet to convert VOResource records from VODataService v1.0
@@ -93,20 +85,39 @@
      -->
    <xsl:param name="resourceElement">Resource</xsl:param>
 
+   <xsl:template match="/">
+      <xsl:apply-templates select="*" />
+   </xsl:template>
+
    <!--
-     -  If resourceName is set (with an non-empty value), the output 
-     -  document will have a root element of $resourceName and a 
-     -  this namespace.  It will contain the VOResource metadata; all 
-     -  other wrapping elements from the input will be filtered out. 
+     -  Copy a VODataService type unchanged
      -->
-   <xsl:param name="resourceNS">http://www.ivoa.net/xml/RegistryInterface/v1.0</xsl:param>
+   <xsl:template match="*" priority="-2">
+      <xsl:param name="sp"/>
+      <xsl:param name="step"/>
 
-   <xsl:variable name="idrefprefix">
-      <xsl:value-of select="translate(//vr2:identifier,
-                                     '/!~*()+=:','_________')"/>
-      <xsl:text>_</xsl:text>
-   </xsl:variable>
+      <xsl:variable name="elname">
+         <xsl:call-template name="uncapitalize">
+            <xsl:with-param name="in" select="local-name()"/>
+         </xsl:call-template>
+      </xsl:variable>
 
+      <xsl:value-of select="$sp"/>
+
+      <xsl:element name="local-name()">
+         <xsl:for-each select="@*">
+            <xsl:copy/>
+         </xsl:for-each>
+
+         <xsl:apply-templates select="child::node()">
+            <xsl:with-param name="sp" select="concat($sp,$step)"/>
+            <xsl:with-param name="step" select="$step"/>
+         </xsl:apply-templates>
+
+         <xsl:value-of select="$sp"/>
+      </xsl:element>
+
+   </xsl:template>
 
 
 
