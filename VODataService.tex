@@ -1,5 +1,9 @@
 \documentclass[11pt,a4paper]{ivoa}
 \input tthdefs
+\usepackage{listings}
+\lstloadlanguages{XML}
+\lstset{flexiblecolumns=true,tagstyle=\ttfamily,showstringspaces=False}
+\usepackage{todonotes}
 
 \title{VODataService: A VOResource Schema Extension for Describing
 Collections and Services}
@@ -119,7 +123,7 @@ for creating extensions to the core VOResource metadata.  This allows
 for the standardization of new metadata for describing specialized
 kinds of resources in a modular way without deprecating the core
 schema or other extensions.  This document defines one such extension
-referred to as \strong{VODataService}.
+referred to as VODataService.
 
 \subsection{The Role in the IVOA Architecture}
 
@@ -306,7 +310,7 @@ given object.
 This example illustrates some of the features of the VODataService
 extension:
 
-\begin{enumeration}
+\begin{enumerate}
 \item the extra namespaces associated with
        VODataService metadata; if STC coverage information
        \citep{STC} is not
@@ -326,7 +330,7 @@ extension:
        description plus waveband keywords.
 \item a description of the table that is returned
        by the service.
-\end{enumeration}
+\end{enumerate}
 
 \subsection{The Schema Namespace and Location}
 
@@ -368,8 +372,8 @@ The IVOA Registry Interface standard \citep{RI}
 The prefix, \xmlel{vs}, is used by convention as the prefix
 defined for the VODataService schema; however, instance documents may
 use any prefix.  In applications where common use of prefixes is
-recommended (such as with the Registry Interface specification [<a
-href="#RI">RI</a>]), use of the \xmlel{vs} prefix is recommended.
+recommended (such as with the Registry Interfaces specification),
+use of the \xmlel{vs} prefix is recommended.
 Note also that in this document, the \xmlel{vr} prefix is used to
 label, as shorthand, a type or element name that is defined in the
 VOResource schema, as in \xmlel{vr:Resource}.
@@ -385,7 +389,7 @@ One reason one may \emph{not} be able to use \xmlel{vs}
        it is already in defined to represent VODataService v1.0 and
        cannot be overridden.  At this writing, there are no IVOA
        applications in which this is the case.  Consult
-       <a href="#appB">Appendix B</a> for more details on
+       appendix~\ref{vods10-compat} for more details on
        compatibility issues.</dd>
 \end{admonition}
 
@@ -449,6 +453,7 @@ Inheriting from \xmlel{vs:DataService}, this type
        data access layer protocols such as Simple Image Access
        \citep{SIA} and Simple Cone Search
        \citep{SCS}.
+\end{bigdescription}
 
 
 In general, \xmlel{coverage} refers to
@@ -814,6 +819,7 @@ only will be returned:
 \item\verb|schema[@name="default"]|
 \item\verb|schema/table[@name="default"]|
 \end{itemize}
+\end{admonition}
 
 Name uniqueness is only required when the table set description is
 part of a VOResource description.  The name uniqueness rules
@@ -860,7 +866,7 @@ what are defined in this document.  This document recommends the
 use of the following extension mechanisms when richer descriptions are
 desired:
 
-\begin{enumeration}
+\begin{enumerate}
 \item Use extended types by applying the \xmlel{xsi:type}
        attribute to the \xmlel{tableset},
        \xmlel{schema}, \xmlel{table}, 
@@ -891,7 +897,7 @@ desired:
        section~\ref{sect:tbldatatypes}).
        to indicate a more specific data type then those defined by the
        \xmlel{vs:TableParam} type.
-\end{enumeration}
+\end{enumerate}
 
 \subsection{Interface Type Extension: ParamHTTP}
 \label{sect:paramif}
@@ -976,7 +982,7 @@ Of course, listing required parameters is always allowed, even when
 describing a standard interface as long as these are consistent with
 the service specification and the corresponding \xmlel{param}
 elements include the attribute \verb|use="required"| (see
-section~\ref{sect:inputparam).  The \xmlel{param}
+section~\ref{sect:inputparam}.  The \xmlel{param}
 elements for custom parameters that are not part of the standard (but
 are rather local customizations) should include the attribute
 \verb|std="false"|.
@@ -1168,7 +1174,7 @@ The VODataService schema defines two XML types that derive from
 
 The \xmlel{vs:TAPType} XML type provides an additional attribute,
 \xmlel{size}, corresponding to the \verb|"size"| column from the
-TAP_SCHEMA.columns defined by the TAP standard
+TAP\_SCHEMA.columns defined by the TAP standard
 \citep{TAP}.\todo{deprecate}
 
 
@@ -1226,7 +1232,7 @@ well matched to a type from one of these standard sets, authors are
 encouraged to use the \xmlel{extendedType} attribute to refer to
 a more specific type.  Note that the TAP standard
 \citep{TAP} defines an explicit mapping between
-TAP_SCHEMA types and VOTable types.  Thus, in the context of a
+TAP\_SCHEMA types and VOTable types.  Thus, in the context of a
 \xmlel{vs:CatalogService} resource description that supports a
 TAP capability (perhaps in addition to other catalog services like
 Simple Cone Search \citep{SCS}), use of the
@@ -1244,7 +1250,7 @@ The motivation for providing two standard data type sets,
        generated using the \xmlel{vs:VOTableType} data types from
        these interface's respective metadata queries.  Newer services
        supporting TAP could generate its description using its
-       TAP_SCHEMA queries.
+       TAP\_SCHEMA queries.
 
        
        The motivation for specifying a column's data type using the
@@ -1259,6 +1265,7 @@ The motivation for providing two standard data type sets,
 \appendix
 
 \section{Compatibility Issues with VODataService 1.0}
+\label{vods10-compat}
 
 The working draft version 1.0 of the VODataService schema has been in
 use in IVOA registries since about 2008\todo{Do we want to keep this?
@@ -1338,9 +1345,9 @@ differing metadata are formed.
 \subsection{Changes since PR-20090903}
 
 \begin{itemize}
-  \item <a href="#paramif">S3.4</a>:  added \xmlel{&lt:testQuery}
+  \item added \xmlel{testQuery}
        to \xmlel{vs:ParamHTTP}
-  \item <a href="#paramif">S3.1.1</a>:  in text, added explanation of
+  \item in text, added explanation of
        \xmlel{vs:Format}
   \item grammatical clean-up
 \end{itemize}
@@ -1348,7 +1355,7 @@ differing metadata are formed.
 \subsection{Changes since WD-20090508 (v1.10)}
 
 \begin{itemize}
-  \item corrected errors in example in <a href="#intro">Introduction</a>
+  \item corrected errors in example in Introduction
   \item added \xmlel{description} and
        \xmlel{utype} elements to the
        \xmlel{vs:ForeignKey} type for consistency with TAP.
@@ -1357,136 +1364,4 @@ differing metadata are formed.
        \xmlel{vs:VOTableType}.
 \end{itemize}
 
-<h2><a id="References">References</a></h2>
-
-<dl>
-  <dt> <a name="Arch">[Arch]</a> </dt>
-  <dd> Arviset, Christophe and the IVOA Tehcnical Coordination Group
-       2010, <cite>The IVOA in 2010: Technical Assessment and
-       Roadmap</cite>, v1.0, IVOA Note, <i>in preparation.</i>
-  
-  <dt> <a name="ADQL">[ADQL]</a> </dt>
-  <dd> Ortiz, I., Lusted, J., Dowler, P., Szalay, A., Shirasaki, Y.,
-       Nieto-Santisteban, M., Ohishi, M., O'Mullane, W., Osuna, P. 2008,<cite>
-       <a href="http://www.ivoa.net/Documents/latest/ADQL.html">
-       IVOA Astronomical Data Query Language</a></cite>, v2.00, IVOA
-       Recommendation,
-       \xmlel{http://www.ivoa.net/Documents/latest/ADQL.html}
-       </dd>
-       
-  <dt> <a name="HTTP">[HTTP]</a> </dt>
-  <dd> Fielding, R., Gettys, J, Mogul, J., Frystyk, H., Masinter, L.,
-       Leach, P., Berners-Lee, T. 1999.
-       <cite><a href="http://www.ietf.org/rfc/rfc2616.txt">
-       Hypertext Transfer Protocol -- HTTP/1.1</a></cite>, IETF RFC 2616,
-       \xmlel{http://www.ietf.org/rfc/rfc2616.txt} </dd>
-
-  <dt> <a name="should">[RFC 2119]</a> </dt>
-  <dd> Bradner, S. 1997. <cite><a href="http://www.ietf.org/rfc/rfc2119.txt">
-       Key words for use in RFCs to Indicate Requirement
-       Levels</a></cite>, IETF RFC 2119,
-       \xmlel{http://www.ietf.org/rfc/rfc2119.txt} </dd>
-
-  <dt> <a name="RM">[RM]</a>
-  </dt><dd> Hanisch, Robert (ed.) 2004.
-       <cite><a href="http://www.ivoa.net/Documents/REC/ResMetadata/RM-20070302.html">
-       Resource Metadata for the Virtual Observatory, Version 1.12</a></cite>,
-       IVOA Recommendation,
-     \xmlel{http://www.ivoa.net/Documents/REC/ResMetadata/RM-20040426.htm}
-
-  <dt> <a name="RI">[RI]</a> </dt>
-  <dd> Benson, Kevin, Plante, Ray, Auden, Elizabeth, Graham, Matthew, Greene,
-       Gretchen, Hill, Martin, Linde, Tony, Morris, Dave, O'Mullane,
-       Wil, Rixon, Guy, Andrews, Kona 2008, <cite>
-       <a href="http://www.ivoa.net/Documents/RegistryInterface/20091104/">
-       IVOA Registry Interfaces</a></cite>, v1.0, IVOA
-       Recommendation,
-       \xmlel{http://www.ivoa.net/Documents/RegistryInterface/20091104/}
-       </dd>
-       
-  </dd><dt> <a name="schema">[schema]</a>
-  </dt><dd> Fallside, David C., Walmsley, Priscilla (editors) 2004,
-       <cite><a href="http://www.w3.org/TR/xmlschema-0/">XML Schema
-       Part 0: Primer Second Edition</a></cite>, W3C Recommendation 28
-       October 2004, \xmlel{http://www.w3.org/TR/xmlschema-0/}
-
-  </dd><dt> <a name="SCS">[SCS]</a>
-  </dt><dd> Williams, Roy, Hanisch, Robert, Szalay, Alex and Plante, Ray 2008, <cite>
-       <a href="http://www.ivoa.net/Documents/REC/DAL/ConeSearch-20080222.html">
-       Simple Cone Search Version 1.03</a></cite>, IVOA Recommendation, 
-       \xmlel{http://www.ivoa.net/Documents/REC/DAL/ConeSearch-20080222.html}.
-
-  </dd><dt> <a name="SIA">[SIA]</a>
-  </dt><dd> Tody, Doug, Plante, Ray, and Harrison, Paul 2009, <cite>
-       <a href="http://www.ivoa.net/Documents/SIA/20091116/">
-       Simple Image Access Specification Version 1.0</a></cite>, IVOA
-       Recommendation, 
-       \xmlel{http://www.ivoa.net/Documents/SIA/20091116/}.
-
-  <dt> <a name="STC">[STC]</a> </dt>
-  <dd> Rots, Arnold 2007, <cite>
-       <a href="http://www.ivoa.net/Documents/REC/STC/STC-20071030.html">
-       Space-Time Coordinate Metadata for the Virtual Observatory</a></cite>,
-       v1.33, IVOA Recommendation,
-       \xmlel{href="http://www.ivoa.net/Documents/REC/STC/STC-20071030.html">}
-  <dt> <a name="SQLGuide">[SQLGuide]</a> </dt>
-  <dd> Date, C.J. and Darwin, Hugh 1997, <code>A Guide to the SQL
-       Standard</code>, Fourth Edition, (Addison-Wesley, Longman Inc.:
-       Reading), p 24. </dd>
-
-  <dt> <a name="TAP">[TAP]</a> </dt>
-  <dd> Dowler, P., Rixon, G., Tody, D. 2010, <cite>
-       <a href="http://www.ivoa.net/Documents/TAP/20100327/">Table Access
-       Protocol</a></cite>, v1.0, IVOA Recommendation,
-       \xmlel{http://www.ivoa.net/Documents/TAP/20100327/}
-       </dd>
-       
-  <dt> <a name="UCD">[UCD]</a> </dt>
-  <dd> Martinez, A.P., Derriere, S., Delmotte, N., Gray, N., Mann, R.,
-       McGlynn, T., Ochsenbein, F., Osuna, P., Rixon, G., Williams, R.
-       2007, <cite>
-       <a href="http://www.ivoa.net/Documents/latest/UCDlist.html">
-       The UCD1+ Controlled Vocabulary</a></cite>,
-       v1.23, IVOA Recommendation,
-       \xmlel{http://www.ivoa.net/Documents/latest/UCDlist.html}
-       </dd>
-
-  <dt> <a name="VOR">[VOR]</a> </dt>
-  <dd> Plante, R., Benson, K., Graham, M., Greene,
-       G., Harrison, P., Lemson, G., Linde, T., Rixon,
-       G., St&eacute;b&eacute;, A. 2008, <cite>
-       <a href="http://www.ivoa.net/Documents/REC/ReR/VOResource-20080222.html">
-       VOResource: an XML Encoding Schema for Resource Metadata</a></cite>,
-       v1.03, IVOA Recommendation,
-       \xmlel{http://www.ivoa.net/Documents/REC/ReR/VOResource-20080222.html}
-       </dd>
-
-  <dt> <a name="VOSI">[VOSI]</a>
-  <dd> Graham, M. and Rixon, G. 2010, <cite>
-       <a href="http://www.ivoa.net/Documents/VOSI/20100311/PR-VOSI-1.0-20100311.html">
-       IVOA Support Interfaces</a></cite>, v1.00 20101129, IVOA Proposed
-       Recommendation,
-       \xmlel{http://www.ivoa.net/Documents/VOSI/20100311/PR-VOSI-1.0-20100311.html} </dd>
-
-  </dd><dt> <a name="VOTable">[VOTable]</a>
-  </dt><dd>  Ochsenbein, F., Williams, R., Davenhall, C., Durand, D.,
-       Fernique, P., Giaretta, D., Hanisch, R., McGlynn, T., Szalay, A.,
-       Taylor, M.B., Wicenec, A. 2008, <cite>
-       <a href="http://www.ivoa.net/Documents/VOTable/20091130/REC-VOTable-1.2.html">
-       VOTable Format Definition</a>, version 1.20, IVOA Recommendation,
-       \xmlel{http://www.ivoa.net/Documents/VOTable/20091130/}
-
-  </dd><dt> <a name="xml">[xml]</a>
-  </dt><dd> Bray, Tim, Paoli, Jean, Sperberg-McQueen, C. M., Maler, Eve,
-       Yergeau, Francois (editors) 2004,
-       <cite><a href="http://www.w3.org/TR/REC-xml">Extensible Markup
-       Language (XML) 1.0 (Third Edition)</a></cite>, W3C
-       Recommendation 04 February 2004,
-       \xmlel{http://www.w3.org/TR/REC-xml}
-
-
-</dl>
-
-</body>
-</html>
-
+\end{document}
