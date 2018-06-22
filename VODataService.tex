@@ -359,7 +359,7 @@ xsi:schemaLocation="http://www.ivoa.net/xml/VODataService/v1.1
 \end{lstlisting}
 
 
-\begin{admonition}
+\begin{admonition}{Note}
 The IVOA Registry Interface standard \citep{todo:RI1.1}
        actually \emph{requires} that the VOResource records it
        shares with other registries provide location URLs via
@@ -380,7 +380,7 @@ VOResource schema, as in \xmlel{vr:Resource}.
 
 
 
-\begin{admonition}
+\begin{admonition}{Note}
 (todo: remove this; doesn't really apply any more; and there *really*
 shouldn't be any VODS 1.0 around any more)
 
@@ -555,6 +555,146 @@ The \xmlel{vs:DataCollection} type adds seven additional metadata
 elements beyond the core VOResource metadata:
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd DataCollection
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:DataCollection} Type Schema Documentation}
+
+\noindent{\small
+           A logical grouping of data which, in general, is composed of one 
+           or more accessible datasets.  A collection can contain any
+           combination of images, spectra, catalogs, or other data.   
+         \par}
+
+\noindent{\small
+           (A dataset is a collection of digitally-encoded data that 
+           is normally accessible as a single unit, e.g. a file.)
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:DataCollection} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="DataCollection" >
+  <xs:complexContent >
+    <xs:extension base="vr:Resource" >
+      <xs:sequence >
+        <xs:element name="facility" type="vr:ResourceName" minOccurs="0"
+                  maxOccurs="unbounded" />
+        <xs:element name="instrument" type="vr:ResourceName" minOccurs="0"
+                  maxOccurs="unbounded" />
+        <xs:element name="rights" type="vr:Rights" minOccurs="0"
+                  maxOccurs="unbounded" />
+        <xs:element name="format" type="vs:Format" minOccurs="0"
+                  maxOccurs="unbounded" />
+        <xs:element name="coverage" type="vs:Coverage" minOccurs="0" />
+        <xs:element name="tableset" type="vs:TableSet" minOccurs="0" >
+          <xs:unique name="DataCollection-schemaName" >
+            <xs:selector xpath="schema" />
+            <xs:field xpath="name" />
+          </xs:unique>
+          <xs:unique name="DataCollection-tableName" >
+            <xs:selector xpath="schema/table" />
+            <xs:field xpath="name" />
+          </xs:unique>
+        </xs:element>
+        <xs:element name="accessURL" type="vr:AccessURL" minOccurs="0" />
+      </xs:sequence>
+    </xs:extension>
+  </xs:complexContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:DataCollection} Extension Metadata Elements}
+
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{facility}]
+\begin{description}
+\item[Type] string with ID attribute: vr:ResourceName
+\item[Meaning] 
+                     the observatory or facility used to collect the data 
+                     contained or managed by this resource.  
+                   
+\item[Occurrence] optional; multiple occurrences allowed.
+
+\end{description}
+\item[Element \xmlel{instrument}]
+\begin{description}
+\item[Type] string with ID attribute: vr:ResourceName
+\item[Meaning] 
+                     the Instrument used to collect the data contain or 
+                     managed by a resource.  
+                   
+\item[Occurrence] optional; multiple occurrences allowed.
+
+\end{description}
+\item[Element \xmlel{rights}]
+\begin{description}
+\item[Type] composite: \xmlel{vr:Rights}
+\item[Meaning] 
+                      Information about rights held in and over the resource.
+                    
+\item[Occurrence] optional; multiple occurrences allowed.
+\item[Comment] 
+                      This should be repeated for all Rights values that apply.
+                    
+
+\end{description}
+\item[Element \xmlel{format}]
+\begin{description}
+\item[Type] a string with optional attributes
+\item[Meaning] 
+                      The physical or digital manifestation of the information 
+                      supported by a resource.
+                    
+\item[Occurrence] optional; multiple occurrences allowed.
+\item[Comment] 
+                      MIME types should be used for network-retrievable, digital
+                      data.  Non-MIME type values are used for media that cannot
+                      be retrieved over the network--e.g. CDROM, poster, slides,
+                      video cassette, etc.  
+                    
+
+\end{description}
+\item[Element \xmlel{coverage}]
+\begin{description}
+\item[Type] composite: \xmlel{vs:Coverage}
+\item[Meaning] 
+                     Extent of the content of the resource over space, time, 
+                     and frequency.
+                   
+\item[Occurrence] optional
+
+\end{description}
+\item[Element \xmlel{tableset}]
+\begin{description}
+\item[Type] composite: \xmlel{vs:TableSet}
+\item[Meaning] 
+                     A description of the tables that are part of this
+                     collection. 
+                   
+\item[Occurrence] optional
+\item[Comment] 
+                     Each schema name and each table name must be
+                     unique within this tableset.
+                   
+
+\end{description}
+\item[Element \xmlel{accessURL}]
+\begin{description}
+\item[Type] composite: \xmlel{vr:AccessURL}
+\item[Meaning] 
+                     The URL that can be used to download the data contained in 
+                     this data collection.
+                   
+\item[Occurrence] optional
+
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 The definition of the \xmlel{tableset} element forces certain
@@ -582,6 +722,40 @@ providing a value to the \xmlel{format} element:
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd Format
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{1ex}\noindent\textbf{\xmlel{vs:Format} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="Format" >
+  <xs:simpleContent >
+    <xs:extension base="xs:token" >
+      <xs:attribute name="isMIMEType" type="xs:boolean" default="false" />
+    </xs:extension>
+  </xs:simpleContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:Format} Attributes}
+
+\begingroup\small\begin{bigdescription}
+\item[isMIMEType]
+\begin{description}
+\item[Type] boolean (true/false): xs:boolean
+\item[Meaning] 
+                 if true, then the content is a MIME Type
+               
+\item[Occurrence] optional
+false
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 
@@ -611,6 +785,74 @@ the STC definitions.
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd StandardSTC
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:StandardSTC} Type Schema Documentation}
+
+\noindent{\small
+           a description of standard space-time coordinate systems,
+           positions, and regions.
+         \par}
+
+\noindent{\small
+           This resource provides a mechanism for registering standard 
+           coordinate systems which other resources may reference as
+           part of a coverage descripiton.  In particular, coverage
+           descriptions will refer to components of the STC
+           descriptions in this resource via an IVOA identifier.  It
+           is intended that an application consuming such coverage
+           descriptions be able to semantically interpret the
+           identifier without resolving it.  For this reason, once a
+           standard STC description is registered with this resource 
+           type, updating the description is strongly discouraged.  
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:StandardSTC} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="StandardSTC" >
+  <xs:complexContent >
+    <xs:extension base="vr:Resource" >
+      <xs:sequence >
+        <xs:element name="stcDefinitions"
+                  type="stc:stcDescriptionType"
+                  minOccurs="1"
+                  maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:extension>
+  </xs:complexContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:StandardSTC} Extension Metadata Elements}
+
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{stcDefinitions}]
+\begin{description}
+\item[Type] \xmlel{stc:stcDescriptionType}
+\item[Meaning] 
+                       An STC description of coordinate systems,
+                       positions, and/or regions
+                     
+\item[Occurrence] required; multiple occurrences allowed.
+\item[Comment] 
+                       Each system, position, and region description
+                       should have a an XML ID assigned to it.
+                     
+\item[Comment] 
+                       Because the STC schema sets 
+                       elementFormDefault={"}qualified{"}, it is
+                       recommended that this element specify the STC 
+                       default namespace via an xmlns namespace.
+                     
+
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
 
 % /GENERATED
 
@@ -650,6 +892,72 @@ of this type still implies access to astronomical data.
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd DataService
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:DataService} Type Schema Documentation}
+
+\noindent{\small
+           A service for accessing astronomical data
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:DataService} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="DataService" >
+  <xs:complexContent >
+    <xs:extension base="vr:Service" >
+      <xs:sequence >
+        <xs:element name="facility" type="vr:ResourceName" minOccurs="0"
+                  maxOccurs="unbounded" />
+        <xs:element name="instrument" type="vr:ResourceName" minOccurs="0"
+                  maxOccurs="unbounded" />
+        <xs:element name="coverage" type="vs:Coverage" minOccurs="0" />
+      </xs:sequence>
+    </xs:extension>
+  </xs:complexContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:DataService} Extension Metadata Elements}
+
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{facility}]
+\begin{description}
+\item[Type] string with ID attribute: vr:ResourceName
+\item[Meaning] 
+                     the observatory or facility used to collect the data 
+                     contained or managed by this resource.  
+                   
+\item[Occurrence] optional; multiple occurrences allowed.
+
+\end{description}
+\item[Element \xmlel{instrument}]
+\begin{description}
+\item[Type] string with ID attribute: vr:ResourceName
+\item[Meaning] 
+                     the Instrument used to collect the data contain or 
+                     managed by a resource.  
+                   
+\item[Occurrence] optional; multiple occurrences allowed.
+
+\end{description}
+\item[Element \xmlel{coverage}]
+\begin{description}
+\item[Type] composite: \xmlel{vs:Coverage}
+\item[Meaning] 
+                     Extent of the content of the resource over space, time, 
+                     and frequency.
+                   
+\item[Occurrence] optional
+
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 The use and meaning of the \xmlel{facility} and
@@ -672,6 +980,67 @@ tabular data may optionally be described via a
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd CatalogService
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:CatalogService} Type Schema Documentation}
+
+\noindent{\small
+            A service that interacts with with astronomical data
+            through one or more specified tables.
+         \par}
+
+\noindent{\small
+            A table with sky coverage typically have columns that give
+            longitude-latitude positions in some coordinate system.  
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:CatalogService} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="CatalogService" >
+  <xs:complexContent >
+    <xs:extension base="vs:DataService" >
+      <xs:sequence >
+        <xs:element name="tableset" type="vs:TableSet" minOccurs="0" >
+          <xs:unique name="CatalogService-schemaName" >
+            <xs:selector xpath="schema" />
+            <xs:field xpath="name" />
+          </xs:unique>
+          <xs:unique name="CatalogService-tableName" >
+            <xs:selector xpath="schema/table" />
+            <xs:field xpath="name" />
+          </xs:unique>
+        </xs:element>
+      </xs:sequence>
+    </xs:extension>
+  </xs:complexContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:CatalogService} Extension Metadata Elements}
+
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{tableset}]
+\begin{description}
+\item[Type] composite: \xmlel{vs:TableSet}
+\item[Meaning] 
+                       A description of the tables that are accessible
+                       through this service.
+                     
+\item[Occurrence] optional
+\item[Comment] 
+                       Each schema name and each table name must be
+                       unique within this tableset.
+                     
+
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 The definition of \xmlel{tableset} element forces certain
@@ -688,6 +1057,139 @@ sky, frequency, and time.
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd Coverage
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:Coverage} Type Schema Documentation}
+
+\noindent{\small
+           A description of how a resource's contents or behavior maps
+           to the sky, to time, and to frequency space, including
+           coverage and resolution. 
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:Coverage} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="Coverage" >
+  <xs:sequence >
+    <xs:element ref="stc:STCResourceProfile" minOccurs="0" />
+    <xs:element name="footprint" type="vs:ServiceReference" minOccurs="0" />
+    <xs:element name="waveband" type="vs:Waveband" minOccurs="0"
+              maxOccurs="unbounded" />
+    <xs:element name="regionOfRegard" type="xs:float" minOccurs="0" />
+  </xs:sequence>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:Coverage} Metadata Elements}
+
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{}]
+\begin{description}
+\item[Type] 
+\item[Meaning] 
+                 The STC description of the location of the resource's 
+                 data (or behavior on data) on the sky, in time, and in 
+                 frequency space, including resolution. 
+               
+\item[Occurrence] optional
+\item[Comment] 
+                 In general, this description should be approximate; a
+                 more precise description can be provided by the 
+                 footprint service.  
+               
+
+\end{description}
+\item[Element \xmlel{footprint}]
+\begin{description}
+\item[Type] a URI with optional attributes
+\item[Meaning] 
+                  a reference to a footprint service for retrieving 
+                  precise and up-to-date description of coverage.  
+               
+\item[Occurrence] optional
+\item[Comment] 
+                  the ivo-id attribute refers to a Service record
+                  that describes the Footprint capability.  That is,
+                  the record will have a capability element describing
+                  the service.  The resource refered to may be the 
+                  current one.  
+               
+
+\end{description}
+\item[Element \xmlel{waveband}]
+\begin{description}
+\item[Type] string with controlled vocabulary
+\item[Meaning] 
+                  a named spectral region of the electro-magnetic spectrum 
+                  that the resource's spectral coverage overlaps with.
+               
+\item[Occurrence] optional; multiple occurrences allowed.
+
+\item[Allowed Values]\hfil
+\begin{longtermsdescription}
+\item[Radio]
+                 wavelength >= 10 mm; frequency <= 30 GHz.
+               
+\item[Millimeter]
+                 0.1 mm <= wavelength <= 10 mm; 
+                 3000 GHz >= frequency >= 30 GHz.
+               
+\item[Infrared]
+                 1 micron <= wavelength <= 100 micons 
+               
+\item[Optical]
+                 0.3 microns <= wavelength <= 1 micon; 
+                 300 nm <= wavelength <= 1000 nm; 
+                 3000 Angstroms <= wavelength <= 10000 Angstroms
+               
+\item[UV]
+                 0.1 microns <= wavelength <= 0.3 micon; 
+                 1000 nm <= wavelength <= 3000 nm; 
+                 1000 Angstroms <= wavelength <= 30000 Angstroms
+               
+\item[EUV]
+                 100 Angstroms <= wavelength <= 1000 Angstroms; 
+                 12 eV <= energy <= 120 eV
+               
+\item[X-ray]
+                 0.1 Angstroms <= wavelength <= 100 Angstroms; 
+                 0.12 keV <= energy <= 120 keV
+               
+\item[Gamma-ray]
+                 energy >= 120 keV
+               
+\end{longtermsdescription}
+
+\end{description}
+\item[Element \xmlel{regionOfRegard}]
+\begin{description}
+\item[Type] floating-point number: \xmlel{xs:float}
+\item[Meaning] 
+                  a single numeric value representing the angle, given
+                  in decimal degrees, by which a positional query
+                  against this resource should be {"}blurred{"} in order
+                  to get an appropriate match. 
+               
+\item[Occurrence] optional
+\item[Comment] 
+                  In the case of image repositories, it might refer to
+                  a typical field-of-view size, or the primary beam
+                  size for radio aperture synthesis data.  In the case
+                  of object catalogs RoR should normally be the
+                  largest of the typical size of the objects, the
+                  astrometric errors in the positions, or the
+                  resolution of the data.  
+               
+
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 A detailed, systematic description of coverage is provided via the
@@ -706,7 +1208,7 @@ use of the \xmlel{stc:} prefix to represent the STC namespace is
 encouraged.   
 
 
-\begin{admonition}
+\begin{admonition}{Note}
 The STC scheme provides rich mark-up for expressing the
        details of the coverage.  In particular, the mark-up is quite
        flexible in the units that can be used.  For example, spectral
@@ -747,6 +1249,59 @@ be consider functionally all located at a single site.
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd TableSet
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:TableSet} Type Schema Documentation}
+
+\noindent{\small
+           The set of tables hosted by a resource.
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:TableSet} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="TableSet" >
+  <xs:sequence >
+    <xs:element name="schema" type="vs:TableSchema" minOccurs="1"
+              maxOccurs="unbounded" />
+  </xs:sequence>
+  <xs:anyAttribute namespace="##other" />
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:TableSet} Metadata Elements}
+
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{schema}]
+\begin{description}
+\item[Type] composite: \xmlel{vs:TableSchema}
+\item[Meaning] 
+                A named description of a set of logically related tables.
+              
+\item[Occurrence] required; multiple occurrences allowed.
+\item[Comment] 
+                The name given by the {"}name{"} child element must
+                be unique within this TableSet instance.  If there is
+                only one schema in this set and/or there's no locally
+                appropriate name to provide, the name can be set to
+                {"}default{"}.  
+              
+\item[Comment] 
+                This aggregation does not need to map to an
+                actual database, catalog, or schema, though the
+                publisher may choose to aggregate along such
+                designations, or particular service protocol may
+                recommend it.  
+              
+
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 
@@ -761,6 +1316,112 @@ the \xmlel{vs:TableSchema} type.
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd TableSchema
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:TableSchema} Type Schema Documentation}
+
+\noindent{\small
+           A detailed description of a logically-related set of tables
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:TableSchema} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="TableSchema" >
+  <xs:sequence >
+    <xs:element name="name" type="xs:token" minOccurs="1" maxOccurs="1" />
+    <xs:element name="title" type="xs:token" minOccurs="0" />
+    <xs:element name="description" type="xs:token" minOccurs="0"
+              maxOccurs="1" />
+    <xs:element name="utype" type="xs:token" minOccurs="0" />
+    <xs:element name="table" type="vs:Table" minOccurs="0"
+              maxOccurs="unbounded" />
+  </xs:sequence>
+  <xs:anyAttribute namespace="##other" />
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:TableSchema} Metadata Elements}
+
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{name}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+               A name for the set of tables.  
+             
+\item[Occurrence] required
+\item[Comment] 
+               This is used to uniquely identify the table set among
+               several table sets.  If a title is not present, this
+               name can be used for display purposes.
+             
+\item[Comment] 
+               If there is no appropriate logical name associated with
+               this set, the name should be explicitly set to
+               {"}default{"}.  
+             
+
+\end{description}
+\item[Element \xmlel{title}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                  a descriptive, human-interpretable name for the table set.
+               
+\item[Occurrence] optional
+\item[Comment] 
+                  This is used for display purposes.  There is no requirement
+                  regarding uniqueness.  It is useful when there are
+                  multiple schemas in the context (e.g. within a
+                  tableset; otherwise, the resource title could be
+                  used instead).
+               
+
+\end{description}
+\item[Element \xmlel{description}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+               A free text description of the tableset that should
+               explain in general how all of the tables are related.
+             
+\item[Occurrence] optional
+
+\end{description}
+\item[Element \xmlel{utype}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                  an identifier for a concept in a data model that
+                  the data in this schema as a whole represent.  
+               
+\item[Occurrence] optional
+\item[Comment] 
+                  The format defined in the VOTable standard is strongly
+                  recommended. 
+               
+
+\end{description}
+\item[Element \xmlel{table}]
+\begin{description}
+\item[Type] composite: \xmlel{vs:Table}
+\item[Meaning] 
+               A description of one of the tables that makes up the set.
+             
+\item[Occurrence] optional; multiple occurrences allowed.
+\item[Comment] 
+               The table names for the table should be unique.
+             
+
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 
@@ -770,6 +1431,135 @@ Each table in a schema is described in detail using the
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd Table
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{1ex}\noindent\textbf{\xmlel{vs:Table} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="Table" >
+  <xs:sequence >
+    <xs:element name="name" type="xs:token" minOccurs="1" maxOccurs="1" />
+    <xs:element name="title" type="xs:token" minOccurs="0" />
+    <xs:element name="description" type="xs:token" minOccurs="0" />
+    <xs:element name="utype" type="xs:token" minOccurs="0" />
+    <xs:element name="column" type="vs:TableParam" minOccurs="0"
+              maxOccurs="unbounded" />
+    <xs:element name="foreignKey" type="vs:ForeignKey" minOccurs="0"
+              maxOccurs="unbounded" />
+  </xs:sequence>
+  <xs:attribute name="type" type="xs:string" />
+  <xs:anyAttribute namespace="##other" />
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:Table} Attributes}
+
+\begingroup\small\begin{bigdescription}
+\item[type]
+\begin{description}
+\item[Type] string: \xmlel{xs:string}
+\item[Meaning] 
+               a name for the role this table plays.  Recognized
+               values include {"}output{"}, indicating this table is output 
+               from a query; {"}base\_table{"}, indicating a table
+               whose records represent the main subjects of its
+               schema; and {"}view{"}, indicating that the table represents
+               a useful combination or subset of other tables.  Other 
+               values are allowed.  
+            
+\item[Occurrence] optional
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:Table} Metadata Elements}
+
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{name}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                  the fully qualified name of the table.  This name 
+                  should include all catalog or schema prefixes
+                  needed to sufficiently uniquely distinguish it in a
+                  query.  
+               
+\item[Occurrence] required
+\item[Comment] 
+                  In general, the format of the qualified name may
+                  depend on the context; however, when the
+                  table is intended to be queryable via ADQL, then the
+                  catalog and schema qualifiers are delimited from the
+                  table name with dots (.).  
+               
+
+\end{description}
+\item[Element \xmlel{title}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                  a descriptive, human-interpretable name for the table.
+               
+\item[Occurrence] optional
+\item[Comment] 
+                  This is used for display purposes.  There is no requirement
+                  regarding uniqueness.  
+               
+
+\end{description}
+\item[Element \xmlel{description}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                  a free-text description of the table's contents
+               
+\item[Occurrence] optional
+
+\end{description}
+\item[Element \xmlel{utype}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                  an identifier for a concept in a data model that
+                  the data in this table represent.  
+               
+\item[Occurrence] optional
+\item[Comment] 
+                  The format defined in the VOTable standard is highly
+                  recommended. 
+               
+
+\end{description}
+\item[Element \xmlel{column}]
+\begin{description}
+\item[Type] composite: \xmlel{vs:TableParam}
+\item[Meaning] 
+                  a description of a table column.
+               
+\item[Occurrence] optional; multiple occurrences allowed.
+
+\end{description}
+\item[Element \xmlel{foreignKey}]
+\begin{description}
+\item[Type] composite: \xmlel{vs:ForeignKey}
+\item[Meaning] 
+                  a description of a foreign keys, one or more columns
+                  from the current table that can be used to join with 
+                  another table.  
+               
+\item[Occurrence] optional; multiple occurrences allowed.
+
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 
@@ -837,6 +1627,90 @@ set of columns in another table.
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd ForeignKey
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:ForeignKey} Type Schema Documentation}
+
+\noindent{\small
+           A description of the mapping a foreign key--a set of 
+           columns from one table--to columns in another table.  
+         \par}
+
+\noindent{\small
+           This definition that the foreign key is being described 
+           within the context of the table containing the key.  
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:ForeignKey} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="ForeignKey" >
+  <xs:sequence >
+    <xs:element name="targetTable" type="xs:token" />
+    <xs:element name="fkColumn" type="vs:FKColumn" minOccurs="1"
+              maxOccurs="unbounded" />
+    <xs:element name="description" type="xs:token" minOccurs="0" />
+    <xs:element name="utype" type="xs:token" minOccurs="0" />
+  </xs:sequence>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:ForeignKey} Metadata Elements}
+
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{targetTable}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+               the fully-qualified name (including catalog and schema, as
+               applicable) of the table that can be joined with the 
+               table containing this foreign key.
+             
+\item[Occurrence] required
+
+\end{description}
+\item[Element \xmlel{fkColumn}]
+\begin{description}
+\item[Type] composite: \xmlel{vs:FKColumn}
+\item[Meaning] 
+               a pair of column names, one from this table and one
+               from the target table that should be used to join the
+               tables in a query.  
+             
+\item[Occurrence] required; multiple occurrences allowed.
+
+\end{description}
+\item[Element \xmlel{description}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                  a free-text description of what this key points to
+                  and what the relationship means.  
+               
+\item[Occurrence] optional
+
+\end{description}
+\item[Element \xmlel{utype}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                  an identifier for a concept in a data model that
+                  the association enabled by this key represents.  
+               
+\item[Occurrence] optional
+\item[Comment] 
+                  The format defined in the VOTable standard is highly
+                  recommended. 
+               
+
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 
@@ -927,6 +1801,108 @@ element.
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd ParamHTTP
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:ParamHTTP} Type Schema Documentation}
+
+\noindent{\small
+           A service invoked via an HTTP Query (either Get or Post)
+           with a set of arguments consisting of keyword name-value pairs.
+        \par}
+
+\noindent{\small
+           Note that the URL for help with this service can be put into
+           the Service/ReferenceURL element.
+        \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:ParamHTTP} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="ParamHTTP" >
+  <xs:complexContent >
+    <xs:extension base="vr:Interface" >
+      <xs:sequence >
+        <xs:element name="queryType" type="vs:HTTPQueryType" minOccurs="0"
+                  maxOccurs="2" />
+        <xs:element name="resultType" type="xs:token" minOccurs="0"
+                  maxOccurs="1" />
+        <xs:element name="param" type="vs:InputParam" minOccurs="0"
+                  maxOccurs="unbounded" />
+        <xs:element name="testQuery" type="xs:string" minOccurs="0"
+                  maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:extension>
+  </xs:complexContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:ParamHTTP} Extension Metadata Elements}
+
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{queryType}]
+\begin{description}
+\item[Type] string with controlled vocabulary
+\item[Meaning] 
+                       The type of HTTP request, either GET or POST.
+                     
+\item[Occurrence] optional; up to 2 occurrences allowed.
+
+\item[Allowed Values]\hfil
+\begin{longtermsdescription}
+\item[GET]
+\item[POST]
+\end{longtermsdescription}
+\item[Comment] 
+                       The service may indicate support for both GET
+                       and POST by providing 2 queryType elements, one
+                       with GET and one with POST.
+                     
+
+\end{description}
+\item[Element \xmlel{resultType}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                       The MIME type of a document returned in the HTTP response.
+                     
+\item[Occurrence] optional
+
+\end{description}
+\item[Element \xmlel{param}]
+\begin{description}
+\item[Type] composite: \xmlel{vs:InputParam}
+\item[Meaning] 
+                       a description of a input parameter that can be 
+                       provided as a name=value argument to the service.  
+                    
+\item[Occurrence] optional; multiple occurrences allowed.
+
+\end{description}
+\item[Element \xmlel{testQuery}]
+\begin{description}
+\item[Type] string: \xmlel{xs:string}
+\item[Meaning] 
+                       an ampersand-delimited list of arguments that
+                       can be used to test this service interface; 
+                       when provided as the input to this interface,
+                       it will produce a legal, non-null response.
+                    
+\item[Occurrence] optional; multiple occurrences allowed.
+\item[Comment] 
+                       When the interface supports GET, then the full 
+                       query URL is formed by the concatonation of the 
+                       base URL (given by the accessURL) and the value 
+                       given by this testQuery element.  
+                    
+
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 The extension metadata defined in the schema definition above are all
@@ -1005,6 +1981,105 @@ metadata except the data type.
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd BaseParam
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:BaseParam} Type Schema Documentation}
+
+\noindent{\small
+            a description of a parameter that places no restriction on 
+            the parameter's data type.
+         \par}
+
+\noindent{\small
+            As the parameter's data type is usually important, schemas
+            normally employ a sub-class of this type (e.g. Param),
+            rather than this type directly.
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:BaseParam} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="BaseParam" >
+  <xs:sequence >
+    <xs:element name="name" type="xs:token" minOccurs="0" />
+    <xs:element name="description" type="xs:token" minOccurs="0" />
+    <xs:element name="unit" type="xs:token" minOccurs="0" />
+    <xs:element name="ucd" type="xs:token" minOccurs="0" />
+    <xs:element name="utype" type="xs:token" minOccurs="0" />
+  </xs:sequence>
+  <xs:anyAttribute namespace="##other" />
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:BaseParam} Metadata Elements}
+
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{name}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                  the name of the column
+               
+\item[Occurrence] optional
+
+\end{description}
+\item[Element \xmlel{description}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                  a free-text description of the column's contents
+               
+\item[Occurrence] optional
+
+\end{description}
+\item[Element \xmlel{unit}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                  the unit associated with all values in the column
+               
+\item[Occurrence] optional
+
+\end{description}
+\item[Element \xmlel{ucd}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                  the name of a unified content descriptor that
+                  describes the scientific content of the parameter.  
+               
+\item[Occurrence] optional
+\item[Comment] 
+                  There are no requirements for compliance with any 
+                  particular UCD standard.  The format of the UCD can
+                  be used to distinguish between UCD1, UCD1+, and
+                  SIA-UCD.  See 
+                  http://www.ivoa.net/Documents/latest/UCDlist.html
+                  for the latest IVOA standard set.  
+               
+
+\end{description}
+\item[Element \xmlel{utype}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                  an identifier for a concept in a data model that
+                  the data in this schema represent.  
+               
+\item[Occurrence] optional
+\item[Comment] 
+                  The format defined in the VOTable standard is highly
+                  recommended. 
+               
+
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 Leaving the data type metadatum out of \xmlel{vs:BaseParam}
@@ -1019,6 +2094,115 @@ derive from a common parent, \xmlel{vs:DataType}.
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd DataType
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:DataType} Type Schema Documentation}
+
+\noindent{\small
+            a type (in the computer language sense) associated with a 
+            parameter with an arbitrary name
+         \par}
+
+\noindent{\small
+            This XML type is used as a parent for defining data types
+            with a restricted set of names.
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:DataType} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="DataType" >
+  <xs:simpleContent >
+    <xs:extension base="xs:token" >
+      <xs:attribute name="arraysize" type="vs:ArrayShape" default="1" />
+      <xs:attribute name="delim" type="xs:string" default=" " />
+      <xs:attribute name="extendedType" type="xs:string" />
+      <xs:attribute name="extendedSchema" type="xs:anyURI" />
+      <xs:anyAttribute namespace="##other" />
+    </xs:extension>
+  </xs:simpleContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:DataType} Attributes}
+
+\begingroup\small\begin{bigdescription}
+\item[arraysize]
+\begin{description}
+\item[Type] string of the form: \emph{([0-9]+x)*[0-9]*[*]?}
+\item[Meaning] 
+                     the shape of the array that constitutes the value
+                  
+\item[Occurrence] optional
+
+1
+\item[Comment] 
+                     the default is {"}1{"}; i.e. the value is a scalar.
+                  
+\end{description}
+\item[delim]
+\begin{description}
+\item[Type] string: \xmlel{xs:string}
+\item[Meaning] 
+                     the string that is used to delimit elements of an array
+                     value when arraysize is not {"}1{"}.
+                  
+\item[Occurrence] optional
+ 
+\item[Comment] 
+                     Unless specifically disallowed by the context, 
+                     applications should allow optional spaces to 
+                     appear in an actual data value before and after 
+                     the delimiter (e.g. {"}1, 5{"} when delim={"},{"}).
+                  
+\item[Comment] 
+                     the default is {"} {"}; i.e. the values are delimited 
+                     by spaces.  
+                  
+\end{description}
+\item[extendedType]
+\begin{description}
+\item[Type] string: \xmlel{xs:string}
+\item[Meaning] 
+                     The data value represented by this type can be
+                     interpreted as of a custom type identified by 
+                     the value of this attribute.
+                  
+\item[Occurrence] optional
+\item[Comment] 
+                     If an application does not recognize this
+                     extendedType, it should attempt to handle value
+                     assuming the type given by the element's value.
+                     string is a recommended default type.
+                  
+\item[Comment] 
+                     This element may make use of the extendedSchema
+                     attribute and/or any arbitrary (qualified)
+                     attribute to refine the identification of the 
+                     type.
+                  
+\end{description}
+\item[extendedSchema]
+\begin{description}
+\item[Type] a URI: \xmlel{xs:anyURI}
+\item[Meaning] 
+                     An identifier for the schema that the value given
+                     by the extended attribute is drawn from.
+                  
+\item[Occurrence] optional
+\item[Comment] 
+                     This attribute is normally ignored if the
+                     extendedType attribute is not present.
+                  
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 The content of an element of type \xmlel{vs:DataType} is the name
@@ -1081,6 +2265,109 @@ service or a function in a weakly-typed (e.g. scripting) language.
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd InputParam
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:InputParam} Type Schema Documentation}
+
+\noindent{\small
+            a description of a service or function parameter having a
+            fixed data type. 
+         \par}
+
+\noindent{\small
+            The allowed data type names do not imply a size or precise
+            format.  This type is intended to be sufficient for describing
+            an input parameter to a simple REST service or a function 
+            written in a weakly-typed (e.g., scripting) language.
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:InputParam} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="InputParam" >
+  <xs:complexContent >
+    <xs:extension base="vs:BaseParam" >
+      <xs:sequence >
+        <xs:element name="dataType" type="vs:SimpleDataType" minOccurs="0" />
+      </xs:sequence>
+      <xs:attribute name="use" type="vs:ParamUse" default="optional" />
+      <xs:attribute name="std" type="xs:boolean" default="true" />
+    </xs:extension>
+  </xs:complexContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:InputParam} Attributes}
+
+\begingroup\small\begin{bigdescription}
+\item[use]
+\begin{description}
+\item[Type] string with controlled vocabulary
+\item[Meaning] 
+                     An indication of whether this parameter is
+                     required to be provided for the application
+                     or service to work properly.  
+                  
+\item[Occurrence] optional
+
+\item[Allowed Values]\hfil
+\begin{longtermsdescription}
+\item[required]
+                  the parameter is required for the application or
+                  service to work properly.  
+               
+\item[optional]
+                  the parameter is optional but supported by the application or
+                  service.
+               
+\item[ignored]
+                  the parameter is not supported and thus is ignored by the 
+                  application or service.
+               
+\end{longtermsdescription}
+optional
+\item[Comment] 
+                     Allowed values are {"}required{"} and {"}optional{"}.
+                  
+\end{description}
+\item[std]
+\begin{description}
+\item[Type] boolean (true/false): xs:boolean
+\item[Meaning] 
+                     If true, the meaning and behavior of this parameter is
+                     reserved and defined by a standard interface.  If
+                     false, it represents an implementation-specific
+                     parameter that effectively extends the behavior of the 
+                     service or application.  
+                  
+\item[Occurrence] optional
+true
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:InputParam} Extension Metadata Elements}
+
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{dataType}]
+\begin{description}
+\item[Type] composite: \xmlel{vs:SimpleDataType}
+\item[Meaning] 
+                        a type of data contained in the column
+                     
+\item[Occurrence] optional
+
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 
@@ -1123,6 +2410,90 @@ a table.
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd TableParam
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:TableParam} Type Schema Documentation}
+
+\noindent{\small
+            a description of a table parameter having a fixed data type.
+         \par}
+
+\noindent{\small
+            The allowed data type names match those supported by VOTable.
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:TableParam} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="TableParam" >
+  <xs:complexContent >
+    <xs:extension base="vs:BaseParam" >
+      <xs:sequence >
+        <xs:element name="dataType" type="vs:TableDataType" minOccurs="0" />
+        <xs:element name="flag" type="xs:token" minOccurs="0"
+                  maxOccurs="unbounded" />
+      </xs:sequence>
+      <xs:attribute name="std" type="xs:boolean" />
+    </xs:extension>
+  </xs:complexContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:TableParam} Attributes}
+
+\begingroup\small\begin{bigdescription}
+\item[std]
+\begin{description}
+\item[Type] boolean (true/false): xs:boolean
+\item[Meaning] 
+                     If true, the meaning and use of this parameter is
+                     reserved and defined by a standard model.  If false, 
+                     it represents a database-specific parameter 
+                     that effectively extends beyond the standard.  If
+                     not provided, then the value is unknown.
+                  
+\item[Occurrence] optional
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:TableParam} Extension Metadata Elements}
+
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{dataType}]
+\begin{description}
+\item[Type] \xmlel{vs:DataType} with optional attributes
+\item[Meaning] 
+                        a type of data contained in the column
+                     
+\item[Occurrence] optional
+
+\end{description}
+\item[Element \xmlel{flag}]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                        a keyword representing traits of the column.  
+                        Recognized values include {"}indexed{"}, {"}primary{"}, and
+                        {"}nullable{"}.  
+                     
+\item[Occurrence] optional; multiple occurrences allowed.
+\item[Comment] 
+                        See the specification document for definitions 
+                        of recognized keywords.
+                     
+
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 
@@ -1161,9 +2532,168 @@ The VODataService schema defines two XML types that derive from
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd VOTableType
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:VOTableType} Type Schema Documentation}
+
+\noindent{\small
+            a data type supported explicitly by the VOTable format
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:VOTableType} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="VOTableType" >
+  <xs:simpleContent >
+    <xs:restriction base="vs:TableDataType" >
+      <xs:enumeration value="boolean" />
+      <xs:enumeration value="bit" />
+      <xs:enumeration value="unsignedByte" />
+      <xs:enumeration value="short" />
+      <xs:enumeration value="int" />
+      <xs:enumeration value="long" />
+      <xs:enumeration value="char" />
+      <xs:enumeration value="unicodeChar" />
+      <xs:enumeration value="float" />
+      <xs:enumeration value="double" />
+      <xs:enumeration value="floatComplex" />
+      <xs:enumeration value="doubleComplex" />
+      <xs:attribute name="arraysize" type="vs:ArrayShape" default="1" />
+      <xs:attribute name="delim" type="xs:string" default=" " />
+      <xs:attribute name="extendedType" type="xs:string" />
+      <xs:attribute name="extendedSchema" type="xs:anyURI" />
+      <xs:anyAttribute namespace="##other" />
+    </xs:restriction>
+  </xs:simpleContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:VOTableType} Attributes}
+
+\begingroup\small\begin{bigdescription}
+\item[arraysize]
+\begin{description}
+\item[Type] string of the form: \emph{([0-9]+x)*[0-9]*[*]?}
+\item[Meaning] 
+\item[Occurrence] optional
+
+1
+\end{description}
+\item[delim]
+\begin{description}
+\item[Type] string: \xmlel{xs:string}
+\item[Meaning] 
+\item[Occurrence] optional
+ 
+\end{description}
+\item[extendedType]
+\begin{description}
+\item[Type] string: \xmlel{xs:string}
+\item[Meaning] 
+\item[Occurrence] optional
+\end{description}
+\item[extendedSchema]
+\begin{description}
+\item[Type] a URI: \xmlel{xs:anyURI}
+\item[Meaning] 
+\item[Occurrence] optional
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd TAPType
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:TAPType} Type Schema Documentation}
+
+\noindent{\small
+            a data type supported explicitly by the Table Access 
+            Protocol (v1.0).  
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:TAPType} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="TAPType" >
+  <xs:simpleContent >
+    <xs:restriction base="vs:TAPDataType" >
+      <xs:enumeration value="BOOLEAN" />
+      <xs:enumeration value="SMALLINT" />
+      <xs:enumeration value="INTEGER" />
+      <xs:enumeration value="BIGINT" />
+      <xs:enumeration value="REAL" />
+      <xs:enumeration value="DOUBLE" />
+      <xs:enumeration value="TIMESTAMP" />
+      <xs:enumeration value="CHAR" />
+      <xs:enumeration value="VARCHAR" />
+      <xs:enumeration value="BINARY" />
+      <xs:enumeration value="VARBINARY" />
+      <xs:enumeration value="POINT" />
+      <xs:enumeration value="REGION" />
+      <xs:enumeration value="CLOB" />
+      <xs:enumeration value="BLOB" />
+      <xs:attribute name="arraysize" type="vs:ArrayShape" default="1" />
+      <xs:attribute name="delim" type="xs:string" default=" " />
+      <xs:attribute name="extendedType" type="xs:string" />
+      <xs:attribute name="extendedSchema" type="xs:anyURI" />
+      <xs:attribute name="size" type="xs:positiveInteger" />
+      <xs:anyAttribute namespace="##other" />
+    </xs:restriction>
+  </xs:simpleContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:TAPType} Attributes}
+
+\begingroup\small\begin{bigdescription}
+\item[arraysize]
+\begin{description}
+\item[Type] string of the form: \emph{([0-9]+x)*[0-9]*[*]?}
+\item[Meaning] 
+\item[Occurrence] optional
+
+1
+\end{description}
+\item[delim]
+\begin{description}
+\item[Type] string: \xmlel{xs:string}
+\item[Meaning] 
+\item[Occurrence] optional
+ 
+\end{description}
+\item[extendedType]
+\begin{description}
+\item[Type] string: \xmlel{xs:string}
+\item[Meaning] 
+\item[Occurrence] optional
+\end{description}
+\item[extendedSchema]
+\begin{description}
+\item[Type] a URI: \xmlel{xs:anyURI}
+\item[Meaning] 
+\item[Occurrence] optional
+\end{description}
+\item[size]
+\begin{description}
+\item[Type] \xmlel{xs:positiveInteger}
+\item[Meaning] 
+\item[Occurrence] optional
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 
