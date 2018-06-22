@@ -110,11 +110,11 @@ References to specific elements and types defined in the VOResource
 schema include the namespaces prefix \xmlel{vr} as in
 \xmlel{vr:Resource} (a type defined in the VOResource schema; the
 recommended namespace prefix for VODataService as per Registry
-Interfaces 1.1 \citep{registry interfaces 1.1}, sect.~2.2, is \xmlel{vs}.
+Interfaces 1.1 \citep{todo:RI1.1}, sect.~2.2, is \xmlel{vs}.
 
 \section{Introduction}
 
-The VOResource standard \citep{2008ivoa.spec.0222P} provides a means of
+The VOResource standard \citep{todo:VOR1.1} provides a means of
 encoding IVOA Resource Metadata\todo{decouple from RM} in XML.
 VOResource uses XML Schema \citep{std:XSD} to define
 most of the XML syntax rules (while a few of the syntax rules are
@@ -137,7 +137,7 @@ User Layer) to discover archives and services of interest (represented
 in the Resource Layer); registries provide the means for this
 discovery.  A registry is a repository of descriptions of resources
 that can be searched based on the metadata in those descriptions.  The
-Resource Metadata standard \citep{RM} defines the core
+Resource Metadata standard \citep{2007ivoa.spec.0302H} defines the core
 concepts used in the resource descriptions, and the VOResource
 standard defines the XML format.  As an
 extension of VOResource, the VODataService standard, defined in this
@@ -155,19 +155,19 @@ sky with which the data are associated and the time and frequency ranges that
 were observed or modeled to create the data.  It also allows one to
 describe tables in detail.  In particular, one can describe each of
 the columns of a table--providing, for example, its name, type, UCD
-\citep{UCD}, 
+\citep{2005ivoa.spec.1231D}, 
 and textual description.  When this metadata is part of a resource
-description in a registry \citep{VOR}, it becomes possible
+description in a registry, it becomes possible
 to discover tables that contain particular kinds of data.  
 
 
 
 It is intended that VODataService will be central to describing
 services that support standard IVOA data access layer protocols such
-as Simple Image Access \citep{SIA} and Simple Cone Search
-\citep{SCS}.  While other VOResource extensions would
+as Simple Image Access \citep{2015ivoa.spec.1223D} and Simple Cone Search
+\citep{2008ivoa.specQ0222P}.  While other VOResource extensions would
 define the protocol-specific metadata (encapsulated as a standard
-\emph{capability} \citep{VOR}), the general service
+\emph{capability} from VOResource), the general service
 resource description would share the common data concepts such as
 coverage and tabular data.  Note, however, that a service described
 using the VODataService schema need not support any standard
@@ -177,9 +177,9 @@ interface that accesses data.
 
 
 
-As a legal extension of VOResource \citep{VOR}, the use
+As a legal extension of VOResource, the use
 of VODataService is subject to the rules and recommendations for XML
-\citep{xml}, XML Schema \citep{schema},
+\citep{std:XML}, XML Schema \citep{std:XSD},
 and VOResource itself.  
 
 
@@ -313,7 +313,7 @@ extension:
 \begin{enumerate}
 \item the extra namespaces associated with
        VODataService metadata; if STC coverage information
-       \citep{STC} is not
+        is not
        included, then only the VODataService namespaced is needed.
 \item the specific type of resource indicated by
        the value of the \xmlel{xsi:type} attribute; in this case
@@ -360,7 +360,7 @@ xsi:schemaLocation="http://www.ivoa.net/xml/VODataService/v1.1
 
 
 \begin{admonition}
-The IVOA Registry Interface standard \citep{RI}
+The IVOA Registry Interface standard \citep{todo:RI1.1}
        actually \emph{requires} that the VOResource records it
        shares with other registries provide location URLs via
        \xmlel{xsi:schemaLocation} for the VOResource schema and
@@ -394,7 +394,7 @@ One reason one may \emph{not} be able to use \xmlel{vs}
 \end{admonition}
 
 
-As recommend by the VOResource standard \citep{VOR}, the
+As recommend by the VOResource standard, the
 VODataService schema sets \xmlel{elementFormDefault="unqualified"}.
 This means that it is not necessary to qualify element names defined
 in this schema with a namespace prefix (as there are no global
@@ -425,7 +425,7 @@ This resource declares the existence of a collection of data, what
 
 \item[\xmlel{vs:StandardSTC}]
 This resource type declares one or more coordinate systems described
-       using STC \citep{STC} such that each can be
+       using STC \citep{2007ivoa.spec.1030R} such that each can be
        assigned a globally unique identifier (based on the IVOA
        identifier for the resource record itself).  This identifier
        can then be referenced in any other STC description in lieu of
@@ -451,8 +451,7 @@ Inheriting from \xmlel{vs:DataService}, this type
        ability to describe the tables and their columns.  This is
        intended for describing services that support the ``simple'' IVOA
        data access layer protocols such as Simple Image Access
-       \citep{SIA} and Simple Cone Search
-       \citep{SCS}.
+        and Simple Cone Search.
 \end{bigdescription}
 
 
@@ -463,7 +462,7 @@ frequency, and time.  The coverage metadata (encoded via the
 allows a full STC profile description (via the imported STC element,
 \xmlel{stc:STCResourceProfile})\todo{deprecate}.  The second part
 captures key coverage metadata defined in the IVOA Resource Metadata
-standard \citep{RM}.  The RM-derived coverage elements can
+standard \citep{2007ivoa.spec.0302H}.  The RM-derived coverage elements can
 be considered summarizing metadata for many of the details that
 \emph{may} appear within the STC description, and enables simpler
 searching of high-level coverage information.
@@ -474,7 +473,7 @@ The detailed STC profile contained within the
 \xmlel{stc:STCResourceProfile} element is capable of
 describing coverage not only in space, time, and frequency but also
 velocity and redshift.  The profile contains up to three types of
-component descriptions (\citep{STC}, section 4.1):
+component descriptions:
 coordinate systems, coordinate values, and coordinate areas or ranges.
 The first component describes the coordinate systems to which coordinate
 values, areas, and regions are referenced.  While any arbitrary
@@ -493,8 +492,7 @@ element.  This element can in turn can contain one or more
 \xmlel{schema} element in which each schema
 represents a set of logically related tables.  It is not required that 
 that the schema grouping match the underlying database's
-\emph{catalogs} or \emph{schemas} (as defined in
-\citep{SQLGuide}), though it may.  In some cases,
+\emph{catalogs} or \emph{schemas}, though it may.  In some cases,
 such as when describing the table that is returned from an SIA
 service, the terms \emph{catalog} and \emph{schema} may have
 little relevance; in this case, the table can be considered part of a
@@ -503,7 +501,7 @@ sole ``default'' schema.
 
 
 For each table in a schema, one can describe each of the columns,
-providing such information as its name, type, UCD \citep{UCD},
+providing such information as its name, type, UCD,
 units, and a textual description.  Providing this information makes it
 possible to select a resource based on the kind data contained in its
 tables.  
@@ -514,7 +512,7 @@ Finally, the VODataService defines specialized interface type
 (inheriting from \xmlel{vr:Interface}) called
 \xmlel{vs:ParamHTTP}.  This type is used to describe the commonly
 used interface that is invoked over HTTP as either a GET or a POST 
-\citep{HTTP} in which the arguments are encoded as
+in which the arguments are encoded as
 \emph{name=value} pairs.  In addition to the access URL, it can
 include not only the mime-type of the returned response, it can also
 enumerate the input arguments that are supported by the service
@@ -554,7 +552,7 @@ data that is normally accessible as a single unit -- e.g., a file.)
 
 
 The \xmlel{vs:DataCollection} type adds seven additional metadata
-elements beyond the core VOResource metadata \citep{VOR}.  
+elements beyond the core VOResource metadata:
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd DataCollection
 % /GENERATED
@@ -605,7 +603,7 @@ the \xmlel{vs:TableSet} type for describing tables.
 
 The \xmlel{vs:StandardSTC} resource type is used to register standard
 coordinate systems, positions, or regions using the Space-Time
-Coordinate (STC, \citep{STC}) standard schema so that
+Coordinate standard schema \citep{2007ivoa.spec.1030R} so that
 they can by uniquely referenced by name by other resource descriptions
 or applications.  This resource type extends the core metadata with a
 single element, \xmlel{stcDefinitions}, which contains
@@ -703,7 +701,7 @@ Consequently, the \xmlel{stc:STCResourceProfile} element
 and all its child elements must be qualified as part of the STC
 namespace as required by XML Schema.
 In applications where common use of XML prefixes is required or
-encouraged (e.g. the IVOA Registry Interfaces \citep{RI}),
+encouraged (e.g. the IVOA Registry Interfaces \citep{todo:RI1.1}),
 use of the \xmlel{stc:} prefix to represent the STC namespace is
 encouraged.   
 
@@ -874,8 +872,7 @@ desired:
        \xmlel{dataType} elements.  The values provided in the
        attributes must refer to an XML type legally extended from the types
        associated with these elements according to the rules of XML Schema
-       \citep{schema} and the VOResource specification
-       \citep{VOR}.
+       \citep{std:XSD} and the VOResource specification.
 
 \item Apply a globally-defined attribute from a schema other than
        VODataService (i.e. from a namespace other than
@@ -887,8 +884,8 @@ desired:
 \item When the extended metadata is specific to how the table data is
        accessed via a particular service protocol, then the new
        metadata can be incorporated into a specific capability
-       extension (as described in the VOResource specification
-       \citep{VOR}).  This extension may make use of the
+       extension (as described in the VOResource specification).  
+       This extension may make use of the
        various names within the \xmlel{tableset} to
        indicate where the extension metadata apply.
 
@@ -905,11 +902,11 @@ desired:
 
 The \xmlel{vs:ParamHTTP} type is a specialized service interface
 description that extends the VOResource \xmlel{vr:Interface} type 
-(as recommended by \citep{VOR}, section 2.3.2\todo{check}).  It
+(as recommended by VOResource 1.1, section 2.2).  It
 describes a service interface that is invoke over HTTP via a GET or a
-POST \citep{HTTP} in which the inputs are parameters
+POST in which the inputs are parameters
 encoded as \emph{name=value} pairs, delimited by ampersands
-(\verb|&|) and URL-encoded \citep{URI}.  When
+(\verb|&|) and URL-encoded as per RFC 3986 \citep{std:RFC3986}.  When
 the service is invoked as a GET service, this input list is appended
 to a base URL (where the result must form a legal URL.  Usually, the
 URL contains a question mark (\verb|?|) setting off a list of
@@ -923,8 +920,8 @@ are uploaded to the service as the HTTP Message Body.
 
 The \xmlel{vs:ParamHTTP} type is intended for (but not limited
 to) use in describing an interface within a VOResource description of
-a service capability (as described in \citep{VOR},
-section 2.2.2\todo{check}); that is, it can be invoked via the
+a service capability (as described in VOResource
+section 2.2.7); that is, it can be invoked via the
 \xmlel{xsi:type} attribute on an \xmlel{interface}
 element. 
 
@@ -948,7 +945,7 @@ in this section.
 A important intended use of the \xmlel{vs:ParamHTTP} type is
 describing the interface of an IVOA standard service protocol 
 of the ``simple'' variety, such as the Simple Image Access Protocol
-\citep{SIA}.  In particular, it is recommended that
+\citep{2015ivoa.spec.1223D}.  In particular, it is recommended that
 specifications that define how a standard service is registered in a
 registry \emph{require} the use of the \xmlel{vs:ParamHTTP}
 interface type when it is applicable.
@@ -1133,7 +1130,7 @@ A table column's data type is indicated with the \xmlel{dataType}
 element with a name drawn from a standard set of names.  The
 \xmlel{vs:TableParam} type is not restricted to a single standard
 set, and the VODataService schema defines two standard sets: one
-corresponding to VOTable data types \citep{VOTable}
+corresponding to VOTable data types \citep{2013ivoa.spec.0920O}
 and one for Table Access Protocol types.  Because
 its XML type, \xmlel{vs:TableDataType} is abstract, the
 \xmlel{dataType} element MUST include an
@@ -1175,7 +1172,7 @@ The VODataService schema defines two XML types that derive from
 The \xmlel{vs:TAPType} XML type provides an additional attribute,
 \xmlel{size}, corresponding to the \verb|"size"| column from the
 TAP\_SCHEMA.columns defined by the TAP standard
-\citep{TAP}.\todo{deprecate}
+\citep{todo:TAP1.1}.\todo{deprecate}
 
 
 
@@ -1230,12 +1227,12 @@ standard type derived from \xmlel{vs:TableDataType}) be used to
 ensure maximum interoperability.  When the actual column type is not
 well matched to a type from one of these standard sets, authors are
 encouraged to use the \xmlel{extendedType} attribute to refer to
-a more specific type.  Note that the TAP standard
-\citep{TAP} defines an explicit mapping between
-TAP\_SCHEMA types and VOTable types.  Thus, in the context of a
+a more specific type.  Note that the ADQL standard
+\citep{todo:ADQL2.2} defines an explicit mapping between
+SQL types and VOTable types.  Thus, in the context of a
 \xmlel{vs:CatalogService} resource description that supports a
 TAP capability (perhaps in addition to other catalog services like
-Simple Cone Search \citep{SCS}), use of the
+Simple Cone Search), use of the
 \xmlel{vs:TAPType} data type is preferred.
 
 
@@ -1244,7 +1241,7 @@ Simple Cone Search \citep{SCS}), use of the
 The motivation for providing two standard data type sets,
        \xmlel{vs:VOTableType} and \xmlel{vs:TAPType}, is to maximize
        the ease of generating the table description, particular as
-       part of the VO Standard Interface \citep{VOSI}
+       part of the VO Standard Interface \citep{2017ivoa.spec.0524G}
        and for legacy services.  The table description for
        ``stand-alone'' SIA, SCS, and SSA services can be readily
        generated using the \xmlel{vs:VOTableType} data types from
@@ -1363,5 +1360,7 @@ differing metadata are formed.
        \xmlel{vs:TAPType} and \xmlel{vs:VOTable}
        \xmlel{vs:VOTableType}.
 \end{itemize}
+
+\bibliography{ivoatex/ivoabib,ivoatex/docrepo}
 
 \end{document}
