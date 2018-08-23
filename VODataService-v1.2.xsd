@@ -160,14 +160,69 @@
          <xs:element ref="stc:STCResourceProfile" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                 The STC description of the location of the resource's 
-                 data (or behavior on data) on the sky, in time, and in 
-                 frequency space, including resolution. 
+                 An STC 1.0 description of the location of the resource's 
+                 data on the sky, in time, and in frequency space, 
+                 including resolution.   This is deprecated in favour
+                 of the separate spatial, temporal, and spectral elements.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+
+         <xs:element name="spatial" type="xs:string" 
+               minOccurs="0">
+            <xs:annotation>
+               <xs:documentation>
+                  An ASCII-serialised MOC defining the spatial coverage 
+                  of the resource.
                </xs:documentation>
                <xs:documentation>
-                 In general, this description should be approximate; a
-                 more precise description can be provided by the 
-                 footprint service.  
+                  The MOC is to be understood in the ICRS reference frame.
+                  Resources should give the coverage at least to order 6
+                  (a resolution of about one degree).  The order should be
+                  chosen so as to keep the resulting MOC smaller than a few
+                  dozens of kB.  If desired, a more precise MOC can be provided
+                  on a dedicated endpoint declared in the footprint element.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+
+<!-- TODO: make a FloatPair or FloatInterval or whatever type -->
+         <xs:element name="temporal" type="xs:string" minOccurs="0"
+               maxOccurs="unbounded">
+            <xs:annotation>
+               <xs:documentation>
+                  A pair of lower, upper limits of a time interval 
+                  for which the resource offers data.
+               </xs:documentation>
+               <xs:documentation>
+                  This is written as for VOTable tabledata (i.e., 
+                  white-separated C-style floating point literals).
+                  The limits must be given as MJD.  While they
+                  are not intended to be precise, they are to be understood
+                  in TDB for the solar system barycenter.  The total coverage
+                  of the resource is the union of all such intervals.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+
+         <xs:element name="spectral" type="xs:string" minOccurs="0"
+               maxOccurs="unbounded">
+            <xs:annotation>
+               <xs:documentation>
+                  A pair of lower, upper limits of a spectral interval 
+                  for which the resource offers data.
+               </xs:documentation>
+               <xs:documentation>
+                  This is written as for VOTable tabledata (i.e., 
+                  white-separated C-style floating point literals).
+                  The limits must be given in Joules of particle
+                  energies.  While the limits are not intended 
+                  to be precise, they are to be understood for the
+                  solar system barycenter.
+               </xs:documentation>
+               <xs:documentation>
+                  For instance, the Johnson V waveband (480 .. 730 nm)
+                  would be specified as “2.72e-19 4.14e-19“
                </xs:documentation>
             </xs:annotation>
          </xs:element>
