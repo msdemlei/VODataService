@@ -2637,50 +2637,6 @@ The motivation for providing two standard data type sets,
 
 \appendix
 
-\section{Compatibility Issues with VODataService 1.0}
-\label{vods10-compat}
-
-The working draft version 1.0 of the VODataService schema has been in
-use in IVOA registries since about 2008\todo{Do we want to keep this?
-I'd say no}.  It is expected that
-registries will migrate over to version 1.1 gradually and during the
-transition, there may well be instances of both v1.1 and v1.0 in the
-same registry.  While the metadata structures are the mostly the same
-(particularly the core VOResource metadata), it is worth enumerating
-where they are different as this can affect how queries against
-differing metadata are formed.
-
-\begin{itemize}
-\item In v1.1, \xmlel{schema} replaces v1.0's
-       \xmlel{catalog}. 
-
-\item In v1.0, the root element of a table description in a
-       \xmlel{vs:DataCollection} was
-       \xmlel{catalog}.  Consequently, a
-       \xmlel{table} element in a v1.1 record is one
-       level lower than in v1.0.  
-
-\item In v1.0, the root element of a table description in a
-       \xmlel{vs:CatalogService} was
-       \xmlel{table}.  Consequently, a
-       \xmlel{table} element in a v1.1 record is one
-       level lower than in v1.0.  
-
-\item Version 1.1's \xmlel{vs:Coverage} type now
-       contains a \xmlel{regionOfRegard} element.  In
-       v1.0, this metadatum was only available via
-       \xmlel{coverage/stc:STCResourceProfile/stc:AstroCoord/stc:Size}.
-       
-
-\item Version 1.1's \xmlel{vs:TableParam} (for describing table
-       columns) adds \xmlel{utype} and
-       \xmlel{flag} elements.  The v1.1
-       \xmlel{vs:InputParam} adds a \xmlel{utype}
-       element. 
-       
-\end{itemize}
-
-
 \section{Changes from previous versions}
 
 \subsection{Changes from REC-1.1}
