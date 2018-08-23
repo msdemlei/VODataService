@@ -1,5 +1,8 @@
 \documentclass[11pt,a4paper]{ivoa}
 \input tthdefs
+% widen up the display a bit so that 75 column listings still fit on
+% the page
+\usepackage[width=14cm]{geometry}
 \usepackage{listings}
 \lstloadlanguages{XML}
 \lstset{flexiblecolumns=true,tagstyle=\ttfamily,showstringspaces=False}
@@ -22,8 +25,8 @@ Collections and Services}
 \author[http://www.ivoa.net/twiki/bin/view/IVOA/TonyLinde]{Tony Linde}
 \author[http://www.ivoa.net/twiki/bin/view/IVOA/GuyRixon]{Guy Rixon}
 
-\editor{Ray Plante}
 \editor{Markus Demleitner}
+\editor{Ray Plante}
 
 \previousversion[http://www.ivoa.net/Documents/VODataService/20101202]{REC
 1.1}
@@ -114,7 +117,7 @@ Interfaces 1.1 \citep{todo:RI1.1}, sect.~2.2, is \xmlel{vs}.
 
 \section{Introduction}
 
-The VOResource standard \citep{todo:VOR1.1} provides a means of
+The VOResource standard \citep{2018ivoa.spec.0625P} provides a means of
 encoding IVOA Resource Metadata\todo{decouple from RM} in XML.
 VOResource uses XML Schema \citep{std:XSD} to define
 most of the XML syntax rules (while a few of the syntax rules are
@@ -220,7 +223,7 @@ extension:
        documents used by this description,
 \item the core VOResource metadata,
 \item an interface described by the
-       VODataService interface type, \xmlel{vs:ParamHTTP}; this
+       VODataService type \xmlel{vs:ParamHTTP}; this
        type can indicate input arguments it supports.
 \item a description of the
        coverage, including quantitative coverage
@@ -245,7 +248,7 @@ v1.1}
 Authors of VOResource instance documents may choose to
 provide a location for the VOResource XML Schema document and its
 extensions using the
-\xmlel{xsi:schemaLocation}</a> attribute.  While the choice of
+\xmlel{xsi:schemaLocation} attribute.  While the choice of
 the location value is the choice of the author, this specification
 recommends using the VODataService namespace URI as its location URL
 (as illustrated in the example above), as in,
@@ -277,22 +280,9 @@ VOResource schema, as in \xmlel{vr:Resource}.
 
 
 
-\begin{admonition}{Note}
-(todo: remove this; doesn't really apply any more; and there *really*
-shouldn't be any VODS 1.0 around any more)
-
-One reason one may \emph{not} be able to use \xmlel{vs}
-       to represent the VODataService schema, version 1.1, is because
-       it is already in defined to represent VODataService v1.0 and
-       cannot be overridden.  At this writing, there are no IVOA
-       applications in which this is the case.  Consult
-       appendix~\ref{vods10-compat} for more details on
-       compatibility issues.
-\end{admonition}
-
 
 As recommend by the VOResource standard, the
-VODataService schema sets \xmlel{elementFormDefault="unqualified"}.
+VODataService schema sets \xmlel{element\-Form\-Default} to \emph{unqualified}.
 This means that it is not necessary to qualify element names defined
 in this schema with a namespace prefix (as there are no global
 elements defined).  The only place it is usually needed is as a
@@ -988,7 +978,7 @@ intervals on that level.
                
 \item[Comment] 
                   For instance, the Johnson V waveband (480 .. 730 nm)
-                  would be specified as {"}2.72e-19 4.14e-19{"}
+                  would be specified as “2.72e-19 4.14e-19“
                
 
 \end{description}
@@ -1031,21 +1021,15 @@ intervals on that level.
                  1 micron <= wavelength <= 100 micons 
                
 \item[Optical]
-                 0.3 microns <= wavelength <= 1 micon; 
                  300 nm <= wavelength <= 1000 nm; 
-                 3000 Angstroms <= wavelength <= 10000 Angstroms
                
 \item[UV]
-                 0.1 microns <= wavelength <= 0.3 micon; 
-                 1000 nm <= wavelength <= 3000 nm; 
-                 1000 Angstroms <= wavelength <= 30000 Angstroms
+                 100 nm <= wavelength <= 300 nm; 
                
 \item[EUV]
-                 100 Angstroms <= wavelength <= 1000 Angstroms; 
                  12 eV <= energy <= 120 eV
                
 \item[X-ray]
-                 0.1 Angstroms <= wavelength <= 100 Angstroms; 
                  0.12 keV <= energy <= 120 keV
                
 \item[Gamma-ray]
@@ -1434,7 +1418,7 @@ the role a table plays in the schema.
 
 The definitions of the \xmlel{tableset} elements used in
 the \xmlel{vs:DataCollection} and
-\xmlel{vs:CatalogService} types
+\xmlel{vs:Catalog\-Ser\-vice} types
 constrain certain names to be unique.  In particular, all schema names
 within a \xmlel{tableset} element must be unique, and all
 table names within a \xmlel{tableset} element must be
@@ -2369,7 +2353,7 @@ defined to have the VOTable-defined type double:
 
 
 \subsubsection{Table Column Data Types}
-\label{tbldatatypes}
+\label{sect:tbldatatypes}
 
 
 The VODataService schema defines two XML types that derive from

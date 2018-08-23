@@ -227,8 +227,8 @@
             </xs:annotation>
          </xs:element>
 
-         <xs:element name="footprint" type="vs:ServiceReference" 
-                     minOccurs="0">
+         <xs:element name="footprint" 
+               type="vs:ServiceReference" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
                   a reference to a footprint service for retrieving 
@@ -335,25 +335,20 @@
          <xs:enumeration value="Optical">
             <xs:annotation>
                <xs:documentation>
-                 0.3 microns &lt;= wavelength &lt;= 1 micon; 
                  300 nm &lt;= wavelength &lt;= 1000 nm; 
-                 3000 Angstroms &lt;= wavelength &lt;= 10000 Angstroms
                </xs:documentation>
             </xs:annotation>
          </xs:enumeration>
          <xs:enumeration value="UV">
             <xs:annotation>
                <xs:documentation>
-                 0.1 microns &lt;= wavelength &lt;= 0.3 micon; 
-                 1000 nm &lt;= wavelength &lt;= 3000 nm; 
-                 1000 Angstroms &lt;= wavelength &lt;= 30000 Angstroms
+                 100 nm &lt;= wavelength &lt;= 300 nm; 
                </xs:documentation>
             </xs:annotation>
          </xs:enumeration>
          <xs:enumeration value="EUV">
             <xs:annotation>
                <xs:documentation>
-                 100 Angstroms &lt;= wavelength &lt;= 1000 Angstroms; 
                  12 eV &lt;= energy &lt;= 120 eV
                </xs:documentation>
             </xs:annotation>
@@ -361,7 +356,6 @@
          <xs:enumeration value="X-ray">
             <xs:annotation>
                <xs:documentation>
-                 0.1 Angstroms &lt;= wavelength &lt;= 100 Angstroms; 
                  0.12 keV &lt;= energy &lt;= 120 keV
                </xs:documentation>
             </xs:annotation>
