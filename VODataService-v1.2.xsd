@@ -732,6 +732,20 @@
             </xs:annotation>
          </xs:element>
 
+         <xs:element name="nrows" type="xs:integer" minOccurs="0"
+            maxOccurs="1">
+            <xs:annotation>
+               <xs:documentation>
+                  the size of the table in rows.
+               </xs:documentation>
+               <xs:documentation>
+                  This is not expected to be exact.  For instance, the
+                  estimates on table sizes databases keep for query
+                  planning purposes are suitable for this field.
+               </xs:documentation>
+            </xs:annotation>
+         </xs:element>
+
          <xs:element name="column" type="vs:TableParam" 
                      minOccurs="0" maxOccurs="unbounded">
             <xs:annotation>
@@ -1364,3 +1378,5 @@
    </xs:complexType>
 
 </xs:schema>
+<!-- vim:sta:sw=3:et
+-->

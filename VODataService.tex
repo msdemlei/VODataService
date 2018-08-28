@@ -1074,7 +1074,10 @@ intervals on that level.
 
 The \xmlel{vs:TableSet} type can be used
 to describe a set of tables that are part of a single resource and can
-be consider functionally all located at a single site.
+be considered functionally all located at a single site.  While there is
+no expectation that the table set directly correspond to tabular service
+responses, services should not include metadata for purely internal
+tables.
 
 
 
@@ -1273,6 +1276,8 @@ Each table in a schema is described in detail using the
     <xs:element name="title" type="xs:token" minOccurs="0" />
     <xs:element name="description" type="xs:token" minOccurs="0" />
     <xs:element name="utype" type="xs:token" minOccurs="0" />
+    <xs:element name="nrows" type="xs:integer" minOccurs="0"
+              maxOccurs="1" />
     <xs:element name="column" type="vs:TableParam" minOccurs="0"
               maxOccurs="unbounded" />
     <xs:element name="foreignKey" type="vs:ForeignKey" minOccurs="0"
@@ -1360,6 +1365,20 @@ Each table in a schema is described in detail using the
 \item[Comment] 
                   The format defined in the VOTable standard is highly
                   recommended. 
+               
+
+\end{description}
+\item[Element \xmlel{nrows}]
+\begin{description}
+\item[Type] integer
+\item[Meaning] 
+                  the size of the table in rows.
+               
+\item[Occurrence] optional
+\item[Comment] 
+                  This is not expected to be exact.  For instance, the
+                  estimates on table sizes databases keep for query
+                  planning purposes are suitable for this field.
                
 
 \end{description}
@@ -1615,7 +1634,8 @@ the service is invoked as a GET service, this input list is appended
 to a base URL (where the result must form a legal URL.  Usually, the
 URL contains a question mark (\verb|?|) setting off a list of
 URL arguments to the URL.
-
+\todo{Insert material currently developed in UWSRegExt, and try to clear
+up relationship between these and ParamHTTP.}
 
 
 When the service is invoked as a POST, the encoded list of parameters
@@ -2628,6 +2648,7 @@ The motivation for providing two standard data type sets,
 \begin{itemize}
 \item Deprecating STCResourceProfile and replacing it with
 \xmlel{spatial}, \xmlel{temporal}, and \xmlel{spectral} elements.
+\item Adding an nrows element to \xmlel{vs:Table}.
 \item Ported source to \ivoatex.
 \end{itemize}
 
