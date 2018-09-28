@@ -1203,7 +1203,9 @@
       <xs:annotation>
          <xs:documentation>
             a data type supported explicitly by the Table Access 
-            Protocol (v1.0).  
+            Protocol (v1.0).  This is deprecated in VODataService 1.2,
+            and even TAP 1.0 services are encouraged to declare
+            their columns using VOTableType.
          </xs:documentation>
       </xs:annotation>
       <xs:simpleContent>

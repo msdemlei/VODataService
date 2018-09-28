@@ -2381,7 +2381,10 @@ defined to have the VOTable-defined type double:
 
 The VODataService schema defines two XML types that derive from
 \xmlel{vs:TableDataType}:  \xmlel{vs:VOTableType} and
-\xmlel{vs:TAPType}.  
+\xmlel{vs:TAPType}.  Following the move to VOTable-compatible type
+descriptions in TAP 1.1 \citep{todo:TAP1.1}, this version of
+VODataService deprecates the use of \xmlel{vs:TAPType}.  New software
+should only generate \xmlel{vs:VOTableType}s in \xmlel{tableset}s.
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd VOTableType
@@ -2468,7 +2471,9 @@ The VODataService schema defines two XML types that derive from
 
 \noindent{\small
             a data type supported explicitly by the Table Access 
-            Protocol (v1.0).  
+            Protocol (v1.0).  This is deprecated in VODataService 1.2,
+            and even TAP 1.0 services are encouraged to declare
+            their columns using VOTableType.
          \par}
 
 \vspace{1ex}\noindent\textbf{\xmlel{vs:TAPType} Type Schema Definition}
@@ -2550,14 +2555,6 @@ The VODataService schema defines two XML types that derive from
 
 
 
-The \xmlel{vs:TAPType} XML type provides an additional attribute,
-\xmlel{size}, corresponding to the \verb|"size"| column from the
-TAP\_SCHEMA.columns defined by the TAP standard
-\citep{todo:TAP1.1}.\todo{deprecate}
-
-
-
-
 Examples for column definitions:
 A representation of a string type using the
 \xmlel{vs:VOTableType} set of types:
@@ -2571,30 +2568,6 @@ A representation of a string type using the
 </column>
 \end{lstlisting}
 
-The same column described using the
-\xmlel{vs:TAPType} set of types:\todo{deprecate this}
-
-\begin{lstlisting}
-<column>
-   <name> id </name>
-   <description> the object identifier </description>
-   <ucd> meta.id </ucd>
-   <dataType xsi:type="vs:TAPType"> VARCHAR </dataType>
-</column>
-\end{lstlisting}
-
-The same column again described using the
-\xmlel{vs:TAPType} set of types, assuming a fixed-length
-string:\todo{deprecate this}
-
-\begin{lstlisting}
-<column>
-   <name> id </name>
-   <description> the object identifier </description>
-   <ucd> meta.id </ucd>
-   <dataType xsi:type="vs:TAPType" size="8" > CHAR </dataType>
-</column>
-\end{lstlisting}
 
 
 
@@ -2602,43 +2575,14 @@ In general, the \xmlel{vs:TableParam}'s \xmlel{dataType}
 can support any non-abstract type legally derived from
 \xmlel{vs:TableDataType}.  However, in the context of a
 \xmlel{vs:DataCollection} or \xmlel{vs:CatalogService}
-resource description, it is strongly recommended that either
-\xmlel{vs:VOTableType} or \xmlel{vs:TAPType} (or some other IVOA
-standard type derived from \xmlel{vs:TableDataType}) be used to
-ensure maximum interoperability.  When the actual column type is not
-well matched to a type from one of these standard sets, authors are
+resource description, it is strongly recommended that 
+\xmlel{vs:VOTableType}  be used to
+ensure maximum interoperability.  
+
+When the actual column type is not
+well matched to a VOTable data type, authors are
 encouraged to use the \xmlel{extendedType} attribute to refer to
-a more specific type.  Note that the ADQL standard
-\citep{todo:ADQL2.2} defines an explicit mapping between
-SQL types and VOTable types.  Thus, in the context of a
-\xmlel{vs:CatalogService} resource description that supports a
-TAP capability (perhaps in addition to other catalog services like
-Simple Cone Search), use of the
-\xmlel{vs:TAPType} data type is preferred.
-
-
-
-\begin{admonition}{Note}
-The motivation for providing two standard data type sets,
-       \xmlel{vs:VOTableType} and \xmlel{vs:TAPType}, is to maximize
-       the ease of generating the table description, particular as
-       part of the VO Standard Interface \citep{2017ivoa.spec.0524G}
-       and for legacy services.  The table description for
-       ``stand-alone'' SIA, SCS, and SSA services can be readily
-       generated using the \xmlel{vs:VOTableType} data types from
-       these interface's respective metadata queries.  Newer services
-       supporting TAP could generate its description using its
-       TAP\_SCHEMA queries.
-
-       
-       The motivation for specifying a column's data type using the
-       \xmlel{xsi:type} mechanism is mainly to allow for the
-       possibility that the official TAP data types will evolve.  This
-       allows the IVOA to define new data type sets without updating
-       the VODataService standard.  Using non-IVOA-standardized data
-       type names is expected to undermine interoperability and so is
-       therefore discouraged.  
-\end{admonition}
+a more specific type.\todo{Say something about this and DALI xtype}.
 
 \appendix
 
@@ -2653,6 +2597,7 @@ The motivation for providing two standard data type sets,
 \item DataType/@arraysize no longer defaults to 1, and the
 interpretation of arraysize=1 as a scalar is withdrawn.  Use empty
 arraysize for scalars now.
+\item Deprecating TAPType.
 \item Ported source to \ivoatex.
 \end{itemize}
 
