@@ -1058,9 +1058,9 @@
                   </xs:documentation>
                   <xs:documentation>
                      This element may make use of the extendedSchema
-                     attribute and/or any arbitrary (qualified)
                      attribute to refine the identification of the 
-                     type.
+                     type.  extendedTypes without an extendedSchema 
+                     mean VOTable xtypes as defined by DALI.
                   </xs:documentation>
                </xs:annotation>
             </xs:attribute>
@@ -1073,7 +1073,9 @@
                   </xs:documentation>
                   <xs:documentation>
                      This attribute is normally ignored if the
-                     extendedType attribute is not present.
+                     extendedType attribute is not present.  A missing
+                     extendedSchema indicates that extendedType is a
+                     VOTable xtype.
                   </xs:documentation>
                </xs:annotation>
             </xs:attribute>

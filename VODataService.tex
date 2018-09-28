@@ -2031,9 +2031,9 @@ derive from a common parent, \xmlel{vs:DataType}.
                   
 \item[Comment] 
                      This element may make use of the extendedSchema
-                     attribute and/or any arbitrary (qualified)
                      attribute to refine the identification of the 
-                     type.
+                     type.  extendedTypes without an extendedSchema 
+                     mean VOTable xtypes as defined by DALI.
                   
 \end{description}
 \item[extendedSchema]
@@ -2046,7 +2046,9 @@ derive from a common parent, \xmlel{vs:DataType}.
 \item[Occurrence] optional
 \item[Comment] 
                      This attribute is normally ignored if the
-                     extendedType attribute is not present.
+                     extendedType attribute is not present.  A missing
+                     extendedSchema indicates that extendedType is a
+                     VOTable xtype.
                   
 \end{description}
 
@@ -2582,7 +2584,11 @@ ensure maximum interoperability.
 When the actual column type is not
 well matched to a VOTable data type, authors are
 encouraged to use the \xmlel{extendedType} attribute to refer to
-a more specific type.\todo{Say something about this and DALI xtype}.
+a more specific type.  This will usually be a VOTable \xmlel{xtype} as
+defined by DALI \citep{2017ivoa.spec.0517D}.  Using different extended
+type schemes is possible by setting \xmlel{extendedSchema} to a
+non-empty value; data providers using this extension mechanism should
+explain their schema in an IVOA Note.
 
 \appendix
 
