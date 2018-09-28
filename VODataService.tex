@@ -1965,7 +1965,7 @@ derive from a common parent, \xmlel{vs:DataType}.
 <xs:complexType name="DataType" >
   <xs:simpleContent >
     <xs:extension base="xs:token" >
-      <xs:attribute name="arraysize" type="vs:ArrayShape" default="1" />
+      <xs:attribute name="arraysize" type="vs:ArrayShape" />
       <xs:attribute name="delim" type="xs:string" default=" " />
       <xs:attribute name="extendedType" type="xs:string" />
       <xs:attribute name="extendedSchema" type="xs:anyURI" />
@@ -1986,9 +1986,12 @@ derive from a common parent, \xmlel{vs:DataType}.
                   
 \item[Occurrence] optional
 
-1
 \item[Comment] 
-                     the default is {"}1{"}; i.e. the value is a scalar.
+                     Leave arraysize empty for scalar values.  In version 1.1,
+                     this defaulted to 1, which was intended to indicate
+                     a scalar.  This is now deprecated; an arraysize of 1 should
+                     be avoided now, the future interpretation, in accord with
+                     VOTable, will be “array of size 1”.
                   
 \end{description}
 \item[delim]
@@ -2409,7 +2412,7 @@ The VODataService schema defines two XML types that derive from
       <xs:enumeration value="double" />
       <xs:enumeration value="floatComplex" />
       <xs:enumeration value="doubleComplex" />
-      <xs:attribute name="arraysize" type="vs:ArrayShape" default="1" />
+      <xs:attribute name="arraysize" type="vs:ArrayShape" />
       <xs:attribute name="delim" type="xs:string" default=" " />
       <xs:attribute name="extendedType" type="xs:string" />
       <xs:attribute name="extendedSchema" type="xs:anyURI" />
@@ -2428,7 +2431,6 @@ The VODataService schema defines two XML types that derive from
 \item[Meaning] 
 \item[Occurrence] optional
 
-1
 \end{description}
 \item[delim]
 \begin{description}
@@ -2490,7 +2492,7 @@ The VODataService schema defines two XML types that derive from
       <xs:enumeration value="REGION" />
       <xs:enumeration value="CLOB" />
       <xs:enumeration value="BLOB" />
-      <xs:attribute name="arraysize" type="vs:ArrayShape" default="1" />
+      <xs:attribute name="arraysize" type="vs:ArrayShape" />
       <xs:attribute name="delim" type="xs:string" default=" " />
       <xs:attribute name="extendedType" type="xs:string" />
       <xs:attribute name="extendedSchema" type="xs:anyURI" />
@@ -2510,7 +2512,6 @@ The VODataService schema defines two XML types that derive from
 \item[Meaning] 
 \item[Occurrence] optional
 
-1
 \end{description}
 \item[delim]
 \begin{description}
@@ -2649,6 +2650,9 @@ The motivation for providing two standard data type sets,
 \item Deprecating STCResourceProfile and replacing it with
 \xmlel{spatial}, \xmlel{temporal}, and \xmlel{spectral} elements.
 \item Adding an nrows element to \xmlel{vs:Table}.
+\item DataType/@arraysize no longer defaults to 1, and the
+interpretation of arraysize=1 as a scalar is withdrawn.  Use empty
+arraysize for scalars now.
 \item Ported source to \ivoatex.
 \end{itemize}
 

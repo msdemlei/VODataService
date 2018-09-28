@@ -1009,13 +1009,17 @@
       </xs:annotation>
       <xs:simpleContent>
         <xs:extension base="xs:token">
-            <xs:attribute name="arraysize" type="vs:ArrayShape" default="1">
+            <xs:attribute name="arraysize" type="vs:ArrayShape">
                <xs:annotation>
                   <xs:documentation>
                      the shape of the array that constitutes the value
                   </xs:documentation>
                   <xs:documentation>
-                     the default is "1"; i.e. the value is a scalar.
+                     Leave arraysize empty for scalar values.  In version 1.1,
+                     this defaulted to 1, which was intended to indicate
+                     a scalar.  This is now deprecated; an arraysize of 1 should
+                     be avoided now, the future interpretation, in accord with
+                     VOTable, will be “array of size 1”.
                   </xs:documentation>
                </xs:annotation>
             </xs:attribute>
@@ -1119,7 +1123,7 @@
            <xs:enumeration value="char"/>
            <xs:enumeration value="string"/>
 
-           <xs:attribute name="arraysize" type="vs:ArrayShape" default="1"/>
+           <xs:attribute name="arraysize" type="vs:ArrayShape"/>
            <xs:attribute name="delim" type="xs:string" default=" "/>
            <xs:attribute name="extendedType" type="xs:string"/>
            <xs:attribute name="extendedSchema" type="xs:anyURI"/>
@@ -1161,7 +1165,7 @@
            <xs:enumeration value="floatComplex"/>
            <xs:enumeration value="doubleComplex"/>
 
-           <xs:attribute name="arraysize" type="vs:ArrayShape" default="1"/>
+           <xs:attribute name="arraysize" type="vs:ArrayShape"/>
            <xs:attribute name="delim" type="xs:string" default=" "/>
            <xs:attribute name="extendedType" type="xs:string"/>
            <xs:attribute name="extendedSchema" type="xs:anyURI"/>
@@ -1220,7 +1224,7 @@
            <xs:enumeration value="CLOB"/>
            <xs:enumeration value="BLOB"/>
 
-           <xs:attribute name="arraysize" type="vs:ArrayShape" default="1"/>
+           <xs:attribute name="arraysize" type="vs:ArrayShape"/>
            <xs:attribute name="delim" type="xs:string" default=" "/>
            <xs:attribute name="extendedType" type="xs:string"/>
            <xs:attribute name="extendedSchema" type="xs:anyURI"/>
