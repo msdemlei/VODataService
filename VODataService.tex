@@ -113,7 +113,7 @@ References to specific elements and types defined in the VOResource
 schema include the namespaces prefix \xmlel{vr} as in
 \xmlel{vr:Resource} (a type defined in the VOResource schema; the
 recommended namespace prefix for VODataService as per Registry
-Interfaces 1.1 \citep{todo:RI1.1}, sect.~2.2, is \xmlel{vs}.
+Interfaces 1.1 \citep{2018ivoa.spec.0723D}, sect.~2.2, is \xmlel{vs}.
 
 \section{Introduction}
 
@@ -237,12 +237,29 @@ extension:
 
 The namespace associated with VODataService extensions is
 $$\mbox{\texttt{http://www.ivoa.net/xml/VODataService/v1.1}}.$$
-Just like the namespace URI for the VOResource schema, the
-VODataService namespace URI can be interpreted as a URL.  Resolving it
-will return the XML Schema document 
-that defines the VODataService schema.\todo{explain constant ns vs.
-v1.1}
+As required by the IVOA schema versioning policies
+\citep{2018ivoa.spec.0529H}, this namespace is identical to the one
+associated with version 1.1 of this document.  It is regrettable that a
+misleading minor version is present in the namespace URI, but dropping
+it would break existing software for creating and processing
+VODataService instance documents.  Hence, the namespace URI ending in
+\verb|1.1| is also used for versions 1.2, 1.3, and so forth of the
+schema.
 
+Resolving the VODataService namespace URI will redirect to a schema
+document having the actual version number (for the schema associated
+with this document version, this will end in VODataService-1.2.xsd).
+Following the schema versioning policies, the minor version will be
+declared in the \xmlel{version} attribute of this file's root element.
+This information should not in general be used in production software;
+all versions with the above schema URI are compatible with each
+other in the sense defined in the IVOA schema versioning policies.
+
+The versioning policies in version 1.0 posit a requirement that instance
+documents declare the minor version of the schema used to produce them
+in the root element of elements coming from a schema.  VODataService has
+no global elements, and hence there is no place for such a declaration,
+nor is it needed.
 
 
 Authors of VOResource instance documents may choose to
@@ -260,7 +277,7 @@ xsi:schemaLocation="http://www.ivoa.net/xml/VODataService/v1.1
 
 
 \begin{admonition}{Note}
-The IVOA Registry Interface standard \citep{todo:RI1.1}
+The IVOA Registry Interface standard \citep{2018ivoa.spec.0723D}
        actually \emph{requires} that the VOResource records it
        shares with other registries provide location URLs via
        \xmlel{xsi:schemaLocation} for the VOResource schema and
@@ -269,11 +286,12 @@ The IVOA Registry Interface standard \citep{todo:RI1.1}
 \end{admonition}
 
 
-The prefix, \xmlel{vs}, is used by convention as the prefix
-defined for the VODataService schema; however, instance documents may
-use any prefix.  In applications where common use of prefixes is
-recommended (such as with the Registry Interfaces specification),
-use of the \xmlel{vs} prefix is recommended.
+The canonical prefix for VODataService is \xmlel{vs}; this means, in
+particular, that in non-XML contexts (e.g., relational mappings
+like RegTAP) global VODataService elements \emph{must} be qualified with
+vs:.  The Registry Interfaces standard \citep{2018ivoa.spec.0723D} also
+strongly recommends using the canonical prefixes in XML documents.
+
 Note also that in this document, the \xmlel{vr} prefix is used to
 label, as shorthand, a type or element name that is defined in the
 VOResource schema, as in \xmlel{vr:Resource}.
@@ -283,10 +301,10 @@ VOResource schema, as in \xmlel{vr:Resource}.
 
 As recommend by the VOResource standard, the
 VODataService schema sets \xmlel{element\-Form\-Default} to \emph{unqualified}.
-This means that it is not necessary to qualify element names defined
-in this schema with a namespace prefix (as there are no global
-elements defined).  The only place it is usually needed is as a
-qualifier to a VODataService type name given as the value of an
+This means that element names defined
+in this schema may not be used with a namespace prefix.
+The only place the namespace prefix must be used is the
+type names given as the value of an
 \xmlel{xsi:type} attribute.  
 
 
