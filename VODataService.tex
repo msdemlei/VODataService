@@ -8,6 +8,18 @@
 \lstset{flexiblecolumns=true,tagstyle=\ttfamily,showstringspaces=False}
 \usepackage{todonotes}
 
+\iftth
+\newcommand{\tapschema}{TAP\_SCHE\-MA}
+\hyphenation{TAP\_SCHEMA}
+\hyphenation{\tapschema}
+\newcommand{\tapupload}{TAP\_UPLOAD}
+\else
+\newcommand{\tapschema}{\mbox{%
+  TAP\discretionary{-}{}{\kern-2pt\_}SCHEMA}}
+\newcommand{\tapupload}{%
+  TAP\discretionary{-}{}{\kern-2pt\_}UPLOAD}
+\fi
+
 \title{VODataService: A VOResource Schema Extension for Describing
 Collections and Services}
 
@@ -914,9 +926,9 @@ intervals on that level.
   <xs:sequence >
     <xs:element ref="stc:STCResourceProfile" minOccurs="0" />
     <xs:element name="spatial" type="xs:string" minOccurs="0" />
-    <xs:element name="temporal" type="xs:string" minOccurs="0"
+    <xs:element name="temporal" type="vs:FloatInterval" minOccurs="0"
               maxOccurs="unbounded" />
-    <xs:element name="spectral" type="xs:string" minOccurs="0"
+    <xs:element name="spectral" type="vs:FloatInterval" minOccurs="0"
               maxOccurs="unbounded" />
     <xs:element name="footprint" type="vs:ServiceReference" minOccurs="0" />
     <xs:element name="waveband" type="vs:Waveband" minOccurs="0"
@@ -960,12 +972,13 @@ intervals on that level.
 \end{description}
 \item[Element \xmlel{temporal}]
 \begin{description}
-\item[Type] string: \xmlel{xs:string}
+\item[Type] string of the form: \emph{[+-]?($\backslash$p{Nd}+$\backslash$.?$\backslash$p{Nd}*|$\backslash$.$\backslash$p{Nd}+)([eE][+-]?$\backslash$p{Nd}+)? [+-]?($\backslash$p{Nd}+$\backslash$.?$\backslash$p{Nd}*|$\backslash$.$\backslash$p{Nd}+)([eE][+-]?$\backslash$p{Nd}+)?}
 \item[Meaning] 
                   A pair of lower, upper limits of a time interval 
                   for which the resource offers data.
                
 \item[Occurrence] optional; multiple occurrences allowed.
+
 \item[Comment] 
                   This is written as for VOTable tabledata (i.e., 
                   white-separated C-style floating point literals).
@@ -978,12 +991,13 @@ intervals on that level.
 \end{description}
 \item[Element \xmlel{spectral}]
 \begin{description}
-\item[Type] string: \xmlel{xs:string}
+\item[Type] string of the form: \emph{[+-]?($\backslash$p{Nd}+$\backslash$.?$\backslash$p{Nd}*|$\backslash$.$\backslash$p{Nd}+)([eE][+-]?$\backslash$p{Nd}+)? [+-]?($\backslash$p{Nd}+$\backslash$.?$\backslash$p{Nd}*|$\backslash$.$\backslash$p{Nd}+)([eE][+-]?$\backslash$p{Nd}+)?}
 \item[Meaning] 
                   A pair of lower, upper limits of a spectral interval 
                   for which the resource offers data.
                
 \item[Occurrence] optional; multiple occurrences allowed.
+
 \item[Comment] 
                   This is written as for VOTable tabledata (i.e., 
                   white-separated C-style floating point literals).
@@ -1438,6 +1452,13 @@ can be used to join it with another table can be described with the
 A foreign key description should only refer to tables described within
 the current table set.  
 
+When the tableset describes a set of TAP-accessible tables, the value of
+a \xmlel{table}'s \xmlel{name} child must be in a form immediately
+usable for use in ADQL or SQL queries. This corresponds to the analogous
+requirement for \tapschema and is usually only a problem when delimited
+identifiers are used as table names on the relational side.  In that
+case, the quotes must be part of \xmlel{name}'s value, and the
+capitalisation used in the DDL must be preserved.
 
 
 The \xmlel{vs:Table} also provides an attribute for indicating
@@ -1812,7 +1833,7 @@ interface.  In particular, description may include
   required by the standard (as long as the required query type is
   supported as well),
 
-\item \xmlel{param} elements for any optional parameters
+\item \xmlel{param}\/ elements for any optional parameters
        or local extended parameters (when allowed by the standard).
 \end{itemize}
 
@@ -1920,7 +1941,7 @@ metadata except the data type.
                   particular UCD standard.  The format of the UCD can
                   be used to distinguish between UCD1, UCD1+, and
                   SIA-UCD.  See 
-                  http://www.ivoa.net/Documents/latest/UCDlist.html
+                  http://ivoa.net/Documents/latest/UCDlist.html
                   for the latest IVOA standard set.  
                
 
@@ -2369,19 +2390,28 @@ a table.
 
 
 A table column's data type is indicated with the \xmlel{dataType}
-element with a name drawn from a standard set of names.  The
-\xmlel{vs:TableParam} type is not restricted to a single standard
-set, and the VODataService schema defines two standard sets: one
-corresponding to VOTable data types \citep{2013ivoa.spec.0920O}
-and one for Table Access Protocol types.  Because
-its XML type, \xmlel{vs:TableDataType} is abstract, the
-\xmlel{dataType} element MUST include an
-\xmlel{xsi:type} attribute to indicate which standard set of type
-names is being used.  
+element with a name drawn from a standard set of names.  
+Because \xmlel{dataType}'s
+XML type, \xmlel{vs:TableDataType}, is abstract, the
+element MUST include an
+\xmlel{xsi:type} attribute.  As discussed in
+sect.~\ref{sect:tbldatatypes}, this should generally be
+\xmlel{vs:VOTableType} for VODataService 1.2 table columns.
+
+When the tableset describes a set of TAP-accessible tables, the value of
+a \xmlel{tableColumn}'s \xmlel{name} child must be in a form immediately
+usable for use in ADQL or SQL queries. This corresponds to the analogous
+requirement for \tapschema and is usually only a problem when delimited
+identifiers are used for column names on the relational side.  In that
+case, the quotes must be part of \xmlel{name}'s value, and the
+capitalisation used in the DDL must be preserved.
 
 
-As an example, here is a declination column called ``Dec'' and is
-defined to have the VOTable-defined type double:
+As examples, here are declarations of a column called ``Dec'' containing
+a double-valued declination, of the (deprecated) \verb|size| column
+from TAP 1.0 which requires quotes because it otherwise clashes with a
+SQL reserved name, and a SIAP 1.0-compatible \verb|wcs_cdmatrix|
+column that shows how multidimensional arrays are declared:
 
 \begin{lstlisting}[language=XML]
 <column>
@@ -2389,6 +2419,22 @@ defined to have the VOTable-defined type double:
    <description> the J2000 declination of the object </description>
    <ucd> pos.eq.dec </ucd>
    <dataType xsi:type="vs:VOTableType"> double </dataType>
+</column>
+
+<column>
+  <name>"size"</name>
+  <description>Length of variable length datatypes</description>
+  <dataType xsi:type="vs:VOTableType">int</dataType>
+  <flag>nullable</flag>
+</column>
+
+<column>
+  <name>wcs_cdmatrix</name>
+  <description>World coordinates at WCS reference pixel</description>
+  <unit>deg</unit>
+  <ucd>VOX:WCS_CoordRefValue</ucd>
+  <dataType arraysize="2x2" xsi:type="vs:VOTableType">double</dataType>
+  <flag>nullable</flag>
 </column>
 \end{lstlisting}
 
@@ -2616,6 +2662,8 @@ explain their schema in an IVOA Note.
 \item Deprecating STCResourceProfile and replacing it with
 \xmlel{spatial}, \xmlel{temporal}, and \xmlel{spectral} elements.
 \item Adding an nrows element to \xmlel{vs:Table}.
+\item Requiring inclusion of quotes for delimited identifiers in a
+SQL context.
 \item DataType/@arraysize no longer defaults to 1, and the
 interpretation of arraysize=1 as a scalar is withdrawn.  Use empty
 arraysize for scalars now.
