@@ -2,7 +2,7 @@
 \input tthdefs
 % widen up the display a bit so that 75 column listings still fit on
 % the page
-\usepackage[width=14cm]{geometry}
+\usepackage[width=14cm,left=4cm]{geometry}
 \usepackage{listings}
 \lstloadlanguages{XML}
 \lstset{flexiblecolumns=true,tagstyle=\ttfamily,showstringspaces=False}
@@ -82,8 +82,8 @@ via its
 eInfrastructure Science Repositories initiative.
 
 Version 1.2 of this document was developed in part with support from the
-German federal ministry for research and education's e-inf-astro (BMBF
-FKZ 05A17VH2)
+German federal ministry for research and education's e-inf-astro project (BMBF
+FKZ 05A17VH2).
 
 
 \section*{Conformance-related definitions}
@@ -206,6 +206,88 @@ As a legal extension of VOResource, the use
 of VODataService is subject to the rules and recommendations for XML
 \citep{std:XML}, XML Schema \citep{std:XSD},
 and VOResource itself.  
+
+\subsection{Additional Use Cases for Version 1.2}
+
+In the following, we collect use cases that guided the development of
+VODataService to its version 1.2.  We do not formally derive
+requirements from them but briefly note which new features enable or
+facilitate the specific use case.
+
+A few of the changes are necessary for consistency with other standards
+such as TAP (extendedType interpretation, requirement to use ADQL
+delimited identifier literals in names where appropriate) or VOTable
+(arraysize interpretation).  These were obviously not guided by specific
+use cases.
+
+
+\paragraph{What services have data for the Crab nebula covering the H$\alpha$ 
+line taken in the second half of 2015?}  In version 1.1, this use case
+would have been covered by the \xmlel{stc:STCResourceProfile} type,
+which was never properly standardised or widely adopted.  In the current
+version, the \xmlel{spatial}, \xmlel{spectral}, and \xmlel{temporal}
+children of \xmlel{coverage} enable discovery by coverage on the various
+axes.  It is worth noting that the spectral coverage is for the solar
+system barycenter, so this use case does \emph{not} immediately enable
+the discovery of, say, H$\alpha$ images of remote galaxies.  Redshift
+correction has to be applied by the client based on knowledge about the
+object(s) investigated.\todo{Also, we don't do solar system well
+spatially.  Mention this here?  Fix it now?}
+
+\paragraph{Find all ObsCore services publishing data taken at the
+Telescope X.} This use case could be satisfied in version 1.1 through
+the use of \xmlel{vs:DataCollection} records and relationships to the
+respective TAP services.  However, this scheme led to error-prone query
+patterns, and few such data collections were actually registered; see
+the IVOA Note on Discovering Data Collections \citep{note:DataCollect} for
+details.  To better support the scheme proposed there, version 1.2 adds
+the \xmlel{vs:TODOTODO} type that identifies a resource as data-like but
+allows the addition of various capabilities to the record (which
+\xmlel{vs:DataCollection} did not).  An analogous use case would be
+``Find all TAP services publishing tables from Gaia DR2''.\todo{I need a
+name for these resource types.  Desperately.}
+
+\paragraph{Find a large-scale survey of sources between 20 and 40 GHz.}
+While the spectral constraint is easily satisfied by the new coverage
+children, the ``large-scale'' part is much harder to operationalise.
+However, the plain table size often is a useful proxy in such discovery
+problems.  The new \xmlel{nrows} child of \xmlel{vs:Table} communicates
+it.
+
+\paragraph{Find a resource that has sources in M51 down to 27 mag in V.}
+The constraint about finding a resource that has V magnitudes for M51 is
+expressible using spatial coverage and the column's UCDs.  To express
+something like ``down to $27^{\rm m}$'' one would at least need
+VOTable-style \xmlel{VALUES} children for columns.\todo{Do we want
+that?}
+
+\paragraph{Plan a cross-service query.} Systems like OGSA-DAI
+\citep{2011ASPC..442..579H} perform orchestration of SQL-like queries
+between multiple services automatically, in particular cross-service
+JOINs.  In order to work efficiently, such services need column
+statistics like histograms and the percentage of NULL values.\todo{Do we
+want this?  If so, what exactly?}
+
+\paragraph{Find services serving time series.} In the current registry
+model, users looking for spectra would select SSAP services.  With the
+growing adoption of ObsCore (and a growing number of services abusing
+SSAP to serve time series), the model of selecting data types by
+constraining the service protocol no longer works; in the ObsCore
+example, clients now have to query all services and constrain the
+\verb|dataproduct_type| column. However, for dataset types not overly
+common, well more than 90\% of the services could be excluded without
+sending a query there based on a declaration of dataset types available
+in the Registry.\todo{Actually, a VOTable VALUES workalike would be
+enough for that and ObsCore.  But: SIAv2?  Data collections, perhaps?}
+
+\paragraph{Facilitate discovery of full DALI services.}  The issue here
+is that DALI forsees synchronous and asynchronous endpoints as the
+standard case for many protocols -- it already is standard for TAP.  The
+current way to discover these, together with the pertinent VOSI
+endpoints, is built on \xmlel{vs:ParamHTTP}-typed interfaces and has
+known weaknesses, in particular when multiple authentication schemes
+necessitate multiple sync/async pairs.\todo{See what UWSRegExt brings.}
+
 
 
 \section{The VODataService Data Model}
@@ -334,7 +416,7 @@ This resource was used in version 1.1 of this standard to define simple
 collections of data, perhaps available through ftp services or offline.
 It might still be used as such, although the utility of such a
 registration is questioinable at present.  With the Endorsed Note on
-discovering data collections \citep{todo:DDC}, a more capabable type for
+discovering data collections \citep{note:DataCollect}, a more capabable type for
 reigstering data collections independent of services is necessary, and
 in general it is desirable to attach actionable properties (i.e.,
 capabilities) to resource records.  Therefore, version 1.2 of
@@ -1174,7 +1256,8 @@ tables.
 
 
 The \xmlel{vs:TableSchema} type collects
-tables together that are logically related.  For example, a single
+tables together that are logically related.\todo{Better cater for the
+case that tables are outside of all schemas (see SIMBAD)}  For example, a single
 resource may provide access several major astronomical catalogs
 (e.g. SDSS, 2MASS, and FIRST) from one site, enabling high-performance
 cross-correlations between them.  Each catalog can be described in a
@@ -1803,7 +1886,8 @@ instance does not include any of these extended child elements, the
 use of \verb|xsi:type="vs:ParamHTTP"| indicates that the interface
 accessed via the URL given by the \xmlel{accessURL}
 element complies with the general parameter-based protocol described
-in this section.  
+in this section.\todo{resultType stinks when we have DALI
+RESPONSEFORMAT.  Would anyone miss it?  If so, how can we fix it?}
 
 
 
@@ -2724,6 +2808,6 @@ arraysize for scalars now.
        \xmlel{vs:VOTableType}.
 \end{itemize}
 
-\bibliography{ivoatex/ivoabib,ivoatex/docrepo}
+\bibliography{ivoatex/ivoabib,ivoatex/docrepo,local}
 
 \end{document}
