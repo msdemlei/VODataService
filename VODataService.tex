@@ -1349,8 +1349,9 @@ the \xmlel{vs:TableSchema} type.
                
 \item[Occurrence] optional
 \item[Comment] 
-                  The format defined in the VOTable standard is strongly
-                  recommended. 
+                  The form of the utype string depends on the data
+                  model; common forms are sequences of dotted identifiers
+                  (e.g., in SSA) or URIs (e.g., in RegTAP).
                
 
 \end{description}
@@ -1481,8 +1482,9 @@ Each table in a schema is described in detail using the
                
 \item[Occurrence] optional
 \item[Comment] 
-                  The format defined in the VOTable standard is highly
-                  recommended. 
+                  The form of the utype string depends on the data
+                  model; common forms are sequences of dotted identifiers
+                  (e.g., in SSA) or URIs (e.g., in RegTAP).
                
 
 \end{description}
@@ -1673,8 +1675,9 @@ set of columns in another table.
                
 \item[Occurrence] optional
 \item[Comment] 
-                  The format defined in the VOTable standard is highly
-                  recommended. 
+                  The form of the utype string depends on the data
+                  model; common forms are sequences of dotted identifiers
+                  (e.g., in SSA) or URIs (e.g., in RegTAP).
                
 
 \end{description}
@@ -1994,7 +1997,7 @@ metadata except the data type.
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  the name of the column
+                  the name of the parameter or column
                
 \item[Occurrence] optional
 
@@ -2003,7 +2006,8 @@ metadata except the data type.
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  a free-text description of the column's contents
+                  a free-text description of a parameter's or column's 
+                  contents
                
 \item[Occurrence] optional
 
@@ -2012,7 +2016,8 @@ metadata except the data type.
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  the unit associated with all values in the column
+                  the unit associated with the values in the parameter
+                  or column
                
 \item[Occurrence] optional
 
@@ -2044,8 +2049,9 @@ metadata except the data type.
                
 \item[Occurrence] optional
 \item[Comment] 
-                  The format defined in the VOTable standard is highly
-                  recommended. 
+                  The form of the utype string depends on the data
+                  model; common forms are sequences of dotted identifiers
+                  (e.g., in SSA) or URIs (e.g., in RegTAP).
                
 
 \end{description}
@@ -2106,7 +2112,7 @@ derive from a common parent, \xmlel{vs:DataType}.
 \begingroup\small\begin{bigdescription}
 \item[arraysize]
 \begin{description}
-\item[Type] string of the form: \emph{([0-9]+x)*[0-9]*[*]?}
+\item[Type] string of the form: \emph{([0-9]+x)*[0-9]*[0-9*]}
 \item[Meaning] 
                      the shape of the array that constitutes the value
                   
@@ -2337,7 +2343,7 @@ true
 \begin{description}
 \item[Type] composite: \xmlel{vs:SimpleDataType}
 \item[Meaning] 
-                        a type of data contained in the column
+                        a type of data contained in the parameter
                      
 \item[Occurrence] optional
 
@@ -2583,7 +2589,7 @@ should only generate \xmlel{vs:VOTableType}s in \xmlel{tableset}s.
 \begingroup\small\begin{bigdescription}
 \item[arraysize]
 \begin{description}
-\item[Type] string of the form: \emph{([0-9]+x)*[0-9]*[*]?}
+\item[Type] string of the form: \emph{([0-9]+x)*[0-9]*[0-9*]}
 \item[Meaning] 
 \item[Occurrence] optional
 
@@ -2666,7 +2672,7 @@ should only generate \xmlel{vs:VOTableType}s in \xmlel{tableset}s.
 \begingroup\small\begin{bigdescription}
 \item[arraysize]
 \begin{description}
-\item[Type] string of the form: \emph{([0-9]+x)*[0-9]*[*]?}
+\item[Type] string of the form: \emph{([0-9]+x)*[0-9]*[0-9*]}
 \item[Meaning] 
 \item[Occurrence] optional
 

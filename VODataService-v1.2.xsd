@@ -464,8 +464,9 @@
                   the data in this schema as a whole represent.  
                </xs:documentation>
                <xs:documentation>
-                  The format defined in the VOTable standard is strongly
-                  recommended. 
+                  The form of the utype string depends on the data
+                  model; common forms are sequences of dotted identifiers
+                  (e.g., in SSA) or URIs (e.g., in RegTAP).
                </xs:documentation>
             </xs:annotation>
          </xs:element>
@@ -726,8 +727,9 @@
                   the data in this table represent.  
                </xs:documentation>
                <xs:documentation>
-                  The format defined in the VOTable standard is highly
-                  recommended. 
+                  The form of the utype string depends on the data
+                  model; common forms are sequences of dotted identifiers
+                  (e.g., in SSA) or URIs (e.g., in RegTAP).
                </xs:documentation>
             </xs:annotation>
          </xs:element>
@@ -802,7 +804,7 @@
          <xs:element name="name" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  the name of the column
+                  the name of the parameter or column
                </xs:documentation>
             </xs:annotation>
          </xs:element>
@@ -810,7 +812,8 @@
          <xs:element name="description" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  a free-text description of the column's contents
+                  a free-text description of a parameter's or column's 
+                  contents
                </xs:documentation>
             </xs:annotation>
          </xs:element>
@@ -818,7 +821,8 @@
          <xs:element name="unit" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  the unit associated with all values in the column
+                  the unit associated with the values in the parameter
+                  or column
                </xs:documentation>
             </xs:annotation>
          </xs:element>
@@ -847,8 +851,9 @@
                   the data in this schema represent.  
                </xs:documentation>
                <xs:documentation>
-                  The format defined in the VOTable standard is highly
-                  recommended. 
+                  The form of the utype string depends on the data
+                  model; common forms are sequences of dotted identifiers
+                  (e.g., in SSA) or URIs (e.g., in RegTAP).
                </xs:documentation>
             </xs:annotation>
          </xs:element>
@@ -932,7 +937,7 @@
                            minOccurs="0">
                   <xs:annotation>
                      <xs:documentation>
-                        a type of data contained in the column
+                        a type of data contained in the parameter
                      </xs:documentation>
                   </xs:annotation>
                </xs:element>
@@ -1101,7 +1106,7 @@
       </xs:annotation>
 
      <xs:restriction base="xs:token">
-       <xs:pattern  value="([0-9]+x)*[0-9]*[*]?"/>
+       <xs:pattern  value="([0-9]+x)*[0-9]*[0-9*]"/>
      </xs:restriction>
    </xs:simpleType>
 
@@ -1339,8 +1344,9 @@
                   the association enabled by this key represents.  
                </xs:documentation>
                <xs:documentation>
-                  The format defined in the VOTable standard is highly
-                  recommended. 
+                  The form of the utype string depends on the data
+                  model; common forms are sequences of dotted identifiers
+                  (e.g., in SSA) or URIs (e.g., in RegTAP).
                </xs:documentation>
             </xs:annotation>
          </xs:element>
