@@ -6,7 +6,7 @@
            xmlns:stc="http://www.ivoa.net/xml/STC/stc-v1.30.xsd" 
            xmlns:vm="http://www.ivoa.net/xml/VOMetadata/v0.1"
            elementFormDefault="unqualified" attributeFormDefault="unqualified"
-           version="1.1wd1">
+           version="1.1wd2">
 
    <xs:annotation>
       <xs:appinfo>
@@ -503,10 +503,15 @@
       </xs:simpleContent>
    </xs:complexType>
 
-   <xs:complexType name="DataService">
+   <xs:complexType name="DataResource">
       <xs:annotation>
          <xs:documentation>
-           A service for accessing astronomical data
+           A resource publishing astronomical data.
+         </xs:documentation>
+         <xs:documentation>
+            This resource type should only be used if the resource has no
+            common underlying tabular schema (e.g., an inhomogeneous archive)
+            Use CatalogResource otherwise.
          </xs:documentation>
       </xs:annotation>
 
@@ -551,6 +556,24 @@
 
             </xs:sequence>
          </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <xs:complexType name="DataService">
+      <xs:annotation>
+         <xs:documentation>
+            A service for accessing astronomical data.
+         </xs:documentation>
+         <xs:documentation>
+            This resource type should only be used if the service has no
+            common underlying tabular schema (e.g., a storage service) or 
+            if it is not explicitly accessible (e.g., an ftp server with 
+            images).  Use CatalogService otherwise.
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:complexContent>
+         <xs:extension base="vs:DataResource"/>
       </xs:complexContent>
    </xs:complexType>
 
@@ -637,20 +660,21 @@
       </xs:restriction>
    </xs:simpleType>
 
-   <xs:complexType name="CatalogService">
+   <xs:complexType name="CatalogResource">
       <xs:annotation>
          <xs:documentation>
-            A service that interacts with with astronomical data
-            through one or more specified tables.
+            A resource giving astronomical data in tabular form.
          </xs:documentation>
          <xs:documentation>
-            A table with sky coverage typically have columns that give
-            longitude-latitude positions in some coordinate system.  
+            While this includeds classical astronomical catalogues,
+            this resource is also appropriate for collections of observations
+            or simulation results provided their metadata are available
+            in a sufficiently structured form (e.g., Obscore, SSAP, etc).
          </xs:documentation>
       </xs:annotation>
 
       <xs:complexContent>
-         <xs:extension base="vs:DataService">
+         <xs:extension base="vs:DataResource">
             <xs:sequence>
                <xs:element name="tableset" type="vs:TableSet" minOccurs="0">
                   <xs:annotation>
@@ -676,6 +700,23 @@
                </xs:element>
             </xs:sequence>
          </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+
+   <xs:complexType name="CatalogService">
+      <xs:annotation>
+         <xs:documentation>
+            A service that interacts with astronomical data
+            through one or more specified tables.
+         </xs:documentation>
+         <xs:documentation>
+            This is the appropriate resource type for normal VO services,
+            e.g., TAP, SSAP, SIAP, ConeSearch.
+         </xs:documentation>
+      </xs:annotation>
+
+      <xs:complexContent>
+         <xs:extension base="vs:CatalogResource"/>
       </xs:complexContent>
    </xs:complexType>
 

@@ -1,0 +1,33 @@
+\input pstricks
+\input pst-node
+\nopagenumbers
+\font\rm cmss10
+\font\it cmssi10
+\font\bf cmssbx10
+\parindent=0pt
+\hsize=8cm
+\vsize=4cm
+\rm
+
+\def\boxsz{2.5cm}
+\psset{cornersize=absolute,nodesep=1pt}
+
+\def\compobox#1#2{\rnode{#2}{\psframebox[linearc=5pt,fillstyle=solid,linecolor=#1]{%
+	\hbox
+	{\hskip 2pt\vbox{\vskip 2pt\hbox to\boxsz{\hss #2\hss}\vskip 2pt}\hskip 2pt}}}}
+\def\nfil#1{\hskip 0pt plus #1 fil}
+\def\hidewidth#1{\hbox to 0pt{\hss #1\hss}}
+\def\\{\hfil\break}
+
+\line{\gray\compobox{gray}{vr:Resource}\hfil}
+\vfil
+\line{\compobox{black}{DataResource}\hfil\compobox{black}{DataService}}
+\vfil
+\line{\compobox{black}{CatalogResource}\hfil\compobox{black}{CatalogService}}
+
+\ncline{->}{vr:Resource}{DataResource}
+\ncline{->}{DataResource}{CatalogResource}
+\ncline{->}{DataResource}{DataService}
+\ncline{->}{CatalogResource}{CatalogService}
+
+\eject\end
