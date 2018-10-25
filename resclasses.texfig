@@ -19,13 +19,13 @@
 \def\hidewidth#1{\hbox to 0pt{\hss #1\hss}}
 \def\\{\hfil\break}
 
-\line{\gray\compobox{gray}{vr:Resource}\hfil}
+\line{\gray\compobox{gray}{vr:Service}\hfil}
 \vfil
 \line{\compobox{black}{DataResource}\hfil\compobox{black}{DataService}}
 \vfil
 \line{\compobox{black}{CatalogResource}\hfil\compobox{black}{CatalogService}}
 
-\ncline{->}{vr:Resource}{DataResource}
+\ncline{->}{vr:Service}{DataResource}
 \ncline{->}{DataResource}{CatalogResource}
 \ncline{->}{DataResource}{DataService}
 \ncline{->}{CatalogResource}{CatalogService}

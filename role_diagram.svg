@@ -38,7 +38,6 @@
 	
 	<svg x="55" y="155"><rect width="90" height="18" x="0" y="0" class="rec"/><text class="doclabel" x="45" y="12.5">VOResource</text></svg>
 	<svg x="55" y="180"><rect width="90" height="18" x="0" y="0" class="rec"/><text class="doclabel" x="45" y="12.5">RegTAP</text></svg>
-	<svg x="55" y="205"><rect width="90" height="18" x="0" y="0" class="rec"/><text class="doclabel" x="45" y="12.5">RegistryInterface</text></svg>
 	<svg x="55" y="230"><rect width="90" height="18" x="0" y="0" class="rec"/><text class="doclabel" x="45" y="12.5">Resource M.D.</text></svg>
 	<svg x="55" y="350"><rect width="90" height="18" x="0" y="0" class="thisrec"/><text class="doclabel" x="45" y="12.5">VODataService</text></svg>
 	<svg x="550" y="230"><rect width="90" height="18" x="0" y="0" class="rec"/><text class="doclabel" x="45" y="12.5">STC</text></svg>

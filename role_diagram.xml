@@ -15,7 +15,6 @@ with missing dependencies.
 	<!-- Registry: x=55, y=150..450 -->
 	<rec name="VOResource" x="55" y="155"/>
 	<rec name="RegTAP" x="55" y="180"/>
-	<rec name="RegistryInterface" x="55" y="205"/>
 	<rec name="Resource M.D." x="55" y="230"/>
 	<thisrec name="VODataService" x="55" y="350"/>
 	<rec name="STC" x="550" y="230"/>

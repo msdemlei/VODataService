@@ -23,7 +23,7 @@
 \title{VODataService: A VOResource Schema Extension for Describing
 Collections and Services}
 
-\ivoagroup{registry}
+\ivoagroup{Registry}
 
 \author[http://www.ivoa.net/twiki/bin/view/IVOA/RayPlante]{Raymond Plante}
 \author[http://www.ivoa.net/twiki/bin/view/IVOA/MarkusDemleitner]{Markus Demleitner}
@@ -55,10 +55,10 @@ VODataService refers to an XML encoding standard for a specialized
 extension of the IVOA Resource Metadata that is useful for describing
 data collections and the services that access them.  It is defined as
 an extension of the core resource metadata encoding standard known as
-VOResource \citep{2008ivoa.spec.0222P} using XML Schema.
+VOResource \citep{2018ivoa.spec.0625P} using XML Schema.
 The specialized resource types defined by the VODataService schema
 allow one to describe how the data underlying the resource cover the
-sky as well as cover frequency and time.  
+sky and the frequency and time axes.  
 VODataService also enables detailed
 descriptions of tables that includes information useful to the
 discovery of tabular data.  It is intended that the VODataService data
@@ -103,7 +103,7 @@ infrastructure that enable VO applications.
 
 \section*{Syntax Notation Using XML Schema}
 
-The eXtensible Markup Language, or XML, is document syntax for marking
+The eXtensible Markup Language, or XML, is a document syntax for marking
 textual information with named tags and is defined by \citet{std:XML}.
 The set of XML tag names and the syntax
 rules for their use is referred to as the document schema.  One way to
@@ -122,7 +122,9 @@ repository, the version in the schema repository is authoritative.
 
 References to specific elements and types defined in the VOResource
 schema include the namespaces prefix \xmlel{vr} as in
-\xmlel{vr:Resource} (a type defined in the VOResource schema; the
+\xmlel{vr:Resource} (a type defined in the VOResource schema).
+
+The
 recommended namespace prefix for VODataService as per Registry
 Interfaces 1.1 \citep{2018ivoa.spec.0723D}, sect.~2.2, is \xmlel{vs}.
 
@@ -137,15 +139,15 @@ outside the scope of Schema).  VOResource also describes mechanisms
 for creating extensions to the core VOResource metadata.  This allows
 for the standardization of new metadata for describing specialized
 kinds of resources in a modular way without deprecating the core
-schema or other extensions.  This document defines one such extension
-referred to as VODataService.
+schema or other extensions.  
+
+This document defines one such extension referred to as VODataService.
+It provides types to define data services, their underlying tabular
+structures, their service interfaces, and the location of the data
+served in space, time, and energy.
+
 
 \subsection{The Role in the IVOA Architecture}
-
-The IVOA Architecture \citep{note:VOARCH} provides a high-level
-view of how IVOA standards work together to connect users and
-applications with providers of data and services, as depicted in the
-diagram in Fig.~\ref{fig:archdiag}.
 
 \begin{figure}
 \centering
@@ -154,20 +156,32 @@ diagram in Fig.~\ref{fig:archdiag}.
 \label{fig:archdiag}
 \end{figure}
 
+Fig.~\ref{fig:archdiag} shows the role VODataService plays within the
+IVOA Architecture \citep{note:VOARCH}.
 
+VODataService directly depends on the following other VO standards
+(unless specified otherwise, the dependency is on the major version of
+the cited standard rather than on the exact version):
 
+\begin{description}
+\item[VOResource, v1.1 \citep{2018ivoa.spec.0625P}] VOResource provides
+the fundamental types and structures extended here.
+\item[STC, v1.33 \citep{2007ivoa.spec.1030R}] The deprecated mechanism
+for declaring coverage through STCResourceProfile still uses concepts
+from verion 1 of the IVOA data model for Space-Time Coordinates.  The
+updated mechanism has no such dependence any more.
+\end{description}
 
-In this architecture, users can leverage a variety of tools (from the
-User Layer) to discover archives and services of interest (represented
-in the Resource Layer); registries provide the means for this
-discovery.  A registry is a repository of descriptions of resources
-that can be searched based on the metadata in those descriptions.  The
-Resource Metadata standard \citep{2007ivoa.spec.0302H} defines the core
-concepts used in the resource descriptions, and the VOResource
-standard defines the XML format.  As an
-extension of VOResource, the VODataService standard, defined in this
-document, specifically supports descriptions of data collections and
-services.  
+VODataService is closely related to the following other VO standards:
+
+\begin{description}
+\item[VOSI, v1.1 \citep{2017ivoa.spec.0524G}] VODataService defines the
+schema for the responses on the table metadata endpoint.  It also
+defines the ParamHTTP interface type used in the capabilities of most
+standard protocols.
+\item[RefTAP, v1.0 \citep{2014ivoa.spec.1208D}] RegTAP maps the concepts
+defined here into a relational structure.
+\end{description}
 
 \subsection{Purpose}
 
@@ -676,11 +690,6 @@ services.
 For CatalogService's content model, refer to
 sect.~\ref{sect:CatalogResource}.
 
-\subsection{Coverage}
-\label{sect:cover}
-
-
-
 \subsubsection{DataCollection}
 \label{sect:datacollection}
 
@@ -700,7 +709,10 @@ used in new resource records.  Since the XML serialisation of the STC 1
 data model was never promoted to an IVOA recommendation, there also is
 no properly standardised way of creating such records.
 
+
+
 \subsection{Coverage in Space, Time, and Spectrum}
+\label{sect:cover}
 
 The \xmlel{vs:Coverage} type summarily describes how the data served is
 distributed on the
