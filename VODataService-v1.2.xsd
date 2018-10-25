@@ -172,7 +172,7 @@
                minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  An ASCII-serialised MOC defining the spatial coverage 
+                  An ASCII-serialized MOC defining the spatial coverage 
                   of the resource.
                </xs:documentation>
                <xs:documentation>

@@ -180,7 +180,8 @@ schema for the responses on the table metadata endpoint.  It also
 defines the ParamHTTP interface type used in the capabilities of most
 standard protocols.
 \item[RefTAP, v1.0 \citep{2014ivoa.spec.1208D}] RegTAP maps the concepts
-defined here into a relational structure.
+defined here into a relational structure.  In that sense it provides the
+user interface to what is specified here.
 \end{description}
 
 \subsection{Purpose}
@@ -193,21 +194,24 @@ allows one to describe the data's \emph{coverage}:  the parts of the
 sky with which the data are associated and the time and frequency ranges that
 were observed or modeled to create the data.  It also allows one to
 describe tables in detail.  In particular, one can describe each of
-the columns of a table--providing, for example, its name, type, UCD
-\citep{2005ivoa.spec.1231D}, 
+the columns of a table -- providing, for example, its name, type, UCD
+\citep{2005ivoa.spec.1231D}, unit,
 and textual description.  When this metadata is part of a resource
 description in a registry, it becomes possible
 to discover tables that contain particular kinds of data.  
 
 
 
-It is intended that VODataService will be central to describing
+Resource records using VODataService types are commonly used to register
 services that support standard IVOA data access layer protocols such
 as Simple Image Access \citep{2015ivoa.spec.1223D} and Simple Cone Search
-\citep{2008ivoa.specQ0222P}.  While other VOResource extensions would
+\citep{2008ivoa.specQ0222P}.  As of October 2018, there are more than
+20000~resources of type \xmlel{vs:CatalogService} in the VO Registry.
+
+While other VOResource extensions 
 define the protocol-specific metadata (encapsulated as a standard
 \emph{capability} from VOResource), the general service
-resource description would share the common data concepts such as
+resource description shares the common data concepts such as
 coverage and tabular data.  Note, however, that a service described
 using the VODataService schema need not support any standard
 protocols.  With the VODataService extension schema plus the core
@@ -263,7 +267,7 @@ allows the addition of various capabilities to the record (which
 
 \paragraph{Find a large-scale survey of sources between 20 and 40 GHz.}
 While the spectral constraint is easily satisfied by the new coverage
-children, the ``large-scale'' part is much harder to operationalise.
+children, the ``large-scale'' part is much harder to operationalize.
 However, the plain table size often is a useful proxy in such discovery
 problems.  The new \xmlel{nrows} child of \xmlel{vs:Table} communicates
 it.
@@ -747,7 +751,7 @@ the coverage must be expressed in the ICRS.
 An important characteristic of MOCs is the order of the smallest scale
 (the ``MOC resolution'').  Higher orders yield more faithful
 representations of the actual coverage, but also lead to a possibly
-significant increase of the size of the serialised MOC.  We suggest a
+significant increase of the size of the serialized MOC.  We suggest a
 ``typical resolution'' of the Registry of about a degree (i.e., MOC
 order 6), but resources are free to choose a higher maximum orders if
 appropriate and the resource record size remains reasonable.
@@ -833,7 +837,7 @@ intervals on that level.
 \begin{description}
 \item[Type] string: \xmlel{xs:string}
 \item[Meaning] 
-                  An ASCII-serialised MOC defining the spatial coverage 
+                  An ASCII-serialized MOC defining the spatial coverage 
                   of the resource.
                
 \item[Occurrence] optional
