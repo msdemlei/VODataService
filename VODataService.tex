@@ -535,7 +535,7 @@ term matches a term in the RM, its meaning is given
 in terms of the RM definition.  
 
 
-\subsection{Resource Type Extensions}
+\subsection{VODataService Resource Types}
 \label{sect:resext}
 
 \subsubsection{DataResource}
@@ -806,13 +806,13 @@ from the schema in version 1.3 of this specification.
 The \xmlel{vs:Coverage} type summarily describes how the data served is
 distributed on the
 sky, in energy, and in time.  For the energy coverage, there is a
-qualitative classification in the \xmlel{waveband} \todo{Worry 
+also qualitative classification in the \xmlel{waveband} \todo{Worry 
 about non-EM messengers in waveband (use a vocabulary?)} element.
 
 Historically, the quantitative footprints were expected to be given in
 the element of type \xmlel{stc:STCResourceProfile}.  As discussed in
 \citet{note:regstc}, this expectation turned out to be erroneous,
-and the underlying standard \citep{note:stcx} never proceeded to become
+and the underlying standard, STC-X \citep{note:stcx}, never proceeded to become
 a recommendation.  Hence, this version of VODataService deprecates the
 use of \xmlel{STCResourceProfile}.
 
@@ -829,9 +829,10 @@ need a REC to cite -- DALI? us? VOTable?}
 By default, the MOCs are to be interpreted in the ICRS.  It is forseen
 that future extensions \todo{We should really do this now -- proposals,
 anyone?} to this will allow non-celestial frames (e.g., on planet
-surfaces).  However, whenever a resource's coordinates can be expressed
-as ICRS (e.g., Galactic or Ecliptic coordinates of extrasolar objects),
-the coverage must be expressed in the ICRS.
+surfaces).  However, the only celestial reference system allowed is
+ICRS.  If a resource's coordinates are natively in another frame (e.g.,
+Galactic or FK4 for some equinox), it is the resource record author's
+responsibility to convert the spatial coverage into the ICRS.
 
 An important characteristic of MOCs is the order of the smallest scale
 (the ``MOC resolution'').  Higher orders yield more faithful
@@ -865,7 +866,7 @@ assumed to be of order 10 minutes.
 
 Deviating from common VO practice (which currently fairly consistently
 uses wavelengths of elecromagnetic waves in vacuum), spectral limits are
-given in Joules of particle energy.  This is intended to allow seamless
+given in Joules of messenger energy.  This is intended to allow seamless
 integration of non-electromagnetic messengers.  The reference position
 for the spectral axis is the solar system barycenter.  Again, discovery
 use cases on a level where the difference between reference frames of
@@ -1073,8 +1074,9 @@ intervals on that level.
 The \xmlel{vs:TableSet} type can be used
 to describe a set of tables that are part of a single resource and can
 be considered functionally all located at a single site.  While there is
-no expectation that the table set directly correspond to tabular service
-responses, services should not include metadata for purely internal
+no expectation that the table set directly corresponds to the responses
+of tabular services,
+services should not include metadata for purely internal
 tables.
 
 
@@ -1137,13 +1139,15 @@ tables.
 
 
 The \xmlel{vs:TableSchema} type collects
-tables together that are logically related.\todo{Better cater for the
-case that tables are outside of all schemas (see SIMBAD)}  For example, a single
+tables together that are logically related.
+For example, a single
 resource may provide access several major astronomical catalogs
 (e.g. SDSS, 2MASS, and FIRST) from one site, enabling high-performance
 cross-correlations between them.  Each catalog can be described in a
 separate \xmlel{schema} element, using the elements from
-the \xmlel{vs:TableSchema} type. 
+the \xmlel{vs:TableSchema} type.\todo{Is is a good idea to use
+``default'' as the NULL value?  Or should we rather have minOccurs 0 for
+title?}
 
 
 
@@ -1423,12 +1427,13 @@ can be used to join it with another table can be described with the
 A foreign key description should only refer to tables described within
 the current table set.  
 
-When the tableset describes a set of TAP-accessible tables, the value of
+When the table set describes a set of TAP-accessible tables, the value of
 a \xmlel{table}'s \xmlel{name} child must be in a form immediately
 usable for use in ADQL or SQL queries. This corresponds to the analogous
-requirement for \tapschema\ and is usually only a problem when delimited
-identifiers are used as table names on the relational side.  In that
-case, the quotes must be part of \xmlel{name}'s value, and the
+requirement for \tapschema.  This means that all qualifications (schema,
+catalog) must be present, but also that when delimited
+identifiers are used as table names on the relational side,
+the quotes must be part of \xmlel{name}'s value, and the
 capitalisation used in the DDL must be preserved.
 
 
@@ -1448,23 +1453,10 @@ the \xmlel{vs:DataCollection} and
 \xmlel{vs:Catalog\-Ser\-vice} types
 constrain certain names to be unique.  In particular, all schema names
 within a \xmlel{tableset} element must be unique, and all
-table names within a \xmlel{tableset} element must be
+table names within a \xmlel{schema} element must be
 unique.  (A schema and table may share a common name, such as
 ``default''.)  These constraints makes it possible to uniquely locate
 the description of a schema or table within a VOResource description.  
-
-
-\begin{admonition}{Remark}
-The uniqueness constraints for names
-within table sets guarantee that when the following XPath queries are
-applied to a \xmlel{tableset} element, zero or one node
-only will be returned:
-
-\begin{itemize}
-\item\verb|schema[@name="default"]|
-\item\verb|schema/table[@name="default"]|
-\end{itemize}
-\end{admonition}
 
 Name uniqueness is only required when the table set description is
 part of a VOResource description.  The name uniqueness rules
@@ -2649,6 +2641,10 @@ SQL context.
 interpretation of arraysize=1 as a scalar is withdrawn.  Use empty
 arraysize for scalars now.
 \item Deprecated TAPType.
+\item No longer requiring unique table names within a tableset;
+uniquness is now required within a schema (actually, many services have
+been in violation of the old unique-within-tableset rule for a long time
+without operational difficulties).
 \item Ported source to \ivoatex.
 \end{itemize}
 
