@@ -36,6 +36,12 @@
            (A dataset is a collection of digitally-encoded data that 
            is normally accessible as a single unit, e.g., a file.)
          </xs:documentation>
+         <xs:documentation>
+            This type is deprecated.  Resource record authors should
+            use vs:CatalogResource instead.  This type will be removed
+            from the schema when no resource record using it remains in
+            the registry.
+         </xs:documentation>
       </xs:annotation>
 
       <xs:complexContent>
@@ -1291,16 +1297,9 @@
            positions, and regions.
          </xs:documentation>
          <xs:documentation>
-           This resource provides a mechanism for registering standard 
-           coordinate systems which other resources may reference as
-           part of a coverage descripiton.  In particular, coverage
-           descriptions will refer to components of the STC
-           descriptions in this resource via an IVOA identifier.  It
-           is intended that an application consuming such coverage
-           descriptions be able to semantically interpret the
-           identifier without resolving it.  For this reason, once a
-           standard STC description is registered with this resource 
-           type, updating the description is strongly discouraged.  
+            This resource type is deprecated, and no resource records
+            of this type exist in the Registry.  It will be removed
+            in version 1.3 of VODataService.
          </xs:documentation>
       </xs:annotation>
 

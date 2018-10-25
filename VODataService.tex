@@ -319,29 +319,30 @@ Extragalactic Database (NED) that provides measured redshifts for a
 given object.
 
 
-\lstinputlisting[language=XML,basicstyle=\footnotesize]{ipac-resource.xml}
+\lstinputlisting[language=XML,basicstyle=\footnotesize,numbers=left]{ipac-resource.xml}
 
 This example illustrates some of the features of the VODataService
 extension:
 
 \begin{enumerate}
-\item the extra namespaces associated with
-       VODataService metadata.
-\item the specific type of resource indicated by
+\item The specific type of resource indicated by
        the value of the \xmlel{xsi:type} attribute; in this case
        \xmlel{vs:CatalogService} indicates that this is
-       describing a service that accesses tabular data.
-\item the location of the VOResource-related schema 
-       documents used by this description,
-\item the core VOResource metadata,
-\item an interface described by the
+       describing a service that accesses tabular data (line 1).
+\item The extra namespace declaration for with
+       VODataService metadata with the canonical prefix (line 5).
+\item The location of the VOResource-related schema 
+       documents used by this description (line 7ff.)
+\item The core VOResource metadata (line 12ff.)
+\item An interface described by the
        VODataService type \xmlel{vs:ParamHTTP}; this
-       type can indicate input arguments it supports.
-\item a description of the
+       type can indicate input arguments the service supports (line
+       40ff.)
+\item A description of the
        coverage, including quantitative coverage
-       plus waveband keywords.
-\item a description of the table that is returned
-       by the service.
+       plus waveband keywords (line 62ff.)
+\item A description of the table that is returned
+       by the service (line 73ff.)
 \end{enumerate}
 
 \subsection{The Schema Namespace and Location}
@@ -377,8 +378,9 @@ nor is it needed.
 Authors of VOResource instance documents may choose to
 provide a location for the VOResource XML Schema document and its
 extensions using the
-\xmlel{xsi:schemaLocation} attribute.  While the choice of
-the location value is the choice of the author, this specification
+\xmlel{xsi:schemaLocation} attribute.  While authors are free to
+choose a location (as long as it resolves to the schema document), this
+specification
 recommends using the VODataService namespace URI as its location URL
 (as illustrated in the example above), as in,
 
@@ -400,7 +402,7 @@ The IVOA Registry Interface standard \citep{2018ivoa.spec.0723D}
 
 The canonical prefix for VODataService is \xmlel{vs}; this means, in
 particular, that in non-XML contexts (e.g., relational mappings
-like RegTAP) global VODataService elements \emph{must} be qualified with
+like RegTAP) the VODataService types \emph{must} be qualified with
 vs:.  The Registry Interfaces standard \citep{2018ivoa.spec.0723D} also
 strongly recommends using the canonical prefixes in XML documents.
 
@@ -442,9 +444,9 @@ or it can relate to the data structure returned by the service.  A
 \xmlel{vs:TableSet} consists of one or more (possibly anonymous)
 \xmlel{vs:TableSchema} instances.  These have some very basic metadata
 (name, title, description, utype) and otherwise contain \xmlel{vs:Table}
-instances.  These again have simple metadata, but mainly give column
+instances.  These in turn have simple metadata, but mainly give column
 metadata (including UCDs and units) in \xmlel{vs:TableParam}-typed
-elements.  These are the basis for enabling discovery queries like
+children.  These are the basis for enabling discovery queries like
 ``find all resources having redshifts and far infrared fluxes''.
 
 Note that table and schema metadata is deliberately shallow.  If the
@@ -453,14 +455,14 @@ fairly typical when a TAP service contains multiple unrelated tables --,
 data providers should define separate records for them as described in
 the Note on Discovering Data Collections.
 
-VODataService defines specialized interface type
+VODataService further defines a specialized interface type
 (inheriting from \xmlel{vr:Interface}) called
-\xmlel{vs:ParamHTTP}.  This type is used to describe the commonly
-used interface that is invoked over HTTP as either a GET or a POST 
-in which the arguments are encoded as
-\emph{name=value} pairs.  Such interface declarations should 
-enumerate the input arguments that are supported by the service
-implementation; this is particularly useful in the generation of simple
+\xmlel{vs:ParamHTTP}.  This type is used to describe
+straightforward HTTP interfaces directly operating on
+arguments encoded as
+\emph{name=value} pairs.  Such interface declarations can
+enumerate a service's input arguments, which enables clients
+to generate simple
 user interfaces from VOSI capabilities responses.
 
 To be able to express the types of table columns and service arguments
@@ -481,8 +483,9 @@ derivation tree}
 
 While no common VO service discovery pattern relies on the type  of the
 resource,\footnote{Of course, in non-service discovery (e.g., authorities
-or standards), resource types are important.} resources should
-nevertheless choose an appropriate type for their resources.  At the
+or standards), resource types are important.} resource
+record authors should
+nevertheless choose appropriate types for their resources.  At the
 very least, this helps in Registry maintenance.
 
 VODataService provides four major resource classes; their derivation
@@ -490,11 +493,11 @@ tree is shown in Fig.~\ref{fig:rescls}.  The vertical distinction in
 that figure reflects whether a resource has an associated tableset
 (DataX vs.~CatalogX); you would typically use the DataX types when a
 resource does not naturally admit a relational structure.  The classical
-example for this would be a couple of files on an FTP server.  CatalogX,
+example for this would be a collection of files on an FTP server.  CatalogX,
 on the other hand, has an associated tableset.  That does not mean that
 it is limited to what is conventionally thought as a ``catalogue'',
 i.e., a collection of metadata on astronomical objects.  On the
-contrary, CatalogX should also be used for collection of images,
+contrary, CatalogX should also be used for collections of images,
 spectra, time series, etc, as long as their metadata is sufficiently
 structured.  Accessibility through IVOA standard protocols (ObsCore,
 SIAP, SSAP) certainly satisfies that requirement.
@@ -506,29 +509,20 @@ another service; the classical example would be a table (or schema) in a
 TAP service or a collection of images or spectra within an ObsTAP
 service.  These should then have mainly auxiliary capabilities (where
 a capability with a \xmlel{vr:WebBrowser}-typed interface to, say, an
-form-based access point would certainly not hurt).  Choose XService when
+form-based access point does not preclude the use of XResource).  
+Choose XService when
 there is a 1:1 relationship between the publishing service and the
-published data.
+published data or the resource published multiple data collections
+registered in XResource records.
 
 
-Two further resource classes in VODataService are deprecated in version
-1.2.  
-
-\xmlel{vs:DataCollection} was used in version 1.1 of this standard to
-define simple collections of data, much like CatalogResource in the
-current version.  It did not admit capabilities, though, and since the
-addition of capabilities would essentially have a CatalogService clone
-with a different child sequence, it was decided to abandon rather than
-repair it.
-
-\xmlel{vs:StandardSTC} was intended to declare standard combinations of
-STC 1 reference frames and other coordinate metadata.  Since STC 1
-coverage declaration is itself deprecated, so is \xmlel{vs:StandardSTC}.
-
+Two further resource classes defined VODataService 1.1,
+\xmlel{vs:DataCollection} and \xmlel{vs:StandardSTC}, 
+are deprecated in version 1.2.  
 Resource record authors are requested to migrate or discard resource
-records using the deprecated types.  If all such records have
-disappeared from the VO by version 1.3 of this specification, we may
-remove the type declarations from the schema.
+records using these deprecated types.  If all such records have
+disappeared from the VO by version 1.3 of this specification, their
+type declarations may be removed from the schema.
 
 
 \section{The VODataService Metadata}
@@ -554,20 +548,93 @@ of various observations.  Resources that have structured metadata tables
 (like most VO services) or are tabular in nature (like usual
 astronomical catalogs) should use \xmlel{vs:CatalogResource}.
 
-The type is built on top of \xmlel{vr:Service}, so they can have
+The type is derived from \xmlel{vr:Service}, which means that instances
+can have
 capabilities.  For \xmlel{vs:DataResource}, only auxiliary capabilities
 (e.g., TAP services giving access to the table) or plain capabilities
 with \xmlel{vr:WebBrowser} interfaces should be given.  Resources with a
-primary access mode dedicated to the resource should use
+primary access mode dedicated to the resource's data content should use
 \xmlel{vs:DataService}-typed resources.
 
-to the core VOResource service metadata the ability to associate an
-observing facility and/or instrument with the data as well as describe
-the coordinate coverage of data via its child \xmlel{coverage}
-element.  Note that while these elements are all optional, a resource
-of this type still implies access to astronomical data.
+In addition to \xmlel{vr:Service}'s content, DataResource adds
+elements for declaring the observing facilities and/or instruments used
+to obtain the data, and it allows to declare
+the coordinate coverage of data via the \xmlel{coverage}
+element.
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd DataResource
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:DataResource} Type Schema Documentation}
+
+\noindent{\small
+           A resource publishing astronomical data.
+         \par}
+
+\noindent{\small
+            This resource type should only be used if the resource has no
+            common underlying tabular schema (e.g., an inhomogeneous archive)
+            Use CatalogResource otherwise.
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:DataResource} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="DataResource" >
+  <xs:complexContent >
+    <xs:extension base="vr:Service" >
+      <xs:sequence >
+        <xs:element name="facility" type="vr:ResourceName" minOccurs="0"
+                  maxOccurs="unbounded" />
+        <xs:element name="instrument" type="vr:ResourceName" minOccurs="0"
+                  maxOccurs="unbounded" />
+        <xs:element name="coverage" type="vs:Coverage" minOccurs="0" />
+      </xs:sequence>
+    </xs:extension>
+  </xs:complexContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:DataResource} Extension Metadata Elements}
+
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{facility}]
+\begin{description}
+\item[Type] string with ID attribute: vr:ResourceName
+\item[Meaning] 
+                     the observatory or facility used to collect the data 
+                     contained or managed by this resource.  
+                   
+\item[Occurrence] optional; multiple occurrences allowed.
+
+\end{description}
+\item[Element \xmlel{instrument}]
+\begin{description}
+\item[Type] string with ID attribute: vr:ResourceName
+\item[Meaning] 
+                     the Instrument used to collect the data contain or 
+                     managed by a resource.  
+                   
+\item[Occurrence] optional; multiple occurrences allowed.
+
+\end{description}
+\item[Element \xmlel{coverage}]
+\begin{description}
+\item[Type] composite: \xmlel{vs:Coverage}
+\item[Meaning] 
+                     Extent of the content of the resource over space, time, 
+                     and frequency.
+                   
+\item[Occurrence] optional
+
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
 % /GENERATED
 
 \subsubsection{DataService}
@@ -575,9 +642,9 @@ of this type still implies access to astronomical data.
 The \xmlel{vs:DataService} resource type has the same content model as
 \xmlel{vs:DataResource}.  It should be used instead of
 \xmlel{vs:DataResource} when the resource's capabilties give
-access to (essentially) only the resource's data, as for instance an
-``SSAP service for the XY instrument'', of for a service giving access
-to multiple resources; in this latter case, make the resource-level
+access to (essentially) only the resource's data, as for instance
+``ftp service for the XY instrument'', or for a service giving access
+to multiple resources; in this latter case, the resource-level
 metadata should pertain to the service itself rather than any specific
 data collection served by it.
 
@@ -585,7 +652,8 @@ Note that whenever the service operates on clearly definable tabular
 data, the \xmlel{vs:CatalogService} resource type should be used in
 preference to \xmlel{vs:DataService}.
 
-For DataService's content model, refer to sect.~\ref{sect:DataResource}.
+DataService's content model is exactly the one of
+\xmlel{vs:DataResource}; please refer to sect.~\ref{sect:DataResource}.
 
 
 
@@ -598,13 +666,16 @@ The \xmlel{vs:CatalogResource} resource type is for describing a
 resource containing astronomical data or metadata in a set of one or
 more tables.  It extends \xmlel{vs:DataResource} and thus has metadata
 on coverage and the facilities and instruments that produced the
-resource.  In addition to \xmlel{vs:DataResource}, this type allows the
+resource.  Additionally, this type allows the
 declaration of the metadata of the table(s) underlying the data or
 delivered by it in a tableset element.
 
 As with \xmlel{vs:DataResource}, this type should only be used if all
 capabilities declared in the resource are either auxiliary or
-nonstandard.  Use \xmlel{vs:CatalogService} instead.
+nonstandard.  This is typically the case for catalogs or data
+collections with in larger TAP, ObsTAP, or perhaps SIAP services.  When
+a service only publishes a single resource, use the
+\xmlel{vs:CatalogService} type.
 
 This is the type that should be used for publishing data collections
 according to the IVOA Note on Discovering Data Collections 
@@ -615,24 +686,25 @@ according to the IVOA Note on Discovering Data Collections
 \begin{generated}
 \begingroup
       	\renewcommand*\descriptionlabel[1]{%
-      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:CatalogService} Type Schema Documentation}
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:CatalogResource} Type Schema Documentation}
 
 \noindent{\small
-            A service that interacts with with astronomical data
-            through one or more specified tables.
+            A resource giving astronomical data in tabular form.
          \par}
 
 \noindent{\small
-            A table with sky coverage typically have columns that give
-            longitude-latitude positions in some coordinate system.  
+            While this includeds classical astronomical catalogues,
+            this resource is also appropriate for collections of observations
+            or simulation results provided their metadata are available
+            in a sufficiently structured form (e.g., Obscore, SSAP, etc).
          \par}
 
-\vspace{1ex}\noindent\textbf{\xmlel{vs:CatalogService} Type Schema Definition}
+\vspace{1ex}\noindent\textbf{\xmlel{vs:CatalogResource} Type Schema Definition}
 
 \begin{lstlisting}[language=XML,basicstyle=\footnotesize]
-<xs:complexType name="CatalogService" >
+<xs:complexType name="CatalogResource" >
   <xs:complexContent >
-    <xs:extension base="vs:DataService" >
+    <xs:extension base="vs:DataResource" >
       <xs:sequence >
         <xs:element name="tableset" type="vs:TableSet" minOccurs="0" >
           <xs:unique name="CatalogService-schemaName" >
@@ -650,7 +722,7 @@ according to the IVOA Note on Discovering Data Collections
 </xs:complexType>
 \end{lstlisting}
 
-\vspace{0.5ex}\noindent\textbf{\xmlel{vs:CatalogService} Extension Metadata Elements}
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:CatalogResource} Extension Metadata Elements}
 
 \begingroup\small\begin{bigdescription}\item[Element \xmlel{tableset}]
 \begin{description}
@@ -678,9 +750,10 @@ according to the IVOA Note on Discovering Data Collections
 
 \subsubsection{CatalogService}
 
-The \xmlel{vs:CatalogResource} resource type is for describing a
+The \xmlel{vs:CatalogService} resource type is for describing a
 service publishing astronomical data or metadata based on tabular
-representations.  Its relationship is as between \xmlel{vs:DataResource}
+representations.  Its relationship to \xmlel{vs:CatalogResource}
+is as between \xmlel{vs:DataResource}
 and \xmlel{vs:DataService}: Use \xmlel{vs:CatalogService} when either
 the resource's capabilties are exclusive to the resource described by
 the resource-level metadata (``SSAP service for the XY instrument'') or
@@ -691,27 +764,39 @@ specific data collection contained.
 This is the type that should be used for typical, one-resource VO
 services.
 
-For CatalogService's content model, refer to
-sect.~\ref{sect:CatalogResource}.
+CatalogService's content model is exactly the one of
+\xmlel{vs:CatalogResource}; please refer to sect.~\ref{sect:CatalogResource}.
 
 \subsubsection{DataCollection}
 \label{sect:datacollection}
 
 The \xmlel{vs:DataCollection} type is deprecated and should no longer be
-used in new resource records.  Existing \xmlel{vs:DataCollection}-typed
+used in new resource records.  It was used in version 1.1 to define
+simple collections of data, much like \xmlel{vs:CatalogResource} in the
+current version.  It did not admit capabilities, though, and since the
+addition of capabilities would essentially have created a CatalogService
+clone with a different child sequence, it was decided to abandon rather
+than repair it.
+
+Existing \xmlel{vs:DataCollection}-typed
 records should be migrated to \xmlel{vs:DataResource} or
-\xmlel{vs:CatalogResource} as appropriate.  The \xmlel{accessURL} child
-of \xmlel{vs:DataCollection} (which is not part of any of the new
-classes) should be replaced by a plain capability with a
+\xmlel{vs:CatalogResource} as appropriate.  If \xmlel{accessURL}
+children are present in the
+\xmlel{vs:DataCollection}s,
+they can be replaced with a plain capability with a
 \xmlel{vr:WebBrowser}-typed interface.
 
+This type may be removed from the schema when all resource records using
+it have vanished from the VO Registry.
 
 \subsubsection{StandardSTC}
 
 The \xmlel{vs:StandardSTC} type is deprecated and should no longer be
 used in new resource records.  Since the XML serialisation of the STC 1
 data model was never promoted to an IVOA recommendation, there also is
-no properly standardised way of creating such records.
+no properly standardised way of creating such records.  Since no such
+records ever existed in the Registry, this type will probably be removed
+from the schema in version 1.3 of this specification.
 
 
 
