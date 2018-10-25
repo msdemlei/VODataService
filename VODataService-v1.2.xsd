@@ -1082,8 +1082,8 @@
             <xs:attribute name="delim" type="xs:string">
                <xs:annotation>
                   <xs:documentation>
-                     the string that is used to delimit elements of an array
-                     value when arraysize is not “1”.
+                     a string that is used to delimit elements of an array
+                     value in InputParams.
                   </xs:documentation>
                   <xs:documentation>
                      Unless specifically disallowed by the context, 

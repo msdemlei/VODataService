@@ -1989,8 +1989,8 @@ derive from a common parent, \xmlel{vs:DataType}.
 \begin{description}
 \item[Type] string: \xmlel{xs:string}
 \item[Meaning] 
-                     the string that is used to delimit elements of an array
-                     value when arraysize is not “1”.
+                     a string that is used to delimit elements of an array
+                     value in InputParams.
                   
 \item[Occurrence] optional
 \item[Comment] 
@@ -2062,13 +2062,11 @@ A data type description can be augmented via a common set of
 \xmlel{vs:DataType} attributes, defined below.  The
 \xmlel{arraysize} attribute indicates the parameter is an array
 of values of the named type.  Its value describes the shape of the
-array, and the \xmlel{delim} attribute may be used to indicate
-the delimiter that should appear between elements of an array value.
-Depending on the application context, these attribute may not be
-enough to effectively parse the array values, in which case more
-information must be brought to bear either through assumptions about
-a particular derived \xmlel{vs:DataType} or through additional
-attributes.  
+array. When there is no natural serialisation defined through the type
+system, the \xmlel{delim} attribute may be used to indicate
+a delimiter that should appear between elements of an array value.  This
+attribute must not be combined with VOTableDataType, which always
+uses VOTable serialisation rules.
 
 
 
@@ -2077,7 +2075,7 @@ More descriptive information about the type can be provided via
 provide an alternate data type name.  It is expected that this name
 will only be understood by a special subset of applications.  The name
 given in the element content, then, represents a more commonly
-understood "fall-back" type.   Arbitrary information can also be
+understood “fall-back” type.   Arbitrary information can also be
 provided via any prefix-qualified, globally defined attribute drawn
 from an XML Schema other than VODataService (by virtue of the
 \xmlel{xs:anyAttribute} specification present
@@ -2219,7 +2217,9 @@ true
 
 By fixing the \xmlel{dataType} child element to that of the
 \xmlel{vs:SimpleDataType}, the possible types are restricted to
-predefined set appropriate for input parameters.
+predefined set appropriate for input parameters.\todo{On the other hand,
+also allowing VOTable types here would help a lot with, e.g., SODA and
+friends.  Anyone objecting to opening up the type system here?}
 
 
 
@@ -2367,7 +2367,7 @@ from TAP 1.0 which requires quotes because it otherwise clashes with a
 SQL reserved name, and a SIAP 1.0-compatible \verb|wcs_cdmatrix|
 column that shows how multidimensional arrays are declared:
 
-\begin{lstlisting}[language=XML]
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
 <column>
    <name> Dec </name>
    <description> the J2000 declination of the object </description>
@@ -2480,112 +2480,6 @@ should only generate \xmlel{vs:VOTableType}s in \xmlel{tableset}s.
 \end{generated}
 
 % /GENERATED
-
-% GENERATED: !schemadoc VODataService-v1.2.xsd TAPType
-\begin{generated}
-\begingroup
-      	\renewcommand*\descriptionlabel[1]{%
-      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:TAPType} Type Schema Documentation}
-
-\noindent{\small
-            a data type supported explicitly by the Table Access 
-            Protocol (v1.0).  This is deprecated in VODataService 1.2,
-            and even TAP 1.0 services are encouraged to declare
-            their columns using VOTableType.
-         \par}
-
-\vspace{1ex}\noindent\textbf{\xmlel{vs:TAPType} Type Schema Definition}
-
-\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
-<xs:complexType name="TAPType" >
-  <xs:simpleContent >
-    <xs:restriction base="vs:TAPDataType" >
-      <xs:enumeration value="BOOLEAN" />
-      <xs:enumeration value="SMALLINT" />
-      <xs:enumeration value="INTEGER" />
-      <xs:enumeration value="BIGINT" />
-      <xs:enumeration value="REAL" />
-      <xs:enumeration value="DOUBLE" />
-      <xs:enumeration value="TIMESTAMP" />
-      <xs:enumeration value="CHAR" />
-      <xs:enumeration value="VARCHAR" />
-      <xs:enumeration value="BINARY" />
-      <xs:enumeration value="VARBINARY" />
-      <xs:enumeration value="POINT" />
-      <xs:enumeration value="REGION" />
-      <xs:enumeration value="CLOB" />
-      <xs:enumeration value="BLOB" />
-      <xs:attribute name="arraysize" type="vs:ArrayShape" />
-      <xs:attribute name="delim" type="xs:string" default=" " />
-      <xs:attribute name="extendedType" type="xs:string" />
-      <xs:attribute name="extendedSchema" type="xs:anyURI" />
-      <xs:attribute name="size" type="xs:positiveInteger" />
-      <xs:anyAttribute namespace="##other" />
-    </xs:restriction>
-  </xs:simpleContent>
-</xs:complexType>
-\end{lstlisting}
-
-\vspace{0.5ex}\noindent\textbf{\xmlel{vs:TAPType} Attributes}
-
-\begingroup\small\begin{bigdescription}
-\item[arraysize]
-\begin{description}
-\item[Type] string of the form: \emph{([0-9]+x)*[0-9]*[0-9*]}
-\item[Meaning] 
-\item[Occurrence] optional
-
-\end{description}
-\item[delim]
-\begin{description}
-\item[Type] string: \xmlel{xs:string}
-\item[Meaning] 
-\item[Occurrence] optional
- 
-\end{description}
-\item[extendedType]
-\begin{description}
-\item[Type] string: \xmlel{xs:string}
-\item[Meaning] 
-\item[Occurrence] optional
-\end{description}
-\item[extendedSchema]
-\begin{description}
-\item[Type] a URI: \xmlel{xs:anyURI}
-\item[Meaning] 
-\item[Occurrence] optional
-\end{description}
-\item[size]
-\begin{description}
-\item[Type] \xmlel{xs:positiveInteger}
-\item[Meaning] 
-\item[Occurrence] optional
-\end{description}
-
-
-\end{bigdescription}\endgroup
-
-\endgroup
-\end{generated}
-
-% /GENERATED
-
-
-
-
-Examples for column definitions:
-A representation of a string type using the
-\xmlel{vs:VOTableType} set of types:
-
-\begin{lstlisting}
-<column>
-   <name> id </name>
-   <description> the object identifier </description>
-   <ucd> meta.id </ucd>
-   <dataType xsi:type="vs:VOTableType" arraysize="*"> char </dataType>
-</column>
-\end{lstlisting}
-
 
 
 
