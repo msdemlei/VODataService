@@ -402,7 +402,6 @@
               </xs:documentation>
             </xs:annotation>
 
-
             <xs:unique name="DataCollection-tableName">
                <xs:selector xpath="table" />
                <xs:field xpath="name" />
@@ -1080,7 +1079,7 @@
                </xs:annotation>
             </xs:attribute>
 
-            <xs:attribute name="delim" type="xs:string" default=" ">
+            <xs:attribute name="delim" type="xs:string">
                <xs:annotation>
                   <xs:documentation>
                      the string that is used to delimit elements of an array
@@ -1093,8 +1092,9 @@
                      the delimiter (e.g., “1, 5” when delim=“,”).
                   </xs:documentation>
                   <xs:documentation>
-                     the default is “ ”; i.e. the values are delimited 
-                     by spaces.  
+                     This should not be used for VOTable types; there,
+                     VOTable (typcially TABLEDATA) conventions for writing
+                     arrays are binding.
                   </xs:documentation>
                </xs:annotation>
             </xs:attribute>

@@ -1097,7 +1097,12 @@ tables.
 <xs:complexType name="TableSet" >
   <xs:sequence >
     <xs:element name="schema" type="vs:TableSchema" minOccurs="1"
-              maxOccurs="unbounded" />
+              maxOccurs="unbounded" >
+      <xs:unique name="DataCollection-tableName" >
+        <xs:selector xpath="table" />
+        <xs:field xpath="name" />
+      </xs:unique>
+    </xs:element>
   </xs:sequence>
   <xs:anyAttribute namespace="##other" />
 </xs:complexType>
@@ -1600,7 +1605,7 @@ desired:
 
 \item Apply a globally-defined attribute from a schema other than
        VODataService (i.e. from a namespace other than
-       \url{http://www.ivoa.net/xml/VODataService/v1.1} to any of the
+       \url{http://www.ivoa.net/xml/VODataService/v1.1}) to any of the
        \xmlel{tableset}, \xmlel{schema},
        \xmlel{table}, and/or \xmlel{column}
        elements.
@@ -1627,29 +1632,10 @@ desired:
 The \xmlel{vs:ParamHTTP} type is a specialized service interface
 description that extends the VOResource \xmlel{vr:Interface} type 
 (as recommended by VOResource 1.1, section 2.2).  It
-describes a service interface that is invoke over HTTP via a GET or a
+describes a service interface that is invoked over HTTP via a GET or a
 POST in which the inputs are parameters
-encoded as \emph{name=value} pairs, delimited by ampersands
-(\verb|&|) and URL-encoded as per RFC 3986 \citep{std:RFC3986}.  When
-the service is invoked as a GET service, this input list is appended
-to a base URL (where the result must form a legal URL.  Usually, the
-URL contains a question mark (\verb|?|) setting off a list of
-URL arguments to the URL.
-\todo{Insert material currently developed in UWSRegExt, and try to clear
-up relationship between these and ParamHTTP.}
-
-
-When the service is invoked as a POST, the encoded list of parameters
-are uploaded to the service as the HTTP Message Body.  
-
-
-The \xmlel{vs:ParamHTTP} type is intended for (but not limited
-to) use in describing an interface within a VOResource description of
-a service capability (as described in VOResource
-section 2.2.7); that is, it can be invoked via the
-\xmlel{xsi:type} attribute on an \xmlel{interface}
-element. 
-
+encoded in multipart/form-data or application/x-www-form-urlencoded
+containers.
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd ParamHTTP
 \begin{generated}
@@ -1971,7 +1957,7 @@ derive from a common parent, \xmlel{vs:DataType}.
   <xs:simpleContent >
     <xs:extension base="xs:token" >
       <xs:attribute name="arraysize" type="vs:ArrayShape" />
-      <xs:attribute name="delim" type="xs:string" default=" " />
+      <xs:attribute name="delim" type="xs:string" />
       <xs:attribute name="extendedType" type="xs:string" />
       <xs:attribute name="extendedSchema" type="xs:anyURI" />
       <xs:anyAttribute namespace="##other" />
@@ -2007,7 +1993,6 @@ derive from a common parent, \xmlel{vs:DataType}.
                      value when arraysize is not “1”.
                   
 \item[Occurrence] optional
- 
 \item[Comment] 
                      Unless specifically disallowed by the context, 
                      applications should allow optional spaces to 
@@ -2015,8 +2000,9 @@ derive from a common parent, \xmlel{vs:DataType}.
                      the delimiter (e.g., “1, 5” when delim=“,”).
                   
 \item[Comment] 
-                     the default is “ ”; i.e. the values are delimited 
-                     by spaces.  
+                     This should not be used for VOTable types; there,
+                     VOTable (typcially TABLEDATA) conventions for writing
+                     arrays are binding.
                   
 \end{description}
 \item[extendedType]
@@ -2640,6 +2626,10 @@ SQL context.
 \item DataType/@arraysize no longer defaults to 1, and the
 interpretation of arraysize=1 as a scalar is withdrawn.  Use empty
 arraysize for scalars now.
+\item BaseParam's delim attribute no longer defaults to blank.  That
+would be very unfortunate with VOTable, where other conventions are in
+place (e.g., for string arrays).  Now discouraging the use of delim
+outside of InputParams.
 \item Deprecated TAPType.
 \item No longer requiring unique table names within a tableset;
 uniquness is now required within a schema (actually, many services have
