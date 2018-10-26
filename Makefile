@@ -7,7 +7,7 @@ DOCNAME = VODataService
 DOCVERSION = 1.2
 
 # Publication date, ISO format; update manually for "releases"
-DOCDATE = 2018-11-15
+DOCDATE = 2018-10-26
 
 # What is it you're writing: NOTE, WD, PR, REC, PEN, or EN
 DOCTYPE = WD
@@ -26,6 +26,8 @@ VECTORFIGURES =
 
 # Additional files to distribute (e.g., CSS, schema files, examples...)
 AUX_FILES = VODataService-v1.2.xsd
+
+AUTHOR_EMAIL=msdemlei@ari.uni-heidelberg.de
 
 %.pdf: %.tex
 	pdflatex $<
