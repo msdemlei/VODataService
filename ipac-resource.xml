@@ -63,11 +63,11 @@ http://nedwww.ipac.caltech.edu/cgi-bin/nph-datasearch?search_type=Redshifts&amp;
     <spatial>0/0-11</spatial>
     <!-- arbitrary upper temporal limit for "ongoing acquisition" -->
     <temporal>33282 100000</temporal>
-    <!-- NED is "full-spectrum" -->
-    <spectral>4e-28 8e-7</spectral>
+    <!-- Only radio and optical redshifts, here -->
+    <spectral>4e-28 3e-23</spectral>
+    <spectral>2.4e-19 5e-19</spectral>
     <waveband>Radio</waveband>
-    <!-- ... all other bands ... -->
-    <waveband>Gamma-ray</waveband>
+    <waveband>Optical</waveband>
   </coverage>
 
   <tableset>

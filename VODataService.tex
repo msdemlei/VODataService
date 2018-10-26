@@ -6,6 +6,7 @@
 \usepackage{listings}
 \lstloadlanguages{XML}
 \lstset{flexiblecolumns=true,tagstyle=\ttfamily,showstringspaces=False}
+\usepackage{amsmath}
 \usepackage{todonotes}
 
 \iftth
@@ -124,10 +125,6 @@ References to specific elements and types defined in the VOResource
 schema include the namespaces prefix \xmlel{vr} as in
 \xmlel{vr:Resource} (a type defined in the VOResource schema).
 
-The
-recommended namespace prefix for VODataService as per Registry
-Interfaces 1.1 \citep{2018ivoa.spec.0723D}, sect.~2.2, is \xmlel{vs}.
-
 \section{Introduction}
 
 The VOResource standard \citep{2018ivoa.spec.0625P} provides a means of
@@ -164,7 +161,7 @@ VODataService directly depends on the following other VO standards
 the cited standard rather than on the exact version):
 
 \begin{description}
-\item[VOResource, v1.1 \citep{2018ivoa.spec.0625P}] VOResource provides
+\item[VOResource, v1.1 \citep{2018ivoa.spec.0625P}] VOResource gives
 the fundamental types and structures extended here.
 \item[STC, v1.33 \citep{2007ivoa.spec.1030R}] The deprecated mechanism
 for declaring coverage through STCResourceProfile still uses concepts
@@ -177,10 +174,10 @@ VODataService is closely related to the following other VO standards:
 \begin{description}
 \item[VOSI, v1.1 \citep{2017ivoa.spec.0524G}] VODataService defines the
 schema for the responses on the table metadata endpoint.  It also
-defines the ParamHTTP interface type used in the capabilities of most
+defines the ParamHTTP interface type currently used in the capabilities of most
 standard protocols.
 \item[RefTAP, v1.0 \citep{2014ivoa.spec.1208D}] RegTAP maps the concepts
-defined here into a relational structure.  In that sense it provides the
+defined here into a relational structure.  In that sense it is the
 user interface to what is specified here.
 \end{description}
 
@@ -188,19 +185,15 @@ user interface to what is specified here.
 
 
 The purpose of this extension is to define common XML Schema
-types -- particularly new resource types -- that are useful for describing
-data collections and services that access data.  In particular, it
-allows one to describe the data's \emph{coverage}:  the parts of the
-sky with which the data are associated and the time and frequency ranges that
-were observed or modeled to create the data.  It also allows one to
-describe tables in detail.  In particular, one can describe each of
-the columns of a table -- providing, for example, its name, type, UCD
-\citep{2005ivoa.spec.1231D}, unit,
-and textual description.  When this metadata is part of a resource
-description in a registry, it becomes possible
-to discover tables that contain particular kinds of data.  
-
-
+types -- in particular new resource types -- that are useful for describing
+data collections and services that access data.  One aspect of such a
+description is the resource's \emph{coverage}:  the parts of the
+sky with which the data is associated and the time and frequency ranges that
+were observed or modeled to create the data.  Another important aspect
+is the detailed metadata for tables underlying the resource, including
+names, types, UCDs
+\citep{2005ivoa.spec.1231D}, units,
+and textual descriptions for the columns making them up.  
 
 Resource records using VODataService types are commonly used to register
 services that support standard IVOA data access layer protocols such
@@ -232,17 +225,18 @@ VODataService to its version 1.2.  We do not formally derive
 requirements from them but briefly note which new features enable or
 facilitate the specific use case.
 
-A few of the changes are necessary for consistency with other standards
+A few of the changes in version 1.2 are necessary for consistency with other standards
 such as TAP (extendedType interpretation, requirement to use ADQL
 delimited identifier literals in names where appropriate) or VOTable
 (arraysize interpretation).  These were obviously not guided by specific
 use cases.
 
 
-\paragraph{What services have data for the Crab nebula covering the H$\alpha$ 
+\paragraph{What services have data for the Crab nebula covering the
+H$\boldsymbol\alpha$ 
 line taken in the second half of 2015?}  In version 1.1, this use case
 would have been covered by the \xmlel{stc:STCResourceProfile} type,
-which was never properly standardised or widely adopted.  In the current
+which, however, was never properly standardised or widely adopted.  In the current
 version, the \xmlel{spatial}, \xmlel{spectral}, and \xmlel{temporal}
 children of \xmlel{coverage} enable discovery by coverage on the various
 axes.  It is worth noting that the spectral coverage is for the solar
@@ -300,10 +294,11 @@ enough for that and ObsCore.  But: SIAv2?  Data collections, perhaps?}
 
 \paragraph{Facilitate discovery of full DALI services.}  The issue here
 is that DALI forsees synchronous and asynchronous endpoints as the
-standard case for many protocols -- it already is standard for TAP.  The
-current way to discover these, together with the pertinent VOSI
-endpoints, is built on \xmlel{vs:ParamHTTP}-typed interfaces and has
-known weaknesses, in particular when multiple authentication schemes
+standard case for many protocols -- it already is standard for TAP.
+Also, several auxiliary endpoints (VOSI, examples) are declared as
+separate capabilities and need to be matched with the functional endpoints.
+This matching is becoming a problem when multiple 
+authentication schemes or mirror sites
 necessitate multiple sync/async pairs.\todo{See what UWSRegExt brings.}
 
 
@@ -312,8 +307,13 @@ necessitate multiple sync/async pairs.\todo{See what UWSRegExt brings.}
 
 
 The VODataService extension in general enables the description of two
-types of resources:  data collections and services that access data.
-Here's an example of a VOResource document (abbreviated for the
+types of resources:  Services that access data on the one side, and data
+being accessed through services on the other.  
+
+For simple services just publishing a simple resource -- still a fairly
+common pattern -- the metadata of the data published can be folded into
+the service record.
+Here is an example of such a record (abbreviated for the
 purposes of illustration) that describes a service from the NASA
 Extragalactic Database (NED) that provides measured redshifts for a
 given object.
@@ -329,7 +329,7 @@ extension:
        the value of the \xmlel{xsi:type} attribute; in this case
        \xmlel{vs:CatalogService} indicates that this is
        describing a service that accesses tabular data (line 1).
-\item The extra namespace declaration for with
+\item The extra namespace declaration for 
        VODataService metadata with the canonical prefix (line 5).
 \item The location of the VOResource-related schema 
        documents used by this description (line 7ff.)
@@ -356,8 +356,11 @@ associated with version 1.1 of this document.  It is regrettable that a
 misleading minor version is present in the namespace URI, but dropping
 it would break existing software for creating and processing
 VODataService instance documents.  Hence, the namespace URI ending in
-\verb|1.1| is also used for versions 1.2, 1.3, and so forth of the
-schema.
+\verb|1.1| is also used for schema versions 1.2, 1.3, and so forth.
+
+While VODataService 1.2 is not in REC\todo{Remove this before going
+REC}, the draft schema file can be retrieved from the document
+repository\footnote{For this WD: \auxiliaryurl{VODataService-v1.2.xsd}}.
 
 Resolving the VODataService namespace URI will redirect to a schema
 document having the actual version number (for the schema associated
@@ -371,8 +374,10 @@ other in the sense defined in the IVOA schema versioning policies.
 The versioning policies in version 1.0 posit a requirement that instance
 documents declare the minor version of the schema used to produce them
 in the root element of elements coming from a schema.  VODataService has
-no global elements, and hence there is no place for such a declaration,
-nor is it needed.
+no global elements, and hence there is no place for such a declaration.
+We do not expect this to cause operational difficulties, since we cannot
+see a use case for clients to distinguish minor versions of
+VODataService instance documents.
 
 
 Authors of VOResource instance documents may choose to
