@@ -519,7 +519,7 @@
          </xs:documentation>
          <xs:documentation>
             This resource type should only be used if the resource has no
-            common underlying tabular schema (e.g., an inhomogeneous archive)
+            common underlying tabular schema (e.g., an inhomogeneous archive).
             Use CatalogResource otherwise.
          </xs:documentation>
       </xs:annotation>
@@ -548,7 +548,7 @@
                      <vm:dcterm>Subject.Instrument</vm:dcterm>
                    </xs:appinfo>
                    <xs:documentation>
-                     the Instrument used to collect the data contain or 
+                     the instrument used to collect the data contain or 
                      managed by a resource.  
                    </xs:documentation>
                 </xs:annotation>
@@ -675,7 +675,7 @@
             A resource giving astronomical data in tabular form.
          </xs:documentation>
          <xs:documentation>
-            While this includeds classical astronomical catalogues,
+            While this includeds classical astronomical catalogs,
             this resource is also appropriate for collections of observations
             or simulation results provided their metadata are available
             in a sufficiently structured form (e.g., Obscore, SSAP, etc).
@@ -999,9 +999,6 @@
                      An indication of whether this parameter is
                      required to be provided for the application
                      or service to work properly.  
-                  </xs:documentation>
-                  <xs:documentation>
-                     Allowed values are “required” and “optional”.
                   </xs:documentation>
                </xs:annotation>
             </xs:attribute>
