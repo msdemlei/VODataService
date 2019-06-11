@@ -243,7 +243,11 @@ axes.  It is worth noting that the spectral coverage is for the solar
 system barycenter, so this use case does \emph{not} immediately enable
 the discovery of, say, H$\alpha$ images of remote galaxies.  Redshift
 correction has to be applied by the client based on knowledge about the
-object(s) investigated.
+object(s) investigated.  At the time of writing, coverage also does not
+directly address non-celestial reference systems, although in particular
+planetary surfaces are considered in scope, and the coverage element's
+\xmlel{@frame} attribute is defined to ensure non-ICRS coverages can
+safely be declared as the need arises.
 
 \paragraph{Find all ObsCore services publishing data taken at the
 Telescope X.} This use case could be satisfied in version 1.1 through
@@ -980,7 +984,7 @@ intervals on that level.
 <xs:complexType name="Coverage" >
   <xs:sequence >
     <xs:element ref="stc:STCResourceProfile" minOccurs="0" />
-    <xs:element name="spatial" type="xs:string" minOccurs="0" />
+    <xs:element name="spatial" type="vs:SpatialCoverage" minOccurs="0" />
     <xs:element name="temporal" type="vs:FloatInterval" minOccurs="0"
               maxOccurs="unbounded" />
     <xs:element name="spectral" type="vs:FloatInterval" minOccurs="0"
@@ -1009,7 +1013,7 @@ intervals on that level.
 \end{description}
 \item[Element \xmlel{spatial}]
 \begin{description}
-\item[Type] string: \xmlel{xs:string}
+\item[Type] a string with optional attributes
 \item[Meaning] 
                   An ASCII-serialized MOC defining the spatial coverage 
                   of the resource.
@@ -1153,7 +1157,64 @@ intervals on that level.
 
 % /GENERATED
 
+In order to avoid future ambiguity in the spatial coverage, we already
+add a \xmlel{frame} attribute to the \xmlel{spatial} element.  In its
+absence, the MOC contained is for ICRS coordinates.  Any value indicates
+non-celestial coordinates, where actual, interoperable values are not
+defined here.
 
+
+% GENERATED: !schemadoc VODataService-v1.2.xsd SpatialCoverage
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:SpatialCoverage} Type Schema Documentation}
+
+\noindent{\small
+            A coverage on a sphere.  By default, this refers to the
+            celestial sphere in the ICRS frame.  Non-celestial frames
+            are indicated by non-NULL values of the frame attribute.
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:SpatialCoverage} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="SpatialCoverage" >
+  <xs:simpleContent >
+    <xs:extension base="xs:token" >
+      <xs:attribute name="frame" type="xs:token" />
+    </xs:extension>
+  </xs:simpleContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:SpatialCoverage} Attributes}
+
+\begingroup\small\begin{bigdescription}
+\item[frame]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                     When present, the MOC is written in a non-celestial (e.g., 
+                     planetary) frame.  Note that for celestial coverages,
+                     ICRS must be used.
+                  
+\item[Occurrence] optional
+\item[Comment] 
+                     VODataService 1.2 does not prescribe a vocabulary for 
+                     what values are allowed here; an external standard.  As
+                     long as no such vocabulary is agreed upon, the frame
+                     attribute should not be set.
+                  
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
+% /GENERATED
 
 \subsection{Tabular Data}
 \label{sect:table}
@@ -2581,7 +2642,13 @@ explain their schema in an IVOA Note.
 
 \section{Changes from previous versions}
 
-\subsection{Changes from REC-1.1}
+\subsection{Changes since  WD-20181026}
+
+\begin{itemize}
+\item Spatial coverage now has a frame attribute.
+\end{itemize}
+
+\subsection{Changes since REC-1.1}
 
 \begin{itemize}
 \item Deprecated STCResourceProfile and replaced it with
