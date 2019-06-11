@@ -113,7 +113,7 @@ known as XML Schema \citep{std:XSD}.
 
 The XML Schemas of VODataService as well as VOResource and its other
 extensions are
-available from the IVOA document
+available from the IVOA schema
 repository\footnote{\url{http://www.ivoa.net/xml}} at any time.
 Parts of the schema appear within the main sections of this document;
 however, documentation nodes have been left out for the sake of brevity.
@@ -122,7 +122,7 @@ diverges from the schema document in the IVOA document
 repository, the version in the schema repository is authoritative.
 
 References to specific elements and types defined in the VOResource
-schema include the namespaces prefix \xmlel{vr} as in
+schema include the namespace prefix \xmlel{vr} as in
 \xmlel{vr:Resource} (a type defined in the VOResource schema).
 
 \section{Introduction}
@@ -165,7 +165,7 @@ the cited standard rather than on the exact version):
 the fundamental types and structures extended here.
 \item[STC, v1.33 \citep{2007ivoa.spec.1030R}] The deprecated mechanism
 for declaring coverage through STCResourceProfile still uses concepts
-from verion 1 of the IVOA data model for Space-Time Coordinates.  The
+from version 1 of the IVOA data model for Space-Time Coordinates.  The
 updated mechanism has no such dependence any more.
 \end{description}
 
@@ -243,15 +243,14 @@ axes.  It is worth noting that the spectral coverage is for the solar
 system barycenter, so this use case does \emph{not} immediately enable
 the discovery of, say, H$\alpha$ images of remote galaxies.  Redshift
 correction has to be applied by the client based on knowledge about the
-object(s) investigated.\todo{Also, we don't do solar system well
-spatially.  Mention this here?  Fix it now?}
+object(s) investigated.
 
 \paragraph{Find all ObsCore services publishing data taken at the
 Telescope X.} This use case could be satisfied in version 1.1 through
 the use of \xmlel{vs:DataCollection} records and relationships to the
 respective TAP services.  However, this scheme led to error-prone query
 patterns, and few such data collections were actually registered; see
-the IVOA Note on Discovering Data Collections \citep{note:DataCollect} for
+the IVOA Note on discovering data collections \citep{2019ivoa.rept.0520D} for
 details.  To better support the scheme proposed there, version 1.2 adds
 the \xmlel{vs:DataResource} and \xmlel{vs:CatalogResource} types 
 that identify a resource as data-like but
@@ -432,7 +431,7 @@ The VODataService type \xmlel{vs:Coverage} allows the declaration of
 the physical coverage of a resource on the sky (or on spherical bodies),
 in time, and in the energy of the messenger particle.  In addition, the
 element should contain a rough indication of the messenger type
-(``Optical''), and it can contain a link to a footprint service and an
+(``Optical''), and it can contain a link to a footprint endpoint and an
 indication of the spatial resolution within a service.
 
 VODataService has several classes for the declaration of the tabular
@@ -453,7 +452,7 @@ Note that table and schema metadata is deliberately shallow.  If the
 main resource metadata is not enough to discover the table -- as is
 fairly typical when a TAP service contains multiple unrelated tables --,
 data providers should define separate records for them as described in
-the Note on Discovering Data Collections.
+sect.~\ref{sect:discoverdata}.
 
 VODataService further defines a specialized interface type
 (inheriting from \xmlel{vr:Interface}) called
@@ -495,7 +494,7 @@ that figure reflects whether a resource has an associated tableset
 resource does not naturally admit a relational structure.  The classical
 example for this would be a collection of files on an FTP server.  CatalogX,
 on the other hand, has an associated tableset.  That does not mean that
-it is limited to what is conventionally thought as a ``catalog'',
+it is limited to what is conventionally thought of as a ``catalogue'',
 i.e., a table of data on astronomical objects.  On the
 contrary, CatalogX should also be used for collections of images,
 spectra, time series, etc, as long as their metadata is sufficiently
@@ -503,18 +502,7 @@ structured.  Accessibility through IVOA standard protocols (ObsCore,
 SIAP, SSAP) certainly satisfies that requirement.
 
 The horizontal distinction (XResource vs.~XService) is somewhat more
-subtle, as the content model of XResource and XService are identical.
-Choose XResource when the resource is mainly accessible as part of
-another service; the classical example would be a table (or schema) in a
-TAP service or a collection of images or spectra within an ObsTAP
-service.  These should then have mainly auxiliary capabilities (where
-a capability with a \xmlel{vr:WebBrowser}-typed interface to, say, an
-form-based access point does not preclude the use of XResource).  
-Choose XService when
-there is a 1:1 relationship between the publishing service and the
-published data, or if the service publishes multiple data collections
-registered in separate XResource records.
-
+subtle and will be discussed in sect.~\ref{sect:discoverdata}.
 
 Two further resource classes defined VODataService 1.1,
 \xmlel{vs:DataCollection} and \xmlel{vs:StandardSTC}, 
@@ -524,6 +512,103 @@ records using these deprecated types.  If all such records have
 disappeared from the VO by version 1.3 of this specification, their
 type declarations may be removed from the schema.
 
+\subsubsection{Discovering Data Within Other Services}
+
+The content models of CatalogResource and CatalogService are identical.
+To understand why the two classes are present nevertheless, a short
+historical excurse is in order.  A full treatment of this is found in
+the IVOA Endorsed Note on discovering data collections within services
+\citep{2019ivoa.rept.0520D}, hereafter referred to as DDC.
+
+In the early VO, there was almost throughout a $1:1$ relationship between
+data collections and services.  For instance, a catalogue of variable
+stars had a single cone search interface, and the spectra from a given
+spectrograph had a single SSA interface.  This is the model reflected by
+the CatalogService class, and it was, by and large, sufficient for
+IVOA's ``simple'' protocols (SCS, SIAP, SSAP, SLAP), although even these
+protocols have facilities for multi-collection services.
+
+With the advent of services very naturally publishing what clearly
+are multiple different resources -- TAP, with its multiple tables, and
+Obscore building on top of it are the prime examples --, this model
+proved inadequate; furthermore, publishers increasingly offered data
+through multiple interfaces: An object catalogue now quite typically is
+published as both a cone search service and within a TAP service; an
+image collection could have both SIAP and Obscore interfaces.
+
+Thus, the relationship between data collections and services gradually
+became $n:m$.  With this came the realisation that two classes of
+discovery need to be supported; for all-VO queries, validation, and the
+like, an enumeration of all \emph{services} (``give me all SSAP
+services\dots'') needs to be performed.  For data discovery (``Where are
+images from instrument X of object Y?''), a selection over all
+\emph{collections} needs to be made.
+
+The solution eventually adopted for these problems are auxiliary
+capabilities as introduced in DDC.  They provide stubs merely
+identifying an access protocol -- at the same time identifying the
+capability as an auxiliary one --  and access URLs, delegating all
+further service metadata to a separate record, linked to the original
+resource through an \emph{isServedBy} relationship.
+
+Thus, CatalogService-typed records should be used
+
+\begin{itemize}
+\item when a service serves a single data collection, in which case the
+metadata on the record describes the data collection (e.g., ``These are
+observations of\dots'').
+\item for a service serving multiple data collections, in which case the
+metadata on the record  describes the service (e.g., ``This is the TAP
+service of\dots''').
+\end{itemize}
+
+CatalogResource-typed records should be used for resources that only
+have auxiliary capabilities.
+
+Here is a sketch of a resource record of a table within a TAP service::
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<ri:Resource 
+  xsi:type="vs:CatalogResource"
+  <title>Sample Table</title>
+  <identifier>ivo://example/sample</identifier>
+  <curation>...</curation>
+  <content> ...
+    <relationship>
+      <relationshipType>IsServedBy</relationshipType>
+      <relatedResource ivo-id="ivo://example/tap"
+        >Example TAP service</relatedResource>
+    </relationship>
+  </content>
+  <capability standardID="ivo://ivoa.net/std/TAP#aux">
+    <interface role="std" xsi:type="vs:ParamHTTP">
+      <accessURL use="base"
+        >http://example.org/svcs/tap</accessURL>
+    </interface>
+ </capability>
+  <coverage>...</coverage>
+  <tableset>
+    <schema>
+      <name>someschema</name>
+      <table>
+        <name>someschema.sample</name>...
+        ...
+      </table>
+    </schema>
+  </tableset>
+</ri:Resource>
+\end{lstlisting}
+
+A complete example can be found in DDC.
+
+Note that it is legal to add auxiliary capabilities to CatalogService
+records as well.  The classical example could be a cone search service
+serving a single catalogue that is also queriable within a larger TAP
+service.
+
+Analogous considerations would apply to DataResource versus DataService,
+although at this point no obvious use cases have been identified;
+DataResource was included mainly for symmetry with CatalogResource.
 
 \section{The VODataService Metadata}
 \label{sect:metadata}
