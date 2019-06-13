@@ -266,11 +266,14 @@
                   precise and up-to-date description of coverage.  
                </xs:documentation>
                <xs:documentation>
-                  The ivo-id attribute refers to a Service record
-                  that describes the Footprint capability.  That is,
-                  the record will have a capability element describing
-                  the service.  The resource refered to may be the 
-                  current one.  
+                  The ivo-id attribute here refers to the standard in which
+                  the footprint is given.  The only value defined by 
+                  VODataService at this point is ivo://ivoa.net/std/moc, 
+                  which indicates that retrieving the footprint URL will return
+                  a MOC (any IVOA-approved serialisation is legal).  Note that
+                  the ivo-id attribute was intended to have a different
+                  function in VODataService 1.1.  The current meaning is what
+                  implementors actually adopted.
                </xs:documentation>
             </xs:annotation>
          </xs:element>

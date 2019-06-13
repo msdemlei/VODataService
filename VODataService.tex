@@ -935,9 +935,9 @@ perhaps for some non-discovery use case, can use the \xmlel{footprint}
 element with its \xmlel{ivo-id} attribute set to
 \nolinkurl{ivo://ivoa.net/std/moc} \todo{This doesn't match what this
 ivo-id was originally intended to be.  Can we hijack it like this and
-change the semantics?} to declare a URL giving a MOC 
-footprint of arbitrary level and size; however, MOCs returned from
-footprint services must be in the MOC FITS serialisation.
+change the semantics?} to declare a URL giving a 
+footprint in one of the approved MOC serialisations and of arbitrary
+level and size.
 
 Time and spectral coverage are modeled as unions of simple
 intervals over real numbers; the serialisation here is a space-separated
@@ -1079,11 +1079,14 @@ intervals on that level.
                
 \item[Occurrence] optional
 \item[Comment] 
-                  The ivo-id attribute refers to a Service record
-                  that describes the Footprint capability.  That is,
-                  the record will have a capability element describing
-                  the service.  The resource refered to may be the 
-                  current one.  
+                  The ivo-id attribute here refers to the standard in which
+                  the footprint is given.  The only value defined by 
+                  VODataService at this point is ivo://ivoa.net/std/moc, 
+                  which indicates that retrieving the footprint URL will return
+                  a MOC (any IVOA-approved serialisation is legal).  Note that
+                  the ivo-id attribute was intended to have a different
+                  function in VODataService 1.1.  The current meaning is what
+                  implementors actually adopted.
                
 
 \end{description}
@@ -2731,6 +2734,9 @@ explain their schema in an IVOA Note.
 \item Added a SHOULD requirement on CatalogResources to have a tableset.
 \item Restricted interface/@testQuery to zero or one occurrences (this
 is because there is no clear semantics to having multiple of those).
+\item Sanctioning the use of footprint/@ivo-id to indicate the footprint 
+standard used (which, of course, totally goes against the semantics of
+ServiceReference underlying footprint).
 \end{itemize}
 
 \subsection{Changes since REC-1.1}
