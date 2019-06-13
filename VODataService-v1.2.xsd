@@ -30,7 +30,7 @@
          <xs:documentation>
            A logical grouping of data which, in general, is composed of one 
            or more accessible datasets.  A collection can contain any
-           combination of images, spectra, catalogs, or other data.   
+           combination of images, spectra, catalogues, or other data.   
          </xs:documentation>
          <xs:documentation>
            (A dataset is a collection of digitally-encoded data that 
@@ -207,7 +207,8 @@
                   of the resource.
                </xs:documentation>
                <xs:documentation>
-                  The MOC is to be understood in the ICRS reference frame.
+                  The MOC is to be understood in the ICRS reference frame 
+                  unless a frame attribute is given.
                   Resources should give the coverage at least to order 6
                   (a resolution of about one degree).  The order should be
                   chosen so as to keep the resulting MOC smaller than a few
@@ -226,7 +227,7 @@
                </xs:documentation>
                <xs:documentation>
                   This is written as for VOTable tabledata (i.e., 
-                  white-separated C-style floating point literals).
+                  whitespace-separated C-style floating point literals).
                   The limits must be given as MJD.  While they
                   are not intended to be precise, they are to be understood
                   in TDB for the solar system barycenter.  The total coverage
@@ -244,7 +245,7 @@
                </xs:documentation>
                <xs:documentation>
                   This is written as for VOTable tabledata (i.e., 
-                  white-separated C-style floating point literals).
+                  whitespace-separated C-style floating point literals).
                   The limits must be given in Joules of particle
                   energies.  While the limits are not intended 
                   to be precise, they are to be understood for the
@@ -261,11 +262,11 @@
                type="vs:ServiceReference" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  a reference to a footprint service for retrieving 
+                  A reference to a footprint service for retrieving 
                   precise and up-to-date description of coverage.  
                </xs:documentation>
                <xs:documentation>
-                  the ivo-id attribute refers to a Service record
+                  The ivo-id attribute refers to a Service record
                   that describes the Footprint capability.  That is,
                   the record will have a capability element describing
                   the service.  The resource refered to may be the 
@@ -281,8 +282,14 @@
                  <vm:dcterm>Coverage.Spectral</vm:dcterm>
                </xs:appinfo>           
                <xs:documentation>
-                  a named spectral region of the electro-magnetic spectrum 
+                  A named spectral region of the electro-magnetic spectrum 
                   that the resource's spectral coverage overlaps with.
+               </xs:documentation>
+               <xs:documentation>
+                  Observations using non-electromagnetic messengers should
+                  not give a waveband in version 1.2 of VODataService.  It
+                  is expected that additional terms for these will be provided
+                  in a future version.
                </xs:documentation>
             </xs:annotation>
          </xs:element>
@@ -293,7 +300,7 @@
                  <vm:dcterm>Coverage.RegionOfRegard</vm:dcterm>
                </xs:appinfo>           
                <xs:documentation>
-                  a single numeric value representing the angle, given
+                  A single numeric value representing the angle, given
                   in decimal degrees, by which a positional query
                   against this resource should be “blurred” in order
                   to get an appropriate match. 
@@ -302,7 +309,7 @@
                   In the case of image repositories, it might refer to
                   a typical field-of-view size, or the primary beam
                   size for radio aperture synthesis data.  In the case
-                  of object catalogs RoR should normally be the
+                  of object catalogues RoR should normally be the
                   largest of the typical size of the objects, the
                   astrometric errors in the positions, or the
                   resolution of the data.  
@@ -316,7 +323,7 @@
    <xs:complexType name="ServiceReference">
       <xs:annotation>
          <xs:documentation>
-           the service URL for a potentially registerd service.  That is,
+           The service URL for a potentially registerd service.  That is,
            if an IVOA identifier is also provided, then the service is 
            described in a registry.
          </xs:documentation>
@@ -413,21 +420,21 @@
                      minOccurs="1" maxOccurs="unbounded">
             <xs:annotation>
               <xs:documentation>
-                A named description of a set of logically related tables.
+                A named description of a group of logically related tables.
               </xs:documentation>
               <xs:documentation>
                 The name given by the “name” child element must
                 be unique within this TableSet instance.  If there is
-                only one schema in this set and/or there's no locally
+                only one schema in this set and/or there is no locally
                 appropriate name to provide, the name can be set to
                 “default”.  
               </xs:documentation>
               <xs:documentation>
                 This aggregation does not need to map to an
-                actual database, catalog, or schema, though the
+                actual database, catalogue, or schema, though the
                 publisher may choose to aggregate along such
-                designations, or particular service protocol may
-                recommend it.  
+                designations.  Particular service protocols may
+                require stricter patterns.
               </xs:documentation>
             </xs:annotation>
 
@@ -446,7 +453,7 @@
    <xs:complexType name="TableSchema">
       <xs:annotation>
          <xs:documentation>
-           A detailed description of a logically-related set of tables
+           A detailed description of a logically related group of tables.
          </xs:documentation>
       </xs:annotation>
 
@@ -454,16 +461,16 @@
          <xs:element name="name" type="xs:token" minOccurs="1" maxOccurs="1">
            <xs:annotation>
              <xs:documentation>
-               A name for the set of tables.  
+               A name for the group of tables.  
              </xs:documentation>
              <xs:documentation>
-               This is used to uniquely identify the table set among
-               several table sets.  If a title is not present, this
+               This is used to uniquely identify the group of tables among
+               several groups.  If no title is given, this
                name can be used for display purposes.
              </xs:documentation>
              <xs:documentation>
                If there is no appropriate logical name associated with
-               this set, the name should be explicitly set to
+               this group, the name should be explicitly set to
                “default”.  
              </xs:documentation>
            </xs:annotation>
@@ -472,7 +479,8 @@
          <xs:element name="title" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  a descriptive, human-interpretable name for the table set.
+                  A descriptive, human-interpretable name for the group of 
+                  tables.
                </xs:documentation>
                <xs:documentation>
                   This is used for display purposes.  There is no requirement
@@ -488,8 +496,9 @@
                      minOccurs="0" maxOccurs="1">
            <xs:annotation>
              <xs:documentation>
-               A free text description of the tableset that should
-               explain in general how all of the tables are related.
+               A free text description of the group of tables that should
+               explain in general how all of the tables in the group are 
+               related.
              </xs:documentation>
            </xs:annotation>
          </xs:element>
@@ -497,7 +506,7 @@
          <xs:element name="utype" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  an identifier for a concept in a data model that
+                  An identifier for a concept in a data model that
                   the data in this schema as a whole represent.  
                </xs:documentation>
                <xs:documentation>
@@ -512,10 +521,7 @@
                      minOccurs="0" maxOccurs="unbounded">
            <xs:annotation>
              <xs:documentation>
-               A description of one of the tables that makes up the set.
-             </xs:documentation>
-             <xs:documentation>
-               The table names for the table should be unique.
+               A description of one table.
              </xs:documentation>
            </xs:annotation>
          </xs:element>
@@ -563,7 +569,7 @@
                      <vm:dcterm>Subject</vm:dcterm>
                    </xs:appinfo>
                    <xs:documentation>
-                     the observatory or facility used to collect the data 
+                     The observatory or facility used to collect the data 
                      contained or managed by this resource.  
                    </xs:documentation>
                 </xs:annotation>
@@ -577,7 +583,7 @@
                      <vm:dcterm>Subject.Instrument</vm:dcterm>
                    </xs:appinfo>
                    <xs:documentation>
-                     the instrument used to collect the data contain or 
+                     The instrument used to collect the data contain or 
                      managed by a resource.  
                    </xs:documentation>
                 </xs:annotation>
@@ -623,7 +629,7 @@
         </xs:documentation>
         <xs:documentation>
            Note that the URL for help with this service can be put into
-           the Service/ReferenceURL element.
+           the service/referenceURL element.
         </xs:documentation>
       </xs:annotation>
 
@@ -639,7 +645,11 @@
                      <xs:documentation>
                        The service may indicate support for both GET
                        and POST by providing 2 queryType elements, one
-                       with GET and one with POST.
+                       with GET and one with POST.  Since the IVOA standard
+                       DALI requires standard services to support both
+                       GET and POST, this piece of metadata is not
+                       useful in the description of standard DAL services
+                       and does not need to be given for those.
                      </xs:documentation>
                   </xs:annotation>
                </xs:element>
@@ -648,7 +658,8 @@
                            minOccurs="0" maxOccurs="1">
                   <xs:annotation>
                      <xs:documentation>
-                       The MIME type of a document returned in the HTTP response.
+                       The MIME media type of a document returned in 
+                       the HTTP response.
                      </xs:documentation>
                   </xs:annotation>
                </xs:element>
@@ -657,24 +668,24 @@
                             maxOccurs="unbounded">
                   <xs:annotation>
                     <xs:documentation>
-                       a description of a input parameter that can be 
+                       A description of a input parameter that can be 
                        provided as a name=value argument to the service.  
                     </xs:documentation>
                   </xs:annotation>
                </xs:element>
 
                <xs:element name="testQuery" type="xs:string" minOccurs="0" 
-                           maxOccurs="unbounded">
+                           maxOccurs="1">
                   <xs:annotation>
                     <xs:documentation>
-                       an ampersand-delimited list of arguments that
+                       An ampersand-delimited list of arguments that
                        can be used to test this service interface; 
                        when provided as the input to this interface,
                        it will produce a legal, non-null response.
                     </xs:documentation>
                     <xs:documentation>
                        When the interface supports GET, then the full 
-                       query URL is formed by the concatonation of the 
+                       query URL is formed by the concatenation of the 
                        base URL (given by the accessURL) and the value 
                        given by this testQuery element.  
                     </xs:documentation>
@@ -704,7 +715,7 @@
             A resource giving astronomical data in tabular form.
          </xs:documentation>
          <xs:documentation>
-            While this includeds classical astronomical catalogs,
+            While this includes classical astronomical catalogues,
             this resource is also appropriate for collections of observations
             or simulation results provided their metadata are available
             in a sufficiently structured form (e.g., Obscore, SSAP, etc).
@@ -764,8 +775,8 @@
                      minOccurs="1" maxOccurs="1">
             <xs:annotation>
                <xs:documentation>
-                  the fully qualified name of the table.  This name 
-                  should include all catalog or schema prefixes
+                  The fully qualified name of the table.  This name 
+                  should include all catalogue or schema prefixes
                   needed to sufficiently uniquely distinguish it in a
                   query.  
                </xs:documentation>
@@ -773,7 +784,7 @@
                   In general, the format of the qualified name may
                   depend on the context; however, when the
                   table is intended to be queryable via ADQL, then the
-                  catalog and schema qualifiers are delimited from the
+                  catalogue and schema qualifiers are delimited from the
                   table name with dots (.).  
                </xs:documentation>
             </xs:annotation>
@@ -782,7 +793,7 @@
          <xs:element name="title" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  a descriptive, human-interpretable name for the table.
+                  A descriptive, human-interpretable name for the table.
                </xs:documentation>
                <xs:documentation>
                   This is used for display purposes.  There is no requirement
@@ -794,7 +805,7 @@
          <xs:element name="description" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  a free-text description of the table's contents
+                  A free-text description of the table's contents
                </xs:documentation>
             </xs:annotation>
          </xs:element>
@@ -802,7 +813,7 @@
          <xs:element name="utype" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  an identifier for a concept in a data model that
+                  An identifier for a concept in a data model that
                   the data in this table represent.  
                </xs:documentation>
                <xs:documentation>
@@ -817,7 +828,7 @@
             maxOccurs="1">
             <xs:annotation>
                <xs:documentation>
-                  the size of the table in rows.
+                  The size of the table in rows.
                </xs:documentation>
                <xs:documentation>
                   This is not expected to be exact.  For instance, the
@@ -831,7 +842,7 @@
                      minOccurs="0" maxOccurs="unbounded">
             <xs:annotation>
                <xs:documentation>
-                  a description of a table column.
+                  A description of a table column.
                </xs:documentation>
             </xs:annotation>
          </xs:element>
@@ -840,7 +851,7 @@
                      minOccurs="0" maxOccurs="unbounded" >
             <xs:annotation>
                <xs:documentation>
-                  a description of a foreign keys, one or more columns
+                  A description of a foreign keys, one or more columns
                   from the current table that can be used to join with 
                   another table.  
                </xs:documentation>
@@ -852,7 +863,7 @@
       <xs:attribute name="type" type="xs:string">
          <xs:annotation>
             <xs:documentation>
-               a name for the role this table plays.  Recognized
+               A name for the role this table plays.  Recognized
                values include “output”, indicating this table is output 
                from a query; “base_table", indicating a table
                whose records represent the main subjects of its
@@ -869,12 +880,12 @@
    <xs:complexType name="BaseParam">
       <xs:annotation>
          <xs:documentation>
-            a description of a parameter that places no restriction on 
+            A description of a parameter that places no restriction on 
             the parameter's data type.
          </xs:documentation>
          <xs:documentation>
             As the parameter's data type is usually important, schemas
-            normally employ a sub-class of this type (e.g., Param),
+            normally employ a sub-class of this type
             rather than this type directly.
          </xs:documentation>
       </xs:annotation>
@@ -883,7 +894,7 @@
          <xs:element name="name" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  the name of the parameter or column
+                  The name of the parameter or column.
                </xs:documentation>
             </xs:annotation>
          </xs:element>
@@ -891,8 +902,8 @@
          <xs:element name="description" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  a free-text description of a parameter's or column's 
-                  contents
+                  A free-text description of a parameter's or column's 
+                  contents.
                </xs:documentation>
             </xs:annotation>
          </xs:element>
@@ -900,8 +911,8 @@
          <xs:element name="unit" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  the unit associated with the values in the parameter
-                  or column
+                  The unit associated with the values in the parameter
+                  or column.
                </xs:documentation>
             </xs:annotation>
          </xs:element>
@@ -909,8 +920,8 @@
          <xs:element name="ucd" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  the name of a unified content descriptor that
-                  describes the scientific content of the parameter.  
+                  The name of a unified content descriptor that
+                  describes the scientific content of the parameter.
                </xs:documentation>
                <xs:documentation>
                   There are no requirements for compliance with any 
@@ -926,7 +937,7 @@
          <xs:element name="utype" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  an identifier for a concept in a data model that
+                  An identifier for a concept in a data model that
                   the data in this schema represent.  
                </xs:documentation>
                <xs:documentation>
@@ -945,10 +956,7 @@
    <xs:complexType name="TableParam">
       <xs:annotation>
          <xs:documentation>
-            a description of a table parameter having a fixed data type.
-         </xs:documentation>
-         <xs:documentation>
-            The allowed data type names match those supported by VOTable.
+            A description of a table parameter having a fixed data type.
          </xs:documentation>
       </xs:annotation>
 
@@ -959,7 +967,7 @@
                            minOccurs="0">
                   <xs:annotation>
                      <xs:documentation>
-                        a type of data contained in the column
+                        A type of data contained in the column
                      </xs:documentation>
                   </xs:annotation>
                </xs:element>
@@ -968,7 +976,7 @@
                            minOccurs="0" maxOccurs="unbounded">
                   <xs:annotation>
                      <xs:documentation>
-                        a keyword representing traits of the column.  
+                        A keyword representing traits of the column.  
                         Recognized values include “indexed”, “primary”, and
                         “nullable”.  
                      </xs:documentation>
@@ -985,9 +993,8 @@
                   <xs:documentation>
                      If true, the meaning and use of this parameter is
                      reserved and defined by a standard model.  If false, 
-                     it represents a database-specific parameter 
-                     that effectively extends beyond the standard.  If
-                     not provided, then the value is unknown.
+                     it represents a parameter specific to the data described 
+                     If not provided, then the value is unknown.
                   </xs:documentation>
                </xs:annotation>
             </xs:attribute>
@@ -998,14 +1005,14 @@
    <xs:complexType name="InputParam">
       <xs:annotation>
          <xs:documentation>
-            a description of a service or function parameter having a
+            A description of a service or function parameter having a
             fixed data type. 
          </xs:documentation>
          <xs:documentation>
             The allowed data type names do not imply a size or precise
             format.  This type is intended to be sufficient for describing
             an input parameter to a simple REST service or a function 
-            written in a weakly-typed (e.g., scripting) language.
+            written in a weakly-typed language.
          </xs:documentation>
       </xs:annotation>
 
@@ -1016,7 +1023,7 @@
                            minOccurs="0">
                   <xs:annotation>
                      <xs:documentation>
-                        a type of data contained in the parameter
+                        A type of data contained in the parameter
                      </xs:documentation>
                   </xs:annotation>
                </xs:element>
@@ -1053,7 +1060,7 @@
          <xs:enumeration value="required">
             <xs:annotation>
                <xs:documentation>
-                  the parameter is required for the application or
+                  The parameter is required for the application or
                   service to work properly.  
                </xs:documentation>
             </xs:annotation>
@@ -1061,7 +1068,7 @@
          <xs:enumeration value="optional">
             <xs:annotation>
                <xs:documentation>
-                  the parameter is optional but supported by the application or
+                  The parameter is optional but supported by the application or
                   service.
                </xs:documentation>
             </xs:annotation>
@@ -1069,7 +1076,7 @@
          <xs:enumeration value="ignored">
             <xs:annotation>
                <xs:documentation>
-                  the parameter is not supported and thus is ignored by the 
+                  The parameter is not supported and thus is ignored by the 
                   application or service.
                </xs:documentation>
             </xs:annotation>
@@ -1080,7 +1087,7 @@
    <xs:complexType name="DataType">
       <xs:annotation>
          <xs:documentation>
-            a type (in the computer language sense) associated with a 
+            A type (in the computer language sense) associated with a 
             parameter with an arbitrary name
          </xs:documentation>
          <xs:documentation>
@@ -1093,7 +1100,7 @@
             <xs:attribute name="arraysize" type="vs:ArrayShape">
                <xs:annotation>
                   <xs:documentation>
-                     the shape of the array that constitutes the value
+                     The shape of the array that constitutes the value.
                   </xs:documentation>
                   <xs:documentation>
                      Leave arraysize empty for scalar values.  In version 1.1,
@@ -1108,7 +1115,7 @@
             <xs:attribute name="delim" type="xs:string">
                <xs:annotation>
                   <xs:documentation>
-                     a string that is used to delimit elements of an array
+                     A string that is used to delimit elements of an array
                      value in InputParams.
                   </xs:documentation>
                   <xs:documentation>
@@ -1190,7 +1197,7 @@
    <xs:complexType name="SimpleDataType">
       <xs:annotation>
          <xs:documentation>
-            a data type restricted to a small set of names which is 
+            A data type restricted to a small set of names which is 
             imprecise as to the format of the individual values.
          </xs:documentation>
          <xs:documentation>
@@ -1199,27 +1206,43 @@
          </xs:documentation>
       </xs:annotation>
       <xs:simpleContent>
-        <xs:restriction base="vs:DataType">
-           <xs:enumeration value="integer"/>
-           <xs:enumeration value="real"/>
-           <xs:enumeration value="complex"/>
-           <xs:enumeration value="boolean"/>
-           <xs:enumeration value="char"/>
-           <xs:enumeration value="string"/>
+         <xs:restriction base="vs:DataType">
+            <xs:enumeration value="integer"/>
+            <xs:enumeration value="real"/>
+            <xs:enumeration value="complex"/>
+            <xs:enumeration value="boolean"/>
+            <xs:enumeration value="char"/>
+            <xs:enumeration value="string"/>
 
-           <xs:attribute name="arraysize" type="vs:ArrayShape"/>
-           <xs:attribute name="delim" type="xs:string" default=" "/>
-           <xs:attribute name="extendedType" type="xs:string"/>
-           <xs:attribute name="extendedSchema" type="xs:anyURI"/>
-           <xs:anyAttribute namespace="##other" />
-        </xs:restriction>
+            <xs:attribute name="arraysize" type="vs:ArrayShape">
+               <xs:annotation>
+                  <xs:documentation>See vs:DataType.</xs:documentation>
+               </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="delim" type="xs:string" default=" ">
+               <xs:annotation>
+                  <xs:documentation>See vs:DataType.</xs:documentation>
+               </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="extendedType" type="xs:string">
+               <xs:annotation>
+                  <xs:documentation>See vs:DataType.</xs:documentation>
+               </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="extendedSchema" type="xs:anyURI">
+               <xs:annotation>
+                  <xs:documentation>See vs:DataType.</xs:documentation>
+               </xs:annotation>
+            </xs:attribute>
+            <xs:anyAttribute namespace="##other" />
+         </xs:restriction>
       </xs:simpleContent>
    </xs:complexType>
 
    <xs:complexType name="TableDataType" abstract="true">
       <xs:annotation>
          <xs:documentation>
-            an abstract parent for a class of data types that can be
+            An abstract parent for a class of data types that can be
             used to specify the data type of a table column.
          </xs:documentation>
       </xs:annotation>
@@ -1231,37 +1254,54 @@
    <xs:complexType name="VOTableType">
       <xs:annotation>
          <xs:documentation>
-            a data type supported explicitly by the VOTable format
+            A data type supported explicitly by the VOTable format
          </xs:documentation>
       </xs:annotation>
       <xs:simpleContent>
          <xs:restriction base="vs:TableDataType">
-           <xs:enumeration value="boolean"/>
-           <xs:enumeration value="bit"/>
-           <xs:enumeration value="unsignedByte"/>
-           <xs:enumeration value="short"/>
-           <xs:enumeration value="int"/>
-           <xs:enumeration value="long"/>
-           <xs:enumeration value="char"/>
-           <xs:enumeration value="unicodeChar"/>
-           <xs:enumeration value="float"/>
-           <xs:enumeration value="double"/>
-           <xs:enumeration value="floatComplex"/>
-           <xs:enumeration value="doubleComplex"/>
+            <xs:enumeration value="boolean"/>
+            <xs:enumeration value="bit"/>
+            <xs:enumeration value="unsignedByte"/>
+            <xs:enumeration value="short"/>
+            <xs:enumeration value="int"/>
+            <xs:enumeration value="long"/>
+            <xs:enumeration value="char"/>
+            <xs:enumeration value="unicodeChar"/>
+            <xs:enumeration value="float"/>
+            <xs:enumeration value="double"/>
+            <xs:enumeration value="floatComplex"/>
+            <xs:enumeration value="doubleComplex"/>
 
-           <xs:attribute name="arraysize" type="vs:ArrayShape"/>
-           <xs:attribute name="delim" type="xs:string" default=" "/>
-           <xs:attribute name="extendedType" type="xs:string"/>
-           <xs:attribute name="extendedSchema" type="xs:anyURI"/>
-           <xs:anyAttribute namespace="##other" />
-        </xs:restriction>
+            <xs:attribute name="arraysize" type="vs:ArrayShape">
+               <xs:annotation>
+                  <xs:documentation>See vs:DataType.</xs:documentation>
+               </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="delim" type="xs:string" default=" ">
+               <xs:annotation>
+                  <xs:documentation>See vs:DataType.</xs:documentation>
+               </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="extendedType" type="xs:string">
+               <xs:annotation>
+                  <xs:documentation>See vs:DataType.</xs:documentation>
+               </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="extendedSchema" type="xs:anyURI">
+               <xs:annotation>
+                  <xs:documentation>See vs:DataType.</xs:documentation>
+               </xs:annotation>
+            </xs:attribute>
+
+            <xs:anyAttribute namespace="##other" />
+         </xs:restriction>
       </xs:simpleContent>
    </xs:complexType>
 
    <xs:complexType name="TAPDataType" abstract="true">
       <xs:annotation>
          <xs:documentation>
-            an abstract parent for the specific data types supported 
+            An abstract parent for the specific data types supported 
             by the Table Access Protocol.
          </xs:documentation>
       </xs:annotation>
@@ -1270,7 +1310,7 @@
            <xs:attribute name="size" type="xs:positiveInteger">
               <xs:annotation>
                  <xs:documentation>
-                    the length of the fixed-length value
+                    The length of the fixed-length value
                  </xs:documentation>
                  <xs:documentation>
                     This corresponds to the size Column attribute in
@@ -1286,7 +1326,7 @@
    <xs:complexType name="TAPType">
       <xs:annotation>
          <xs:documentation>
-            a data type supported explicitly by the Table Access 
+            A data type supported explicitly by the Table Access 
             Protocol (v1.0).  This is deprecated in VODataService 1.2,
             and even TAP 1.0 services are encouraged to declare
             their columns using VOTableType.
@@ -1323,7 +1363,7 @@
    <xs:complexType name="StandardSTC">
       <xs:annotation>
          <xs:documentation>
-           a description of standard space-time coordinate systems,
+           A description of standard space-time coordinate systems,
            positions, and regions.
          </xs:documentation>
          <xs:documentation>
@@ -1366,12 +1406,13 @@
    <xs:complexType name="ForeignKey">
       <xs:annotation>
          <xs:documentation>
-           A description of the mapping a foreign key--a set of 
-           columns from one table--to columns in another table.  
+           A description of the mapping a foreign key -- a set of 
+           columns from one table -- to columns in another table.  
          </xs:documentation>
          <xs:documentation>
-           This definition that the foreign key is being described 
-           within the context of the table containing the key.  
+            When foreign keys are declared in this way, clients can expect
+            that joins constrained with the foreign keys are preformed
+            efficiently (e.g., using an index).
          </xs:documentation>
       </xs:annotation>
 
@@ -1380,7 +1421,7 @@
          <xs:element name="targetTable" type="xs:token">
            <xs:annotation>
              <xs:documentation>
-               the fully-qualified name (including catalog and schema, as
+               The fully qualified name (including catalogue and schema, as
                applicable) of the table that can be joined with the 
                table containing this foreign key.
              </xs:documentation>
@@ -1391,7 +1432,7 @@
                      minOccurs="1" maxOccurs="unbounded">
            <xs:annotation>
              <xs:documentation>
-               a pair of column names, one from this table and one
+               A pair of column names, one from this table and one
                from the target table that should be used to join the
                tables in a query.  
              </xs:documentation>
@@ -1401,7 +1442,7 @@
          <xs:element name="description" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  a free-text description of what this key points to
+                  A free-text description of what this key points to
                   and what the relationship means.  
                </xs:documentation>
             </xs:annotation>
@@ -1410,7 +1451,7 @@
          <xs:element name="utype" type="xs:token" minOccurs="0">
             <xs:annotation>
                <xs:documentation>
-                  an identifier for a concept in a data model that
+                  An identifier for a concept in a data model that
                   the association enabled by this key represents.  
                </xs:documentation>
                <xs:documentation>

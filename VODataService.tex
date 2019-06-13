@@ -143,6 +143,11 @@ It provides types to define data services, their underlying tabular
 structures, their service interfaces, and the location of the data
 served in space, time, and energy.
 
+The remainder of the document introduces the use cases addressed by this
+specification, then provides a high-level overview over the concepts and
+usage patterns in sect.~\ref{sect:model} and finally discusses the
+concrete classes in sect.~\ref{sect:metadata}.
+
 
 \subsection{The Role in the IVOA Architecture}
 
@@ -258,7 +263,7 @@ the IVOA Note on discovering data collections \citep{2019ivoa.rept.0520D} for
 details.  To better support the scheme proposed there, version 1.2 adds
 the \xmlel{vs:DataResource} and \xmlel{vs:CatalogResource} types 
 that identify a resource as data-like but
-allows the addition of various capabilities to the record (which
+permits the addition of various capabilities to the record (which
 \xmlel{vs:DataCollection} did not).  An analogous use case would be
 ``Find all TAP services publishing tables from Gaia DR2''.
 
@@ -269,19 +274,28 @@ However, the plain table size often is a useful proxy in such discovery
 problems.  The new \xmlel{nrows} child of \xmlel{vs:Table} communicates
 it.
 
+
+\subsection{Additional Use Cases for Future Versions}
+
+The following use cases were originally envisioned for VODataService
+1.2, but were postponed because building multiply implemented solutions
+for them seemed likely to unnecessarily delay the standardisation of, in
+particular, the STC part of the present document.  They will likely be
+addressed by future versions of VODataService.
+
 \paragraph{Find a resource that has sources in M51 down to 27 mag in V.}
 The constraint about finding a resource that has V magnitudes for M51 is
 expressible using spatial coverage and the column's UCDs.  To express
 something like ``down to $27^{\rm m}$'' one would at least need
-VOTable-style \xmlel{VALUES} children for columns.\todo{Do we want
-that?}
+VOTable-style \xmlel{VALUES} children for columns; however, metadata
+sufficient to address the next use case would certainly be sufficient
+here as well.
 
 \paragraph{Plan a cross-service query.} Systems like OGSA-DAI
 \citep{2011ASPC..442..579H} perform orchestration of SQL-like queries
 between multiple services automatically, in particular cross-service
 JOINs.  In order to work efficiently, such services need column
-statistics like histograms and the percentage of NULL values.\todo{Do we
-want this?  If so, what exactly?}
+statistics like histograms and the percentage of NULL values.
 
 \paragraph{Find services serving time series.} In the current registry
 model, users looking for spectra would select SSAP services.  With the
@@ -292,21 +306,24 @@ example, clients now have to query all services and constrain the
 \verb|dataproduct_type| column. However, for dataset types not overly
 common, well more than 90\% of the services could be excluded without
 sending a query there based on a declaration of dataset types available
-in the Registry.\todo{Actually, a VOTable VALUES workalike would be
-enough for that and ObsCore.  But: SIAv2?  Data collections, perhaps?}
+in the Registry.
 
 \paragraph{Facilitate discovery of full DALI services.}  The issue here
 is that DALI forsees synchronous and asynchronous endpoints as the
 standard case for many protocols -- it already is standard for TAP.
 Also, several auxiliary endpoints (VOSI, examples) are declared as
-separate capabilities and need to be matched with the functional endpoints.
-This matching is becoming a problem when multiple 
-authentication schemes or mirror sites
-necessitate multiple sync/async pairs.\todo{See what UWSRegExt brings.}
+separate capabilities and need to be matched with the functional
+endpoints.  This matching is becoming a problem when multiple
+authentication schemes or mirror sites necessitate multiple sync/async
+pairs.  A longer treatment of this problem has been published while this
+document was in WD \citep{note:caproles}, but at the time of writing the
+process of finding consensus has just begun, so again a normative
+solution has to be deferred to a later version of this standard.
 
 
 
 \section{The VODataService Data Model}
+\label{sect:model}
 
 
 The VODataService extension in general enables the description of two
@@ -374,15 +391,6 @@ This information should not in general be used in production software;
 all versions with the above schema URI are compatible with each
 other in the sense defined in the IVOA schema versioning policies.
 
-The versioning policies in version 1.0 posit a requirement that instance
-documents declare the minor version of the schema used to produce them
-in the root element of elements coming from a schema.  VODataService has
-no global elements, and hence there is no place for such a declaration.
-We do not expect this to cause operational difficulties, since we cannot
-see a use case for clients to distinguish minor versions of
-VODataService instance documents.
-
-
 Authors of VOResource instance documents may choose to
 provide a location for the VOResource XML Schema document and its
 extensions using the
@@ -396,22 +404,10 @@ xsi:schemaLocation="http://www.ivoa.net/xml/VODataService/v1.1
                     http://www.ivoa.net/xml/VODataService/v1.1"
 \end{verbatim}
 
-
-\begin{admonition}{Note}
-The IVOA Registry Interface standard \citep{2018ivoa.spec.0723D}
-       actually \emph{requires} that the VOResource records it
-       shares with other registries provide location URLs via
-       \xmlel{xsi:schemaLocation} for the VOResource schema and
-       all legal extension schemas that are used in the records.  This
-       rule would apply to the VODataService schema.
-\end{admonition}
-
-
 The canonical prefix for VODataService is \xmlel{vs}; this means, in
 particular, that in non-XML contexts (e.g., relational mappings
 like RegTAP) the VODataService types \emph{must} be qualified with
-vs:.  The Registry Interfaces standard \citep{2018ivoa.spec.0723D} also
-strongly recommends using the canonical prefixes in XML documents.
+vs:.
 
 As recommend by the VOResource standard, the
 VODataService schema sets \xmlel{element\-Form\-Default} to \emph{unqualified}.
@@ -517,6 +513,7 @@ disappeared from the VO by version 1.3 of this specification, their
 type declarations may be removed from the schema.
 
 \subsubsection{Discovering Data Within Other Services}
+\label{sect:discoverdata}
 
 The content models of CatalogResource and CatalogService are identical.
 To understand why the two classes are present nevertheless, a short
@@ -619,9 +616,7 @@ DataResource was included mainly for symmetry with CatalogResource.
 
 
 This section enumerates the types and elements defined in the
-VODataService extension schema and describes their meaning.  Where a
-term matches a term in the RM, its meaning is given
-in terms of the RM definition.  
+VODataService extension schema and describes their meaning.
 
 
 \subsection{VODataService Resource Types}
@@ -630,12 +625,12 @@ in terms of the RM definition.
 \subsubsection{DataResource}
 \label{sect:DataResource}
 
-The \xmlel{vs:DataResource} resource type is for describing a
+The \xmlel{vs:DataResource} resource type is used to describe a
 resource containing generic astronomical data without a dominating
 tabular structure.  An example might be a largely unstructured archive
 of various observations.  Resources that have structured metadata tables
 (like most VO services) or are tabular in nature (like usual
-astronomical catalogs) should use \xmlel{vs:CatalogResource}.
+astronomical catalogues) should use \xmlel{vs:CatalogResource}.
 
 The type is derived from \xmlel{vr:Service}, which means that instances
 can have
@@ -647,8 +642,8 @@ primary access mode dedicated to the resource's data content should use
 
 In addition to \xmlel{vr:Service}'s content, DataResource adds
 elements for declaring the observing facilities and/or instruments used
-to obtain the data, and it allows to declare
-the coordinate coverage of data via the \xmlel{coverage}
+to obtain the data, and it supports the declaration of
+the physical coverage of data via the \xmlel{coverage}
 element.
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd DataResource
@@ -691,7 +686,7 @@ element.
 \begin{description}
 \item[Type] string with ID attribute: vr:ResourceName
 \item[Meaning] 
-                     the observatory or facility used to collect the data 
+                     The observatory or facility used to collect the data 
                      contained or managed by this resource.  
                    
 \item[Occurrence] optional; multiple occurrences allowed.
@@ -701,7 +696,7 @@ element.
 \begin{description}
 \item[Type] string with ID attribute: vr:ResourceName
 \item[Meaning] 
-                     the instrument used to collect the data contain or 
+                     The instrument used to collect the data contain or 
                      managed by a resource.  
                    
 \item[Occurrence] optional; multiple occurrences allowed.
@@ -737,13 +732,18 @@ to multiple resources; in this latter case, the resource-level
 metadata should pertain to the service itself rather than any specific
 data collection served by it.
 
+As with \xmlel{vs:CatalogResource}, instances SHOULD
+declare of the metadata of the table(s) underlying the service or
+delivered by it in a \xmlel{tableset} element.
+
 Whenever the service operates on clearly definable tabular
 data, the resource should use the \xmlel{vs:CatalogService} resource type 
 in preference to \xmlel{vs:DataService}, and that tabular structure
 should be given in a table set.
 
 DataService's content model is exactly the one of
-\xmlel{vs:DataResource}; please refer to sect.~\ref{sect:DataResource}.
+\xmlel{vs:DataResource}; please refer to sect.~\ref{sect:DataResource}
+for the motivation of this duplication.
 
 
 
@@ -752,24 +752,20 @@ DataService's content model is exactly the one of
 \label{sect:CatalogResource}
 
 
-The \xmlel{vs:CatalogResource} resource type is for describing a
+The \xmlel{vs:CatalogResource} resource type is used to descre a
 resource containing astronomical data or metadata in a set of one or
 more tables.  It extends \xmlel{vs:DataResource} and thus has metadata
 on coverage and the facilities and instruments that produced the
-resource.  Additionally, this type allows the
-declaration of the metadata of the table(s) underlying the data or
-delivered by it in a \xmlel{tableset} element.
+resource.  Additionally, \xmlel{vs:CatalogResource} instances SHOULD
+declare of the metadata of the table(s) making up the data
+\xmlel{tableset} element.
 
 As with \xmlel{vs:DataResource}, this type should only be used if all
 capabilities declared in the resource are either auxiliary or
-nonstandard.  This is typically the case for catalogs or data
+nonstandard.  This is typically the case for catalogues or data
 collections within larger TAP, ObsTAP, or perhaps SIAP services.  When
 a service only publishes a single resource, use the
 \xmlel{vs:CatalogService} type.
-
-This is the type that should be used for publishing data collections
-according to the IVOA Note on Discovering Data Collections 
-\citep{note:DataCollect}.
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd CatalogResource
@@ -783,7 +779,7 @@ according to the IVOA Note on Discovering Data Collections
          \par}
 
 \noindent{\small
-            While this includeds classical astronomical catalogs,
+            While this includes classical astronomical catalogues,
             this resource is also appropriate for collections of observations
             or simulation results provided their metadata are available
             in a sufficiently structured form (e.g., Obscore, SSAP, etc).
@@ -840,7 +836,7 @@ according to the IVOA Note on Discovering Data Collections
 
 \subsubsection{CatalogService}
 
-The \xmlel{vs:CatalogService} resource type is for describing a
+The \xmlel{vs:CatalogService} resource type is used to describe a
 service publishing astronomical data or metadata based on tabular
 representations.  Its relationship to \xmlel{vs:CatalogResource}
 is as between \xmlel{vs:DataResource}
@@ -855,7 +851,8 @@ This is the type that should be used for one-resource VO
 services.
 
 CatalogService's content model is exactly the one of
-\xmlel{vs:CatalogResource}; please refer to sect.~\ref{sect:CatalogResource}.
+\xmlel{vs:CatalogResource}; please refer to sect.~\ref{sect:CatalogResource}
+for the motivation of this duplication.
 
 \subsubsection{DataCollection}
 \label{sect:datacollection}
@@ -895,9 +892,9 @@ from the schema in version 1.3 of this specification.
 
 The \xmlel{vs:Coverage} type summarily describes how the data served is
 distributed on the
-sky, in energy, and in time.  For the energy coverage, there is a
-also qualitative classification in the \xmlel{waveband} \todo{Worry 
-about non-EM messengers in waveband (use a vocabulary?)} element.
+sky, in energy, and in time.  For the energy coverage on the
+electromagnetic spectrum, there is a
+also qualitative classification in the \xmlel{waveband} element.
 
 Historically, the quantitative footprints were expected to be given in
 the element of type \xmlel{stc:STCResourceProfile}.  As discussed in
@@ -913,13 +910,14 @@ coverage information in the \xmlel{spatial}, \xmlel{spectral}, and
 Spatial coverage is conveyed as a MOC.  To enable easy embedding into
 resource records written in VOResource (i.e., XML), 
 we represent MOCs in the ASCII convention
-proposed in the MOC specification \citep{2014ivoa.spec.0602F}.\todo{We
-need a REC to cite -- DALI? us? VOTable?}
+proposed in MOC 1.0 \citep{2014ivoa.spec.0602F}\footnote{Version 1.1 of MOC
+will give a normative specification of ASCII MOCs, which is expected to 
+exactly match the non-normative proposal in version 1.0.}
 
-By default, the MOCs are to be interpreted in the ICRS.  It is forseen
-that future extensions \todo{We should really do this now -- proposals,
-anyone?} to this will allow non-celestial frames (e.g., on planet
-surfaces).  However, the only celestial reference system allowed is
+By default, the MOCs are to be interpreted in the ICRS.  Future
+extensions to non-celestial frames (e.g., on planet
+surfaces) will use the \xmlel{frame} attribute.  
+However, the only celestial reference system allowed is
 ICRS.  If a resource's native coordinates are given for another frame (e.g.,
 Galactic or FK4 for some equinox), it is the resource record author's
 responsibility to convert the spatial coverage into the ICRS.
@@ -1020,7 +1018,8 @@ intervals on that level.
                
 \item[Occurrence] optional
 \item[Comment] 
-                  The MOC is to be understood in the ICRS reference frame.
+                  The MOC is to be understood in the ICRS reference frame 
+                  unless a frame attribute is given.
                   Resources should give the coverage at least to order 6
                   (a resolution of about one degree).  The order should be
                   chosen so as to keep the resulting MOC smaller than a few
@@ -1040,7 +1039,7 @@ intervals on that level.
 
 \item[Comment] 
                   This is written as for VOTable tabledata (i.e., 
-                  white-separated C-style floating point literals).
+                  whitespace-separated C-style floating point literals).
                   The limits must be given as MJD.  While they
                   are not intended to be precise, they are to be understood
                   in TDB for the solar system barycenter.  The total coverage
@@ -1059,7 +1058,7 @@ intervals on that level.
 
 \item[Comment] 
                   This is written as for VOTable tabledata (i.e., 
-                  white-separated C-style floating point literals).
+                  whitespace-separated C-style floating point literals).
                   The limits must be given in Joules of particle
                   energies.  While the limits are not intended 
                   to be precise, they are to be understood for the
@@ -1075,12 +1074,12 @@ intervals on that level.
 \begin{description}
 \item[Type] a URI with optional attributes
 \item[Meaning] 
-                  a reference to a footprint service for retrieving 
+                  A reference to a footprint service for retrieving 
                   precise and up-to-date description of coverage.  
                
 \item[Occurrence] optional
 \item[Comment] 
-                  the ivo-id attribute refers to a Service record
+                  The ivo-id attribute refers to a Service record
                   that describes the Footprint capability.  That is,
                   the record will have a capability element describing
                   the service.  The resource refered to may be the 
@@ -1092,7 +1091,7 @@ intervals on that level.
 \begin{description}
 \item[Type] string with controlled vocabulary
 \item[Meaning] 
-                  a named spectral region of the electro-magnetic spectrum 
+                  A named spectral region of the electro-magnetic spectrum 
                   that the resource's spectral coverage overlaps with.
                
 \item[Occurrence] optional; multiple occurrences allowed.
@@ -1125,13 +1124,19 @@ intervals on that level.
                  energy >= 120 keV
                
 \end{longtermsdescription}
+\item[Comment] 
+                  Observations using non-electromagnetic messengers should
+                  not give a waveband in version 1.2 of VODataService.  It
+                  is expected that additional terms for these will be provided
+                  in a future version.
+               
 
 \end{description}
 \item[Element \xmlel{regionOfRegard}]
 \begin{description}
 \item[Type] floating-point number: \xmlel{xs:float}
 \item[Meaning] 
-                  a single numeric value representing the angle, given
+                  A single numeric value representing the angle, given
                   in decimal degrees, by which a positional query
                   against this resource should be “blurred” in order
                   to get an appropriate match. 
@@ -1141,7 +1146,7 @@ intervals on that level.
                   In the case of image repositories, it might refer to
                   a typical field-of-view size, or the primary beam
                   size for radio aperture synthesis data.  In the case
-                  of object catalogs RoR should normally be the
+                  of object catalogues RoR should normally be the
                   largest of the typical size of the objects, the
                   astrometric errors in the positions, or the
                   resolution of the data.  
@@ -1263,22 +1268,22 @@ tables.
 \begin{description}
 \item[Type] composite: \xmlel{vs:TableSchema}
 \item[Meaning] 
-                A named description of a set of logically related tables.
+                A named description of a group of logically related tables.
               
 \item[Occurrence] required; multiple occurrences allowed.
 \item[Comment] 
                 The name given by the “name” child element must
                 be unique within this TableSet instance.  If there is
-                only one schema in this set and/or there's no locally
+                only one schema in this set and/or there is no locally
                 appropriate name to provide, the name can be set to
                 “default”.  
               
 \item[Comment] 
                 This aggregation does not need to map to an
-                actual database, catalog, or schema, though the
+                actual database, catalogue, or schema, though the
                 publisher may choose to aggregate along such
-                designations, or particular service protocol may
-                recommend it.  
+                designations.  Particular service protocols may
+                require stricter patterns.
               
 
 \end{description}
@@ -1292,12 +1297,12 @@ tables.
 % /GENERATED
 
 
-The \xmlel{vs:TableSchema} type collects
-tables together that are logically related.
+The \xmlel{vs:TableSchema} type groups
+tables that are logically related.
 For example, a single
-resource may provide access several major astronomical catalogs
-(e.g. SDSS, 2MASS, and FIRST) from one site, enabling high-performance
-cross-correlations between them.  Each catalog can be described in a
+resource may provide access several major astronomical catalogues
+(e.g., SDSS, 2MASS, and FIRST) from one site, enabling high-performance
+cross-correlations between them.  Each catalogue can be described in a
 separate \xmlel{schema} element, using the elements from
 the \xmlel{vs:TableSchema} type.\todo{Is is a good idea to use
 ``default'' as the NULL value?  Or should we rather have minOccurs 0 for
@@ -1312,7 +1317,7 @@ the \xmlel{vs:TableSchema} type.\todo{Is is a good idea to use
       	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:TableSchema} Type Schema Documentation}
 
 \noindent{\small
-           A detailed description of a logically-related set of tables
+           A detailed description of a logically related group of tables.
          \par}
 
 \vspace{1ex}\noindent\textbf{\xmlel{vs:TableSchema} Type Schema Definition}
@@ -1338,17 +1343,17 @@ the \xmlel{vs:TableSchema} type.\todo{Is is a good idea to use
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-               A name for the set of tables.  
+               A name for the group of tables.  
              
 \item[Occurrence] required
 \item[Comment] 
-               This is used to uniquely identify the table set among
-               several table sets.  If a title is not present, this
+               This is used to uniquely identify the group of tables among
+               several groups.  If no title is given, this
                name can be used for display purposes.
              
 \item[Comment] 
                If there is no appropriate logical name associated with
-               this set, the name should be explicitly set to
+               this group, the name should be explicitly set to
                “default”.  
              
 
@@ -1357,7 +1362,8 @@ the \xmlel{vs:TableSchema} type.\todo{Is is a good idea to use
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  a descriptive, human-interpretable name for the table set.
+                  A descriptive, human-interpretable name for the group of 
+                  tables.
                
 \item[Occurrence] optional
 \item[Comment] 
@@ -1373,8 +1379,9 @@ the \xmlel{vs:TableSchema} type.\todo{Is is a good idea to use
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-               A free text description of the tableset that should
-               explain in general how all of the tables are related.
+               A free text description of the group of tables that should
+               explain in general how all of the tables in the group are 
+               related.
              
 \item[Occurrence] optional
 
@@ -1383,7 +1390,7 @@ the \xmlel{vs:TableSchema} type.\todo{Is is a good idea to use
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  an identifier for a concept in a data model that
+                  An identifier for a concept in a data model that
                   the data in this schema as a whole represent.  
                
 \item[Occurrence] optional
@@ -1398,12 +1405,9 @@ the \xmlel{vs:TableSchema} type.\todo{Is is a good idea to use
 \begin{description}
 \item[Type] composite: \xmlel{vs:Table}
 \item[Meaning] 
-               A description of one of the tables that makes up the set.
+               A description of one table.
              
 \item[Occurrence] optional; multiple occurrences allowed.
-\item[Comment] 
-               The table names for the table should be unique.
-             
 
 \end{description}
 
@@ -1453,7 +1457,7 @@ Each table in a schema is described in detail using the
 \begin{description}
 \item[Type] string: \xmlel{xs:string}
 \item[Meaning] 
-               a name for the role this table plays.  Recognized
+               A name for the role this table plays.  Recognized
                values include “output”, indicating this table is output 
                from a query; “base\_table{"}, indicating a table
                whose records represent the main subjects of its
@@ -1475,8 +1479,8 @@ Each table in a schema is described in detail using the
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  the fully qualified name of the table.  This name 
-                  should include all catalog or schema prefixes
+                  The fully qualified name of the table.  This name 
+                  should include all catalogue or schema prefixes
                   needed to sufficiently uniquely distinguish it in a
                   query.  
                
@@ -1485,7 +1489,7 @@ Each table in a schema is described in detail using the
                   In general, the format of the qualified name may
                   depend on the context; however, when the
                   table is intended to be queryable via ADQL, then the
-                  catalog and schema qualifiers are delimited from the
+                  catalogue and schema qualifiers are delimited from the
                   table name with dots (.).  
                
 
@@ -1494,7 +1498,7 @@ Each table in a schema is described in detail using the
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  a descriptive, human-interpretable name for the table.
+                  A descriptive, human-interpretable name for the table.
                
 \item[Occurrence] optional
 \item[Comment] 
@@ -1507,7 +1511,7 @@ Each table in a schema is described in detail using the
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  a free-text description of the table's contents
+                  A free-text description of the table's contents
                
 \item[Occurrence] optional
 
@@ -1516,7 +1520,7 @@ Each table in a schema is described in detail using the
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  an identifier for a concept in a data model that
+                  An identifier for a concept in a data model that
                   the data in this table represent.  
                
 \item[Occurrence] optional
@@ -1531,7 +1535,7 @@ Each table in a schema is described in detail using the
 \begin{description}
 \item[Type] integer
 \item[Meaning] 
-                  the size of the table in rows.
+                  The size of the table in rows.
                
 \item[Occurrence] optional
 \item[Comment] 
@@ -1545,7 +1549,7 @@ Each table in a schema is described in detail using the
 \begin{description}
 \item[Type] composite: \xmlel{vs:TableParam}
 \item[Meaning] 
-                  a description of a table column.
+                  A description of a table column.
                
 \item[Occurrence] optional; multiple occurrences allowed.
 
@@ -1554,7 +1558,7 @@ Each table in a schema is described in detail using the
 \begin{description}
 \item[Type] composite: \xmlel{vs:ForeignKey}
 \item[Meaning] 
-                  a description of a foreign keys, one or more columns
+                  A description of a foreign keys, one or more columns
                   from the current table that can be used to join with 
                   another table.  
                
@@ -1585,7 +1589,7 @@ When the table set describes a set of TAP-accessible tables, the value of
 a \xmlel{table}'s \xmlel{name} child must be in a form immediately
 usable for use in ADQL or SQL queries. This corresponds to the analogous
 requirement for \tapschema.  This means that all qualifications (schema,
-catalog) must be present, but also that when delimited
+catalogue) must be present, but also that when delimited
 identifiers are used as table names on the relational side,
 the quotes must be part of \xmlel{name}'s value, and the
 capitalisation used in the DDL must be preserved.
@@ -1608,23 +1612,17 @@ the \xmlel{vs:DataCollection} and
 constrain certain names to be unique.  In particular, all schema names
 within a \xmlel{tableset} element must be unique, and all
 table names within a \xmlel{schema} element must be
-unique.  (A schema and table may share a common name, such as
-``default''.)  These constraints makes it possible to uniquely locate
+unique.  A schema and table may share a common name, such as
+``default''.  These constraints make it possible to uniquely locate
 the description of a schema or table within a VOResource description.  
-
-Name uniqueness is only required when the table set description is
-part of a VOResource description.  The name uniqueness rules
-should also be applied to other uses of the
-\xmlel{vs:TableSet} element outside of a VOResource
-description.  
 
 
 \subsubsection{Foreign Keys}
 \label{sect:fkey}
 
 
-The \xmlel{vs:ForeignKey} type allows one to describe foreign
-keys in a table that allow it to be joined effectively with another
+The \xmlel{vs:ForeignKey} type is used to describe foreign
+keys in a table that allow it to be joined efficiently with another
 table.  A foreign key is a set of columns that map to a corresponding
 set of columns in another table.  
 
@@ -1636,13 +1634,14 @@ set of columns in another table.
       	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:ForeignKey} Type Schema Documentation}
 
 \noindent{\small
-           A description of the mapping a foreign key--a set of 
-           columns from one table--to columns in another table.  
+           A description of the mapping a foreign key -- a set of 
+           columns from one table -- to columns in another table.  
          \par}
 
 \noindent{\small
-           This definition that the foreign key is being described 
-           within the context of the table containing the key.  
+            When foreign keys are declared in this way, clients can expect
+            that joins constrained with the foreign keys are preformed
+            efficiently (e.g., using an index).
          \par}
 
 \vspace{1ex}\noindent\textbf{\xmlel{vs:ForeignKey} Type Schema Definition}
@@ -1665,7 +1664,7 @@ set of columns in another table.
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-               the fully-qualified name (including catalog and schema, as
+               The fully qualified name (including catalogue and schema, as
                applicable) of the table that can be joined with the 
                table containing this foreign key.
              
@@ -1676,7 +1675,7 @@ set of columns in another table.
 \begin{description}
 \item[Type] composite: \xmlel{vs:FKColumn}
 \item[Meaning] 
-               a pair of column names, one from this table and one
+               A pair of column names, one from this table and one
                from the target table that should be used to join the
                tables in a query.  
              
@@ -1687,7 +1686,7 @@ set of columns in another table.
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  a free-text description of what this key points to
+                  A free-text description of what this key points to
                   and what the relationship means.  
                
 \item[Occurrence] optional
@@ -1697,7 +1696,7 @@ set of columns in another table.
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  an identifier for a concept in a data model that
+                  An identifier for a concept in a data model that
                   the association enabled by this key represents.  
                
 \item[Occurrence] optional
@@ -1719,7 +1718,7 @@ set of columns in another table.
 
 
 In this model, the source of the foreign
-key is the current table being described (i.e. represented by the
+key is the current table being described (i.e., represented by the
 \xmlel{table} element that contains the
 \xmlel{vs:ForeignKey} description, and thus does not need to be
 named explicitly).  The key that is described points to the table
@@ -1769,7 +1768,7 @@ desired:
 
 \item Use the \xmlel{extendedType} attribute of the
        \xmlel{dataType} element (see 
-       section~\ref{sect:tbldatatypes}).
+       section~\ref{sect:tbldatatypes})
        to indicate a more specific data type then those defined by the
        \xmlel{vs:TableParam} type.
 \end{enumerate}
@@ -1799,7 +1798,7 @@ containers.
 
 \noindent{\small
            Note that the URL for help with this service can be put into
-           the Service/ReferenceURL element.
+           the service/referenceURL element.
         \par}
 
 \vspace{1ex}\noindent\textbf{\xmlel{vs:ParamHTTP} Type Schema Definition}
@@ -1816,7 +1815,7 @@ containers.
         <xs:element name="param" type="vs:InputParam" minOccurs="0"
                   maxOccurs="unbounded" />
         <xs:element name="testQuery" type="xs:string" minOccurs="0"
-                  maxOccurs="unbounded" />
+                  maxOccurs="1" />
       </xs:sequence>
     </xs:extension>
   </xs:complexContent>
@@ -1841,7 +1840,11 @@ containers.
 \item[Comment] 
                        The service may indicate support for both GET
                        and POST by providing 2 queryType elements, one
-                       with GET and one with POST.
+                       with GET and one with POST.  Since the IVOA standard
+                       DALI requires standard services to support both
+                       GET and POST, this piece of metadata is not
+                       useful in the description of standard DAL services
+                       and does not need to be given for those.
                      
 
 \end{description}
@@ -1849,7 +1852,8 @@ containers.
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                       The MIME type of a document returned in the HTTP response.
+                       The MIME media type of a document returned in 
+                       the HTTP response.
                      
 \item[Occurrence] optional
 
@@ -1858,7 +1862,7 @@ containers.
 \begin{description}
 \item[Type] composite: \xmlel{vs:InputParam}
 \item[Meaning] 
-                       a description of a input parameter that can be 
+                       A description of a input parameter that can be 
                        provided as a name=value argument to the service.  
                     
 \item[Occurrence] optional; multiple occurrences allowed.
@@ -1868,15 +1872,15 @@ containers.
 \begin{description}
 \item[Type] string: \xmlel{xs:string}
 \item[Meaning] 
-                       an ampersand-delimited list of arguments that
+                       An ampersand-delimited list of arguments that
                        can be used to test this service interface; 
                        when provided as the input to this interface,
                        it will produce a legal, non-null response.
                     
-\item[Occurrence] optional; multiple occurrences allowed.
+\item[Occurrence] optional
 \item[Comment] 
                        When the interface supports GET, then the full 
-                       query URL is formed by the concatonation of the 
+                       query URL is formed by the concatenation of the 
                        base URL (given by the accessURL) and the value 
                        given by this testQuery element.  
                     
@@ -1905,7 +1909,7 @@ RESPONSEFORMAT.  Would anyone miss it?  If so, how can we fix it?}
 
 
 
-A important intended use of the \xmlel{vs:ParamHTTP} type is
+An important intended use of the \xmlel{vs:ParamHTTP} type is
 describing the interface of an IVOA standard service protocol 
 of the ``simple'' variety, such as the Simple Image Access Protocol
 \citep{2015ivoa.spec.1223D}.  In particular, it is recommended that
@@ -1938,11 +1942,11 @@ interface.  In particular, description may include
 \end{itemize}
 
 
-Of course, listing required parameters is always allowed, even when
+Listing required parameters is allowed, even when
 describing a standard interface as long as these are consistent with
 the service specification and the corresponding \xmlel{param}
-elements include the attribute \verb|use="required"| (see
-section~\ref{sect:inputparam}.  The \xmlel{param}
+elements include the attribute \verb|std="true"| (see
+section~\ref{sect:inputparam}).  The \xmlel{param}
 elements for custom parameters that are not part of the standard (but
 are rather local customizations) should include the attribute
 \verb|std="false"|.
@@ -1958,8 +1962,8 @@ are rather local customizations) should include the attribute
 The VODataService schema provides several element types for describing
 different kinds of data parameters used in datasets and services,
 including service input parameters and table columns.  The parameter
-types allow one to fully describe a parameter in terms of metadata
-that includes name, data type, and meaning.  
+types describe a parameter in terms of elementary metadata
+including name, data type, and meaning.  
 
 
 All the VODataService parameter types derive from the base type 
@@ -1974,13 +1978,13 @@ metadata except the data type.
       	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:BaseParam} Type Schema Documentation}
 
 \noindent{\small
-            a description of a parameter that places no restriction on 
+            A description of a parameter that places no restriction on 
             the parameter's data type.
          \par}
 
 \noindent{\small
             As the parameter's data type is usually important, schemas
-            normally employ a sub-class of this type (e.g., Param),
+            normally employ a sub-class of this type
             rather than this type directly.
          \par}
 
@@ -2005,7 +2009,7 @@ metadata except the data type.
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  the name of the parameter or column
+                  The name of the parameter or column.
                
 \item[Occurrence] optional
 
@@ -2014,8 +2018,8 @@ metadata except the data type.
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  a free-text description of a parameter's or column's 
-                  contents
+                  A free-text description of a parameter's or column's 
+                  contents.
                
 \item[Occurrence] optional
 
@@ -2024,8 +2028,8 @@ metadata except the data type.
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  the unit associated with the values in the parameter
-                  or column
+                  The unit associated with the values in the parameter
+                  or column.
                
 \item[Occurrence] optional
 
@@ -2034,8 +2038,8 @@ metadata except the data type.
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  the name of a unified content descriptor that
-                  describes the scientific content of the parameter.  
+                  The name of a unified content descriptor that
+                  describes the scientific content of the parameter.
                
 \item[Occurrence] optional
 \item[Comment] 
@@ -2052,7 +2056,7 @@ metadata except the data type.
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  an identifier for a concept in a data model that
+                  An identifier for a concept in a data model that
                   the data in this schema represent.  
                
 \item[Occurrence] optional
@@ -2090,7 +2094,7 @@ derive from a common parent, \xmlel{vs:DataType}.
       	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:DataType} Type Schema Documentation}
 
 \noindent{\small
-            a type (in the computer language sense) associated with a 
+            A type (in the computer language sense) associated with a 
             parameter with an arbitrary name
          \par}
 
@@ -2122,7 +2126,7 @@ derive from a common parent, \xmlel{vs:DataType}.
 \begin{description}
 \item[Type] string of the form: \emph{([0-9]+x)*[0-9]*[0-9*]}
 \item[Meaning] 
-                     the shape of the array that constitutes the value
+                     The shape of the array that constitutes the value.
                   
 \item[Occurrence] optional
 
@@ -2138,7 +2142,7 @@ derive from a common parent, \xmlel{vs:DataType}.
 \begin{description}
 \item[Type] string: \xmlel{xs:string}
 \item[Meaning] 
-                     a string that is used to delimit elements of an array
+                     A string that is used to delimit elements of an array
                      value in InputParams.
                   
 \item[Occurrence] optional
@@ -2208,7 +2212,7 @@ there are no restrictions on the names that may be included.
 
 
 A data type description can be augmented via a common set of
-\xmlel{vs:DataType} attributes, defined below.  The
+\xmlel{vs:DataType} attributes.  The
 \xmlel{arraysize} attribute indicates the parameter is an array
 of values of the named type.  Its value describes the shape of the
 array. When there is no natural serialisation defined through the type
@@ -2221,10 +2225,17 @@ uses VOTable serialisation rules.
 
 More descriptive information about the type can be provided via
 \xmlel{extendedType} and \xmlel{extendedSchema}, which
-provide an alternate data type name.  It is expected that this name
-will only be understood by a special subset of applications.  The name
-given in the element content, then, represents a more commonly
-understood “fall-back” type.   Arbitrary information can also be
+provide an alternate data type name.  The name
+given in the type's element content, then, represents a commonly
+understood “fallback” type.  For instance, in VOTable, timestamps are
+serialised into strings, which implies a VOTableType of char with
+arraysize *, as supported by all VOTable readers.  VOTable readers
+interpreting the timestamp xtype, however, can turn this string into a
+timestamp value native to its clients.  Such readers will interpret
+a VOTable FIELD's xtype attribute. Such information is reflected in
+\xmlel{extendedType}.  
+
+Arbitrary information can also be
 provided via any prefix-qualified, globally defined attribute drawn
 from an XML Schema other than VODataService (by virtue of the
 \xmlel{xs:anyAttribute} specification present
@@ -2250,11 +2261,97 @@ context permits.
 
 Actual parameters are normally described with types derived from
 \xmlel{vs:BaseParam}.  The \xmlel{vs:InputParam} is intended
-for describing an input parameter to a service or function.  The
-allowed data type names (given in the metadata table below) do not
-imply a size or precise format; rather, they are intended to be
+for describing an input parameter to a service or function.  In this
+version of VODataService, input parameters are restricted to be defined
+in terms of simple data types\todo{On the other hand,
+also allowing VOTable types here would help a lot with, e.g., SODA and
+friends.  If no objections are raised, we'll allow arbitrary type
+systems here in REC.} which do not
+imply a size or precise format. Rather, they are intended to be
 sufficient for describing an input paramter to a simple REST-like
-service or a function in a weakly-typed (e.g. scripting) language.  
+service or a function in a weakly-typed language.  They are defined
+in \xmlel{vs:SimpleDataType}:
+
+% GENERATED: !schemadoc VODataService-v1.2.xsd SimpleDataType
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:SimpleDataType} Type Schema Documentation}
+
+\noindent{\small
+            A data type restricted to a small set of names which is 
+            imprecise as to the format of the individual values.
+         \par}
+
+\noindent{\small
+            This set is intended for describing simple input parameters to 
+            a service or function.
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:SimpleDataType} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="SimpleDataType" >
+  <xs:simpleContent >
+    <xs:restriction base="vs:DataType" >
+      <xs:enumeration value="integer" />
+      <xs:enumeration value="real" />
+      <xs:enumeration value="complex" />
+      <xs:enumeration value="boolean" />
+      <xs:enumeration value="char" />
+      <xs:enumeration value="string" />
+      <xs:attribute name="arraysize" type="vs:ArrayShape" />
+      <xs:attribute name="delim" type="xs:string" default=" " />
+      <xs:attribute name="extendedType" type="xs:string" />
+      <xs:attribute name="extendedSchema" type="xs:anyURI" />
+      <xs:anyAttribute namespace="##other" />
+    </xs:restriction>
+  </xs:simpleContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:SimpleDataType} Attributes}
+
+\begingroup\small\begin{bigdescription}
+\item[arraysize]
+\begin{description}
+\item[Type] string of the form: \emph{([0-9]+x)*[0-9]*[0-9*]}
+\item[Meaning] See vs:DataType.
+\item[Occurrence] optional
+
+\end{description}
+\item[delim]
+\begin{description}
+\item[Type] string: \xmlel{xs:string}
+\item[Meaning] See vs:DataType.
+\item[Occurrence] optional
+ 
+\end{description}
+\item[extendedType]
+\begin{description}
+\item[Type] string: \xmlel{xs:string}
+\item[Meaning] See vs:DataType.
+\item[Occurrence] optional
+\end{description}
+\item[extendedSchema]
+\begin{description}
+\item[Type] a URI: \xmlel{xs:anyURI}
+\item[Meaning] See vs:DataType.
+\item[Occurrence] optional
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
+% /GENERATED
+
+The \xmlel{vs:InputParam} class then is a \xmlel{vs:DataType}
+constrained to these types and furnished with additional metadata
+defining how to use the parameter and whether or not it is defined in
+the standard governing the capability the interface is in (if any):
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd InputParam
@@ -2264,7 +2361,7 @@ service or a function in a weakly-typed (e.g. scripting) language.
       	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:InputParam} Type Schema Documentation}
 
 \noindent{\small
-            a description of a service or function parameter having a
+            A description of a service or function parameter having a
             fixed data type. 
          \par}
 
@@ -2272,7 +2369,7 @@ service or a function in a weakly-typed (e.g. scripting) language.
             The allowed data type names do not imply a size or precise
             format.  This type is intended to be sufficient for describing
             an input parameter to a simple REST service or a function 
-            written in a weakly-typed (e.g., scripting) language.
+            written in a weakly-typed language.
          \par}
 
 \vspace{1ex}\noindent\textbf{\xmlel{vs:InputParam} Type Schema Definition}
@@ -2307,15 +2404,15 @@ service or a function in a weakly-typed (e.g. scripting) language.
 \item[Allowed Values]\hfil
 \begin{longtermsdescription}
 \item[required]
-                  the parameter is required for the application or
+                  The parameter is required for the application or
                   service to work properly.  
                
 \item[optional]
-                  the parameter is optional but supported by the application or
+                  The parameter is optional but supported by the application or
                   service.
                
 \item[ignored]
-                  the parameter is not supported and thus is ignored by the 
+                  The parameter is not supported and thus is ignored by the 
                   application or service.
                
 \end{longtermsdescription}
@@ -2346,7 +2443,7 @@ true
 \begin{description}
 \item[Type] composite: \xmlel{vs:SimpleDataType}
 \item[Meaning] 
-                        a type of data contained in the parameter
+                        A type of data contained in the parameter
                      
 \item[Occurrence] optional
 
@@ -2359,19 +2456,6 @@ true
 \end{generated}
 
 % /GENERATED
-
-
-By fixing the \xmlel{dataType} child element to that of the
-\xmlel{vs:SimpleDataType}, the possible types are restricted to
-predefined set appropriate for input parameters.\todo{On the other hand,
-also allowing VOTable types here would help a lot with, e.g., SODA and
-friends.  Anyone objecting to opening up the type system here?}
-
-
-
-The \xmlel{vs:InputParam} type accepts two attributes that
-indicate the role that the parameter plays as input to the service or
-function.
 
 
 Here is an example for a description
@@ -2408,11 +2492,7 @@ a table.
       	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:TableParam} Type Schema Documentation}
 
 \noindent{\small
-            a description of a table parameter having a fixed data type.
-         \par}
-
-\noindent{\small
-            The allowed data type names match those supported by VOTable.
+            A description of a table parameter having a fixed data type.
          \par}
 
 \vspace{1ex}\noindent\textbf{\xmlel{vs:TableParam} Type Schema Definition}
@@ -2441,9 +2521,8 @@ a table.
 \item[Meaning] 
                      If true, the meaning and use of this parameter is
                      reserved and defined by a standard model.  If false, 
-                     it represents a database-specific parameter 
-                     that effectively extends beyond the standard.  If
-                     not provided, then the value is unknown.
+                     it represents a parameter specific to the data described 
+                     If not provided, then the value is unknown.
                   
 \item[Occurrence] optional
 \end{description}
@@ -2459,7 +2538,7 @@ a table.
 \begin{description}
 \item[Type] \xmlel{vs:DataType} with optional attributes
 \item[Meaning] 
-                        a type of data contained in the column
+                        A type of data contained in the column
                      
 \item[Occurrence] optional
 
@@ -2468,7 +2547,7 @@ a table.
 \begin{description}
 \item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                        a keyword representing traits of the column.  
+                        A keyword representing traits of the column.  
                         Recognized values include “indexed”, “primary”, and
                         “nullable”.  
                      
@@ -2495,7 +2574,7 @@ Because \xmlel{dataType}'s
 XML type, \xmlel{vs:TableDataType}, is abstract, the
 element MUST include an
 \xmlel{xsi:type} attribute.  As discussed in
-sect.~\ref{sect:tbldatatypes}, this should generally be
+sect.~\ref{sect:tbldatatypes}, this SHOULD be
 \xmlel{vs:VOTableType} for VODataService 1.2 table columns.
 
 When the tableset describes a set of TAP-accessible tables, the value of
@@ -2511,7 +2590,9 @@ As examples, here are declarations of a column called ``Dec'' containing
 a double-valued declination, of the (deprecated) \verb|size| column
 from TAP 1.0 which requires quotes because it otherwise clashes with a
 SQL reserved name, and a SIAP 1.0-compatible \verb|wcs_cdmatrix|
-column that shows how multidimensional arrays are declared:
+column that shows how multidimensional arrays are declared; note that in
+the last case, the content of \xmlel{unit} pertains to \emph{elements}
+of the array, not the array as a whole.
 
 \begin{lstlisting}[language=XML,basicstyle=\footnotesize]
 <column>
@@ -2543,8 +2624,8 @@ column that shows how multidimensional arrays are declared:
 \label{sect:tbldatatypes}
 
 
-The VODataService schema defines two XML types that derive from
-\xmlel{vs:TableDataType}:  \xmlel{vs:VOTableType} and
+The VODataService schema defines two type systems that derive from
+\xmlel{vs:TableDa\-taType}:  \xmlel{vs:VOTableType} and
 \xmlel{vs:TAPType}.  Following the move to VOTable-compatible type
 descriptions in TAP 1.1 \citep{todo:TAP1.1}, this version of
 VODataService deprecates the use of \xmlel{vs:TAPType}.  New software
@@ -2558,7 +2639,7 @@ should only generate \xmlel{vs:VOTableType}s in \xmlel{tableset}s.
       	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:VOTableType} Type Schema Documentation}
 
 \noindent{\small
-            a data type supported explicitly by the VOTable format
+            A data type supported explicitly by the VOTable format
          \par}
 
 \vspace{1ex}\noindent\textbf{\xmlel{vs:VOTableType} Type Schema Definition}
@@ -2595,27 +2676,27 @@ should only generate \xmlel{vs:VOTableType}s in \xmlel{tableset}s.
 \item[arraysize]
 \begin{description}
 \item[Type] string of the form: \emph{([0-9]+x)*[0-9]*[0-9*]}
-\item[Meaning] 
+\item[Meaning] See vs:DataType.
 \item[Occurrence] optional
 
 \end{description}
 \item[delim]
 \begin{description}
 \item[Type] string: \xmlel{xs:string}
-\item[Meaning] 
+\item[Meaning] See vs:DataType.
 \item[Occurrence] optional
  
 \end{description}
 \item[extendedType]
 \begin{description}
 \item[Type] string: \xmlel{xs:string}
-\item[Meaning] 
+\item[Meaning] See vs:DataType.
 \item[Occurrence] optional
 \end{description}
 \item[extendedSchema]
 \begin{description}
 \item[Type] a URI: \xmlel{xs:anyURI}
-\item[Meaning] 
+\item[Meaning] See vs:DataType.
 \item[Occurrence] optional
 \end{description}
 
@@ -2645,7 +2726,11 @@ explain their schema in an IVOA Note.
 \subsection{Changes since  WD-20181026}
 
 \begin{itemize}
+\item Adding a summary of the discovering data collections EN.
 \item Spatial coverage now has a frame attribute.
+\item Added a SHOULD requirement on CatalogResources to have a tableset.
+\item Restricted interface/@testQuery to zero or one occurrences (this
+is because there is no clear semantics to having multiple of those).
 \end{itemize}
 
 \subsection{Changes since REC-1.1}
@@ -2669,10 +2754,14 @@ would be very unfortunate with VOTable, where other conventions are in
 place (e.g., for string arrays).  Now discouraging the use of delim
 outside of InputParams.
 \item Deprecated TAPType.
+\item extendedType is now defined to correspond to VOTable xtypes in the
+absence of extendedSchema.
 \item No longer requiring unique table names within a tableset;
 uniquness is now required within a schema (actually, many services have
 been in violation of the old unique-within-tableset rule for a long time
-without operational difficulties).
+without operational difficulties); but then that's largely a moot point
+because for the main uses of tableset, fully qualified names are now
+required.
 \item Ported source to \ivoatex.
 \end{itemize}
 
