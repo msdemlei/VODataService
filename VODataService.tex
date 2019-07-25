@@ -997,19 +997,16 @@ intervals on that level.
 
 \vspace{0.5ex}\noindent\textbf{\xmlel{vs:Coverage} Metadata Elements}
 
-\begingroup\small\begin{bigdescription}\item[Element \xmlel{}]
-\begin{description}
-\item[Type] 
-\item[Meaning] 
+\begingroup\small\begin{bigdescription}\item[Element \xmlel{stc:STCResourceProfile}]
+
                  An STC 1.0 description of the location of the resource's 
                  data on the sky, in time, and in frequency space, 
                  including resolution.   This is deprecated in favour
                  of the separate spatial, temporal, and spectral elements.
                
-\item[Occurrence] optional
 
-\end{description}
-\item[Element \xmlel{spatial}]
+This element is imported from another schema.  See
+	     		 there for details.\item[Element \xmlel{spatial}]
 \begin{description}
 \item[Type] a string with optional attributes
 \item[Meaning] 
@@ -1039,7 +1036,8 @@ intervals on that level.
 
 \item[Comment] 
                   This is written as for VOTable tabledata (i.e., 
-                  whitespace-separated C-style floating point literals).
+                  whitespace-separated C-style floating point literals), as
+                  in “47847.2 51370.2”.
                   The limits must be given as MJD.  While they
                   are not intended to be precise, they are to be understood
                   in TDB for the solar system barycenter.  The total coverage
@@ -1441,7 +1439,7 @@ Each table in a schema is described in detail using the
     <xs:element name="title" type="xs:token" minOccurs="0" />
     <xs:element name="description" type="xs:token" minOccurs="0" />
     <xs:element name="utype" type="xs:token" minOccurs="0" />
-    <xs:element name="nrows" type="xs:integer" minOccurs="0"
+    <xs:element name="nrows" type="xs:NonNegativeInteger" minOccurs="0"
               maxOccurs="1" />
     <xs:element name="column" type="vs:TableParam" minOccurs="0"
               maxOccurs="unbounded" />
@@ -1536,7 +1534,7 @@ Each table in a schema is described in detail using the
 \end{description}
 \item[Element \xmlel{nrows}]
 \begin{description}
-\item[Type] integer
+\item[Type] non-negative integer
 \item[Meaning] 
                   The size of the table in rows.
                
@@ -2328,7 +2326,7 @@ in \xmlel{vs:SimpleDataType}:
 \item[Type] string: \xmlel{xs:string}
 \item[Meaning] See vs:DataType.
 \item[Occurrence] optional
- 
+\item[Default] a space character
 \end{description}
 \item[extendedType]
 \begin{description}
@@ -2419,7 +2417,7 @@ the standard governing the capability the interface is in (if any):
                   application or service.
                
 \end{longtermsdescription}
-optional
+\item[Default] optional
 \end{description}
 \item[std]
 \begin{description}
@@ -2432,7 +2430,7 @@ optional
                      service or application.  
                   
 \item[Occurrence] optional
-true
+\item[Default] true
 \end{description}
 
 
@@ -2688,7 +2686,7 @@ should only generate \xmlel{vs:VOTableType}s in \xmlel{tableset}s.
 \item[Type] string: \xmlel{xs:string}
 \item[Meaning] See vs:DataType.
 \item[Occurrence] optional
- 
+\item[Default] a space character
 \end{description}
 \item[extendedType]
 \begin{description}
@@ -2725,6 +2723,12 @@ explain their schema in an IVOA Note.
 \appendix
 
 \section{Changes from previous versions}
+
+\subsection{Changes since PR-20190715}
+
+\begin{itemize}
+\item table/@nrows is now constrained to be non-negative.
+\end{itemize}
 
 \subsection{Changes since  WD-20181026}
 
