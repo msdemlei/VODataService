@@ -409,7 +409,7 @@ particular, that in non-XML contexts (e.g., relational mappings
 like RegTAP) the VODataService types \emph{must} be qualified with
 vs:.
 
-As recommend by the VOResource standard, the
+As recommended by the VOResource standard, the
 VODataService schema sets \xmlel{element\-Form\-Default} to \emph{unqualified}.
 This means that element names defined
 in this schema may not be used with a namespace prefix.
@@ -517,7 +517,7 @@ type declarations may be removed from the schema.
 
 The content models of CatalogResource and CatalogService are identical.
 To understand why the two classes are present nevertheless, a short
-historical excurse is in order.  A full treatment of this is found in
+historical excursion is in order.  A full treatment of this is found in
 the IVOA Endorsed Note on discovering data collections within services
 \citep{2019ivoa.rept.0520D}, hereafter referred to as DDC.
 
@@ -733,7 +733,7 @@ metadata should pertain to the service itself rather than any specific
 data collection served by it.
 
 As with \xmlel{vs:CatalogResource}, instances SHOULD
-declare of the metadata of the table(s) underlying the service or
+declare the metadata of the table(s) underlying the service or
 delivered by it in a \xmlel{tableset} element.
 
 Whenever the service operates on clearly definable tabular
@@ -912,7 +912,7 @@ resource records written in VOResource (i.e., XML),
 we represent MOCs in the ASCII convention
 proposed in MOC 1.0 \citep{2014ivoa.spec.0602F}\footnote{Version 1.1 of MOC
 will give a normative specification of ASCII MOCs, which is expected to 
-exactly match the non-normative proposal in version 1.0.}
+essentially match the non-normative proposal in version 1.0.}
 
 By default, the MOCs are to be interpreted in the ICRS.  Future
 extensions to non-celestial frames (e.g., on planet
@@ -1303,7 +1303,7 @@ tables.
 The \xmlel{vs:TableSchema} type groups
 tables that are logically related.
 For example, a single
-resource may provide access several major astronomical catalogues
+resource may provide access to several major astronomical catalogues
 (e.g., SDSS, 2MASS, and FIRST) from one site, enabling high-performance
 cross-correlations between them.  Each catalogue can be described in a
 separate \xmlel{schema} element, using the elements from
@@ -2271,7 +2271,7 @@ also allowing VOTable types here would help a lot with, e.g., SODA and
 friends.  If no objections are raised, we'll allow arbitrary type
 systems here in REC.} which do not
 imply a size or precise format. Rather, they are intended to be
-sufficient for describing an input paramter to a simple REST-like
+sufficient for describing an input parameter to a simple REST-like
 service or a function in a weakly-typed language.  They are defined
 in \xmlel{vs:SimpleDataType}:
 
