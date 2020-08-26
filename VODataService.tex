@@ -892,9 +892,15 @@ from the schema in version 1.3 of this specification.
 
 The \xmlel{vs:Coverage} type summarily describes how the data served is
 distributed on the
-sky, in energy, and in time.  For the energy coverage on the
-electromagnetic spectrum, there is a
-also qualitative classification in the \xmlel{waveband} element.
+sky, in energy, and in time.  
+
+In addition, there is the \xmlel{waveband} element that originally
+contained a qualitative indication of the location of the resource's
+coverage on the electromagnetic spectrum.  As more resources cover
+non-electromagnetic messengers, the element's meaning has somewhat
+shifted, and it now admits values from an extendable vocabulary of
+messengers\footnote{\url{http://www.ivoa.net/rdf/messenger}} that, for
+instance, includes Neutrinos.
 
 Historically, the quantitative footprints were expected to be given in
 the element of type \xmlel{stc:STCResourceProfile}.  As discussed in
@@ -988,7 +994,7 @@ intervals on that level.
     <xs:element name="spectral" type="vs:FloatInterval" minOccurs="0"
               maxOccurs="unbounded" />
     <xs:element name="footprint" type="vs:ServiceReference" minOccurs="0" />
-    <xs:element name="waveband" type="vs:Waveband" minOccurs="0"
+    <xs:element name="waveband" type="xs:token" minOccurs="0"
               maxOccurs="unbounded" />
     <xs:element name="regionOfRegard" type="xs:float" minOccurs="0" />
   </xs:sequence>
@@ -1090,46 +1096,20 @@ This element is imported from another schema.  See
 \end{description}
 \item[Element \xmlel{waveband}]
 \begin{description}
-\item[Type] string with controlled vocabulary
+\item[Type] string: \xmlel{xs:token}
 \item[Meaning] 
-                  A named spectral region of the electro-magnetic spectrum 
-                  that the resource's spectral coverage overlaps with.
+                  A name of a messenger that the resource is relevant for
+                  (e.g., was used in the measurements).  Terms must
+                  be taken from the vocabulary at 
+                  http://www.ivoa.net/rdf/messenger.
                
 \item[Occurrence] optional; multiple occurrences allowed.
-
-\item[Allowed Values]\hfil
-\begin{longtermsdescription}
-\item[Radio]
-                 wavelength >= 10 mm; frequency <= 30 GHz.
-               
-\item[Millimeter]
-                 0.1 mm <= wavelength <= 10 mm; 
-                 3000 GHz >= frequency >= 30 GHz.
-               
-\item[Infrared]
-                 1 micron <= wavelength <= 100 micons 
-               
-\item[Optical]
-                 300 nm <= wavelength <= 1000 nm; 
-               
-\item[UV]
-                 100 nm <= wavelength <= 300 nm; 
-               
-\item[EUV]
-                 12 eV <= energy <= 120 eV
-               
-\item[X-ray]
-                 0.12 keV <= energy <= 120 keV
-               
-\item[Gamma-ray]
-                 energy >= 120 keV
-               
-\end{longtermsdescription}
 \item[Comment] 
-                  Observations using non-electromagnetic messengers should
-                  not give a waveband in version 1.2 of VODataService.  It
-                  is expected that additional terms for these will be provided
-                  in a future version.
+                  It is a bit unfortunate that the element is still called
+                  waveband when it is now also coverage non-electromagnetic
+                  messengers.  It was deemed that this slight notional
+                  sloppiness is preferable to introducing new and
+                  deprecating old elements.
                
 
 \end{description}
