@@ -769,7 +769,7 @@
             </xs:annotation>
          </xs:element>
 
-         <xs:element name="nrows" type="xs:NonNegativeInteger" minOccurs="0"
+         <xs:element name="nrows" type="xs:nonNegativeInteger" minOccurs="0"
             maxOccurs="1">
             <xs:annotation>
                <xs:documentation>
