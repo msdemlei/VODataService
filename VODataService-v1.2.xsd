@@ -810,7 +810,7 @@
             <xs:documentation>
                A name for the role this table plays.  Recognized
                values include “output”, indicating this table is output 
-               from a query; “base_table", indicating a table
+               from a query; “base_table”, indicating a table
                whose records represent the main subjects of its
                schema; and “view”, indicating that the table represents
                a useful combination or subset of other tables.  Other 
@@ -1466,5 +1466,3 @@
    </xs:simpleType>
 
 </xs:schema>
-<!-- vim:sta:sw=3:et
--->
