@@ -45,4 +45,5 @@
 	<svg x="55" y="350"><rect width="90" height="18" x="0" y="0" class="thisrec"/><text class="doclabel" x="45" y="12.5">VODataService</text></svg><svg x="55" y="350"><ellipse rx="60" ry="15" cx="45" cy="9" fill="none" stroke="red" stroke-width="3"/></svg>
 	<svg x="550" y="230"><rect width="90" height="18" x="0" y="0" class="rec"/><text class="doclabel" x="45" y="12.5">STC</text></svg>
 	<svg x="540" y="435"><rect width="90" height="18" x="0" y="0" class="rec"/><text class="doclabel" x="45" y="12.5">VOSI</text></svg>
+	<svg x="430" y="400"><rect width="90" height="18" x="0" y="0" class="rec"/><text class="doclabel" x="45" y="12.5">MOC</text></svg>
 </g></svg>

@@ -7,7 +7,6 @@
 \lstloadlanguages{XML}
 \lstset{flexiblecolumns=true,tagstyle=\ttfamily,showstringspaces=False}
 \usepackage{amsmath}
-\usepackage{todonotes}
 
 \iftth
 \newcommand{\tapschema}{TAP\_SCHE\-MA}
@@ -177,9 +176,12 @@ VODataService is closely related to the following other VO standards:
 schema for the responses on the table metadata endpoint.  It also
 defines the ParamHTTP interface type currently used in the capabilities of most
 standard protocols.
-\item[RegTAP, v1.0 \citep{2014ivoa.spec.1208D}] RegTAP maps the concepts
+\item[RegTAP, v1.1 \citep{2019ivoa.spec.1011D}] RegTAP maps the concepts
 defined here into a relational structure.  In that sense it is the
-user interface to what is specified here.
+user interface to what is specified here.  RegTAP will need an update
+to support the space-time constraints added here.
+\item[MOC, v1.1 \citep{2019ivoa.spec.1007F}] Multi-Order coverage maps
+are used by VODataService to communicate spatial coverage.
 \end{description}
 
 \subsection{Purpose}
@@ -307,7 +309,7 @@ in the Registry.
 \paragraph{Facilitate discovery of full DALI services.}  The issue here
 is that DALI forsees synchronous and asynchronous endpoints as the
 standard case for many protocols -- it already is standard for TAP.
-Also, several auxiliary endpoints (VOSI, examples) are declared as
+Also, several auxiliary endpoints (mostly defined in VOSI) are declared as
 separate capabilities and need to be matched with the functional
 endpoints.  This matching is becoming a problem when multiple
 authentication schemes or mirror sites necessitate multiple sync/async
@@ -423,7 +425,7 @@ The VODataService type \xmlel{vs:Coverage} allows the declaration of
 the physical coverage of a resource on the sky (or on spherical bodies),
 in time, and in the energy of the messenger particle.  In addition, the
 element should contain a rough indication of the messenger type
-(``Optical''), and it can contain a link to a footprint endpoint and an
+(e.g., ``Optical''), and it can contain a link to a footprint endpoint and an
 indication of the spatial resolution within a service.
 
 VODataService has several classes for the declaration of the tabular
@@ -460,7 +462,8 @@ To be able to express the types of table columns and service arguments
 alike, VODataService defines several type systems.  All of these are
 basically just enumerations of type names, possibly with some additional
 metadata like VOTable-style array sizes.  In new resource records, only
-\xmlel{vs:SimpleDataType} (for ParamHTTP interface parameters) and
+\xmlel{vs:SimpleDataType} (for ParamHTTP parameters on non-DALI
+interfaces) and
 \xmlel{vs:VOTableType} (for table columns) should be used.
 
 \subsubsection{VODataService Resource Classes}
@@ -490,8 +493,10 @@ it is limited to what is conventionally thought of as a ``catalogue'',
 i.e., a table of data on astronomical objects.  On the
 contrary, CatalogX should also be used for collections of images,
 spectra, time series, etc, as long as their metadata is sufficiently
-structured.  Accessibility through IVOA standard protocols (ObsCore,
-SIAP, SSAP) certainly satisfies that requirement.
+structured.  That a data collection ist published through the standard
+IVOA discovery protocols (ObsCore,
+SIAP, SSAP) certainly is a strong indication that this requirement is
+satisfied.
 
 The horizontal distinction (XResource vs.~XService) is somewhat more
 subtle and will be discussed in sect.~\ref{sect:discoverdata}.
@@ -744,7 +749,7 @@ for the motivation of this duplication.
 \label{sect:CatalogResource}
 
 
-The \xmlel{vs:CatalogResource} resource type is used to descre a
+The \xmlel{vs:CatalogResource} resource type is used to describe a
 resource containing astronomical data or metadata in a set of one or
 more tables.  It extends \xmlel{vs:DataResource} and thus has metadata
 on coverage and the facilities and instruments that produced the
@@ -907,10 +912,8 @@ coverage information in the \xmlel{spatial}, \xmlel{spectral}, and
 
 Spatial coverage is conveyed as a MOC.  To enable easy embedding into
 resource records written in VOResource (i.e., XML), 
-we represent MOCs in the ASCII convention
-proposed in MOC 1.0 \citep{2014ivoa.spec.0602F}\footnote{Version 1.1 of MOC
-will give a normative specification of ASCII MOCs, which is expected to 
-essentially match the non-normative proposal in version 1.0.}
+VODataService uses the string serialisation defined in section 2.3.2 of 
+\citet{2019ivoa.spec.1007F}.
 
 By default, the MOCs are to be interpreted in the ICRS.  Future
 extensions to non-celestial frames (e.g., on planet
@@ -2315,17 +2318,17 @@ in \xmlel{vs:SimpleDataType}:
 Since VODataService 1.2, input parameters can use any type system,
 where non-DALI-compliant services SHOULD use \xmlel{vs:SimpleDataType}
 and DALI-compliant services SHOULD use \xmlel{vs:VOTableType}.  To
-ensure schema validation catches error, resource record authors are
+ensure schema validation catches mistakes, resource record authors are
 advised to declare the type system intended using \xmlel{xsi:type}; for
-instance, an SSAP service might declare:
+instance, a service accepting a DALI point might declare:
 
 \begin{lstlisting}[language=XML]
   <param std="true">
-    <name>POS</name>
+    <name>pos</name>
     <description>ICRS position of target object</description>
-    <dataType arraysize="*" 
+    <dataType arraysize="2" 
       xsi:type="vs:VOTableType" 
-      extendedType="point">char</dataType>
+      extendedType="point">double</dataType>
   </param>
 \end{lstlisting}
 
@@ -2347,8 +2350,8 @@ the standard governing the capability the interface is in (if any):
          \par}
 
 \noindent{\small
-         	DALI-compliant services should use vs:VOTableType here, others
-         	should use vs:SimpleDataType.
+         	DALI-compliant services should use VOTableType here, others
+         	should use SimpleDataType.
          \par}
 
 \vspace{1ex}\noindent\textbf{\xmlel{vs:InputParam} Type Schema Definition}
@@ -2451,7 +2454,7 @@ element uses the \xmlel{vs:InputParam} type to describe itself:
     within this angular distance of the search position.
   </description>
   <ucd> phys.angSize </ucd>
-  <dataType> real </dataType>
+  <dataType xsi:type="vs:SimpleDataType"> real </dataType>
 </param>
 \end{lstlisting}
 

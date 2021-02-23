@@ -952,8 +952,8 @@
             fixed data type. 
          </xs:documentation>
          <xs:documentation>
-         	DALI-compliant services should use vs:VOTableType here, others
-         	should use vs:SimpleDataType.
+         	DALI-compliant services should use VOTableType here, others
+         	should use SimpleDataType.
          </xs:documentation>
       </xs:annotation>
 
