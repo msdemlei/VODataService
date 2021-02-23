@@ -7,7 +7,7 @@ DOCNAME = VODataService
 DOCVERSION = 1.2
 
 # Publication date, ISO format; update manually for "releases"
-DOCDATE = 2019-07-15
+DOCDATE = 2021-02-23
 
 # What is it you're writing: NOTE, WD, PR, REC, PEN, or EN
 DOCTYPE = PR
@@ -18,11 +18,11 @@ SOURCES = $(DOCNAME).tex role_diagram.pdf ipac-resource.xml
 
 # List of image files to be included in submitted package (anything that
 # can be rendered directly by common web browsers)
-FIGURES = role_diagram.svg resclasses.pdf
+FIGURES = role_diagram.svg 
 
 # List of PDF figures (figures that must be converted to pixel images to
 # work in web browsers).
-VECTORFIGURES = 
+VECTORFIGURES = resclasses.pdf
 
 # Additional files to distribute (e.g., CSS, schema files, examples...)
 AUX_FILES = VODataService-v1.2.xsd
