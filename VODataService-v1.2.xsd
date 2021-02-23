@@ -872,9 +872,7 @@
                   There are no requirements for compliance with any 
                   particular UCD standard.  The format of the UCD can
                   be used to distinguish between UCD1, UCD1+, and
-                  SIA-UCD.  See 
-                  http://ivoa.net/Documents/latest/UCDlist.html
-                  for the latest IVOA standard set.  
+                  SIA-UCD.
                </xs:documentation>
             </xs:annotation>
          </xs:element>
@@ -954,21 +952,19 @@
             fixed data type. 
          </xs:documentation>
          <xs:documentation>
-            The allowed data type names do not imply a size or precise
-            format.  This type is intended to be sufficient for describing
-            an input parameter to a simple REST service or a function 
-            written in a weakly-typed language.
+         	DALI-compliant services should use vs:VOTableType here, others
+         	should use vs:SimpleDataType.
          </xs:documentation>
       </xs:annotation>
 
       <xs:complexContent>
          <xs:extension base="vs:BaseParam">
             <xs:sequence>
-               <xs:element name="dataType" type="vs:SimpleDataType" 
+               <xs:element name="dataType" type="vs:DataType" 
                            minOccurs="0">
                   <xs:annotation>
                      <xs:documentation>
-                        A type of data contained in the parameter
+                        A type of data contained in the parameter.
                      </xs:documentation>
                   </xs:annotation>
                </xs:element>

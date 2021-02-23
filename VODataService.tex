@@ -41,14 +41,10 @@ Collections and Services}
 \editor{Markus Demleitner}
 \editor{Ray Plante}
 
+\previousversion[https://ivoa.net/documents/VODataService/20190715/PR-VODataService-1.2-20190715.html]{PR-2019-07-15}
+\previousversion[https://ivoa.net/documents/VODataService/20181026/]{WD-2018-10-26}
 \previousversion[http://www.ivoa.net/Documents/VODataService/20101202]{REC
 1.1}
-\previousversion[http://www.ivoa.net/Documents/VODataService/20100916]{PR-20100916}
-\previousversion[http://www.ivoa.net/Documents/VODataService/20100914]{PR-20100914}
-\previousversion[http://www.ivoa.net/Documents/VODataService/20100412]{PR-20100412}
-\previousversion[http://www.ivoa.net/Documents/VODataService/20090903]{PR-20090903}
-\previousversion[http://www.ivoa.net/Documents/WD/ReR/VODataService-20090508.html]{WD-20090508}
-     
 
 \begin{document}
 \begin{abstract}
@@ -181,7 +177,7 @@ VODataService is closely related to the following other VO standards:
 schema for the responses on the table metadata endpoint.  It also
 defines the ParamHTTP interface type currently used in the capabilities of most
 standard protocols.
-\item[RefTAP, v1.0 \citep{2014ivoa.spec.1208D}] RegTAP maps the concepts
+\item[RegTAP, v1.0 \citep{2014ivoa.spec.1208D}] RegTAP maps the concepts
 defined here into a relational structure.  In that sense it is the
 user interface to what is specified here.
 \end{description}
@@ -377,10 +373,6 @@ misleading minor version is present in the namespace URI, but dropping
 it would break existing software for creating and processing
 VODataService instance documents.  Hence, the namespace URI ending in
 \verb|1.1| is also used for schema versions 1.2, 1.3, and so forth.
-
-While VODataService 1.2 is not in REC\todo{Remove this before going
-REC}, the draft schema file can be retrieved from the document
-repository\footnote{For this WD: \auxiliaryurl{VODataService-v1.2.xsd}}.
 
 Resolving the VODataService namespace URI will redirect to a schema
 document having the actual version number (for the schema associated
@@ -939,9 +931,7 @@ appropriate and the resource record size remains reasonable.
 Resources that need to communicate high-resolution spatial coverage,
 perhaps for some non-discovery use case, can use the \xmlel{footprint}
 element with its \xmlel{ivo-id} attribute set to
-\nolinkurl{ivo://ivoa.net/std/moc} \todo{This doesn't match what this
-ivo-id was originally intended to be.  Can we hijack it like this and
-change the semantics?} to declare a URL giving a 
+\nolinkurl{ivo://ivoa.net/std/moc} to declare a URL giving a 
 footprint in one of the approved MOC serialisations and of arbitrary
 level and size.
 
@@ -1285,10 +1275,7 @@ resource may provide access to several major astronomical catalogues
 (e.g., SDSS, 2MASS, and FIRST) from one site, enabling high-performance
 cross-correlations between them.  Each catalogue can be described in a
 separate \xmlel{schema} element, using the elements from
-the \xmlel{vs:TableSchema} type.\todo{Is is a good idea to use
-``default'' as the NULL value?  Or should we rather have minOccurs 0 for
-@name?}
-
+the \xmlel{vs:TableSchema} type.
 
 
 % GENERATED: !schemadoc VODataService-v1.2.xsd TableSchema
@@ -1419,7 +1406,7 @@ Each table in a schema is described in detail using the
     <xs:element name="title" type="xs:token" minOccurs="0" />
     <xs:element name="description" type="xs:token" minOccurs="0" />
     <xs:element name="utype" type="xs:token" minOccurs="0" />
-    <xs:element name="nrows" type="xs:NonNegativeInteger" minOccurs="0"
+    <xs:element name="nrows" type="xs:nonNegativeInteger" minOccurs="0"
               maxOccurs="1" />
     <xs:element name="column" type="vs:TableParam" minOccurs="0"
               maxOccurs="unbounded" />
@@ -1440,7 +1427,7 @@ Each table in a schema is described in detail using the
 \item[Meaning] 
                A name for the role this table plays.  Recognized
                values include “output”, indicating this table is output 
-               from a query; “base\_table{"}, indicating a table
+               from a query; “base\_table”, indicating a table
                whose records represent the main subjects of its
                schema; and “view”, indicating that the table represents
                a useful combination or subset of other tables.  Other 
@@ -1514,7 +1501,7 @@ Each table in a schema is described in detail using the
 \end{description}
 \item[Element \xmlel{nrows}]
 \begin{description}
-\item[Type] non-negative integer
+\item[Type] \xmlel{xs:nonNegativeInteger}
 \item[Meaning] 
                   The size of the table in rows.
                
@@ -1813,7 +1800,7 @@ containers.
                      
 \item[Occurrence] optional; up to 2 occurrences allowed.
 
-\item[Allowed Values]\hfil
+\item[Terms]\hfil
 \begin{longtermsdescription}
 \item[GET]
 \item[POST]
@@ -1882,8 +1869,10 @@ instance does not include any of these extended child elements, the
 use of \verb|xsi:type="vs:ParamHTTP"| indicates that the interface
 accessed via the URL given by the \xmlel{accessURL}
 element complies with the general parameter-based protocol described
-in this section.\todo{resultType stinks when we have DALI
-RESPONSEFORMAT.  Would anyone miss it?  If so, how can we fix it?}
+in this section.
+
+% resultType stinks when we have DALI RESPONSEFORMAT.  Let's think
+% about fixing this in 1.3.
 
 
 
@@ -2027,9 +2016,7 @@ metadata except the data type.
                   There are no requirements for compliance with any 
                   particular UCD standard.  The format of the UCD can
                   be used to distinguish between UCD1, UCD1+, and
-                  SIA-UCD.  See 
-                  http://ivoa.net/Documents/latest/UCDlist.html
-                  for the latest IVOA standard set.  
+                  SIA-UCD.
                
 
 \end{description}
@@ -2210,11 +2197,11 @@ provide an alternate data type name.  The name
 given in the type's element content, then, represents a commonly
 understood “fallback” type.  For instance, in VOTable, timestamps are
 serialised into strings, which implies a VOTableType of char with
-arraysize *, as supported by all VOTable readers.  VOTable readers
+arraysize \verb|*|, as supported by all VOTable readers.  VOTable readers
 interpreting the timestamp xtype, however, can turn this string into a
 timestamp value native to its clients.  Such readers will interpret
-a VOTable FIELD's xtype attribute. Such information is reflected in
-\xmlel{extendedType}.  
+a VOTable \xmlel{FIELD}'s \xmlel{xtype} attribute. 
+Such information is reflected in \xmlel{extendedType}.  
 
 Arbitrary information can also be
 provided via any prefix-qualified, globally defined attribute drawn
@@ -2242,13 +2229,9 @@ context permits.
 
 Actual parameters are normally described with types derived from
 \xmlel{vs:BaseParam}.  The \xmlel{vs:InputParam} is intended
-for describing an input parameter to a service or function.  In this
-version of VODataService, input parameters are restricted to be defined
-in terms of simple data types\todo{On the other hand,
-also allowing VOTable types here would help a lot with, e.g., SODA and
-friends.  If no objections are raised, we'll allow arbitrary type
-systems here in REC.} which do not
-imply a size or precise format. Rather, they are intended to be
+for describing an input parameter to a service or function.  In previous
+versions of VODataService, input parameters were restricted to be defined
+in terms of simple data types, which are intended to be
 sufficient for describing an input parameter to a simple REST-like
 service or a function in a weakly-typed language.  They are defined
 in \xmlel{vs:SimpleDataType}:
@@ -2329,8 +2312,25 @@ in \xmlel{vs:SimpleDataType}:
 
 % /GENERATED
 
-The \xmlel{vs:InputParam} class then is a \xmlel{vs:DataType}
-constrained to these types and furnished with additional metadata
+Since VODataService 1.2, input parameters can use any type system,
+where non-DALI-compliant services SHOULD use \xmlel{vs:SimpleDataType}
+and DALI-compliant services SHOULD use \xmlel{vs:VOTableType}.  To
+ensure schema validation catches error, resource record authors are
+advised to declare the type system intended using \xmlel{xsi:type}; for
+instance, an SSAP service might declare:
+
+\begin{lstlisting}[language=XML]
+  <param std="true">
+    <name>POS</name>
+    <description>ICRS position of target object</description>
+    <dataType arraysize="*" 
+      xsi:type="vs:VOTableType" 
+      extendedType="point">char</dataType>
+  </param>
+\end{lstlisting}
+
+The \xmlel{vs:InputParam} class then is a \xmlel{vs:BaseParam}
+furnished with additional metadata
 defining how to use the parameter and whether or not it is defined in
 the standard governing the capability the interface is in (if any):
 
@@ -2347,10 +2347,8 @@ the standard governing the capability the interface is in (if any):
          \par}
 
 \noindent{\small
-            The allowed data type names do not imply a size or precise
-            format.  This type is intended to be sufficient for describing
-            an input parameter to a simple REST service or a function 
-            written in a weakly-typed language.
+         	DALI-compliant services should use vs:VOTableType here, others
+         	should use vs:SimpleDataType.
          \par}
 
 \vspace{1ex}\noindent\textbf{\xmlel{vs:InputParam} Type Schema Definition}
@@ -2360,7 +2358,7 @@ the standard governing the capability the interface is in (if any):
   <xs:complexContent >
     <xs:extension base="vs:BaseParam" >
       <xs:sequence >
-        <xs:element name="dataType" type="vs:SimpleDataType" minOccurs="0" />
+        <xs:element name="dataType" type="vs:DataType" minOccurs="0" />
       </xs:sequence>
       <xs:attribute name="use" type="vs:ParamUse" default="optional" />
       <xs:attribute name="std" type="xs:boolean" default="true" />
@@ -2382,7 +2380,7 @@ the standard governing the capability the interface is in (if any):
                   
 \item[Occurrence] optional
 
-\item[Allowed Values]\hfil
+\item[Terms]\hfil
 \begin{longtermsdescription}
 \item[required]
                   The parameter is required for the application or
@@ -2422,9 +2420,9 @@ the standard governing the capability the interface is in (if any):
 
 \begingroup\small\begin{bigdescription}\item[Element \xmlel{dataType}]
 \begin{description}
-\item[Type] composite: \xmlel{vs:SimpleDataType}
+\item[Type] a string with optional attributes
 \item[Meaning] 
-                        A type of data contained in the parameter
+                        A type of data contained in the parameter.
                      
 \item[Occurrence] optional
 
@@ -2608,7 +2606,7 @@ of the array, not the array as a whole.
 The VODataService schema defines two type systems that derive from
 \xmlel{vs:TableDa\-taType}:  \xmlel{vs:VOTableType} and
 \xmlel{vs:TAPType}.  Following the move to VOTable-compatible type
-descriptions in TAP 1.1 \citep{todo:TAP1.1}, this version of
+descriptions in TAP 1.1 \citep{2019ivoa.spec.0927D}, this version of
 VODataService deprecates the use of \xmlel{vs:TAPType}.  New software
 should only generate \xmlel{vs:VOTableType}s in \xmlel{tableset}s.
 
@@ -2707,7 +2705,13 @@ explain their schema in an IVOA Note.
 \subsection{Changes since PR-20190715}
 
 \begin{itemize}
+\item dropped \verb|vs:Waveband| and changed waveband to being
+controlled by a vocabulary that initially grows a generic Photon and a
+Neutrino concept over what the previous Waveband had.
 \item table/@nrows is now constrained to be non-negative.
+\item Now allowing any vs:DataType element to define vs:InputParams.
+In order to still ensure schema validation of type names,
+now advising to have an explicit xsi:type in param's dataTypes.
 \end{itemize}
 
 \subsection{Changes since  WD-20181026}
