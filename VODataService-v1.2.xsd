@@ -123,7 +123,7 @@
                    </xs:documentation>
                    <xs:documentation>
                      Each schema name must be
-                     unique within this tableset.
+                     unique within a tableset.
                    </xs:documentation>
                  </xs:annotation>
 
@@ -773,7 +773,7 @@
             maxOccurs="1">
             <xs:annotation>
                <xs:documentation>
-                  The size of the table in rows.
+                  The approximate size of the table in rows.
                </xs:documentation>
                <xs:documentation>
                   This is not expected to be exact.  For instance, the
