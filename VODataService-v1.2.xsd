@@ -677,8 +677,7 @@
                        through this service.
                      </xs:documentation>
                      <xs:documentation>
-                       Each schema name and each table name must be
-                       unique within this tableset.
+                     	Each schema name must be unique within a tableset.
                      </xs:documentation>
                   </xs:annotation>
 
