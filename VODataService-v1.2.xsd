@@ -1083,7 +1083,7 @@
                   </xs:documentation>
                   <xs:documentation>
                      If an application does not recognize this
-                     extendedType, it should attempt to handle value
+                     extendedType, it should attempt to handle the value
                      assuming the type given by the element's value.
                      string is a recommended default type.
                   </xs:documentation>

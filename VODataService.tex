@@ -751,7 +751,7 @@ element.
 
 The \xmlel{vs:DataService} resource type has the same content model as
 \xmlel{vs:DataResource}.  It should be used instead of
-\xmlel{vs:DataResource} when the resource's capabilties give
+\xmlel{vs:DataResource} when the resource's capabilities give
 access to (essentially) only the resource's data, as for instance
 ``ftp service for the XY instrument'', or for a service giving access
 to multiple resources; in this latter case, the resource-level
@@ -781,7 +781,7 @@ for the motivation of this duplication.
 The \xmlel{vs:CatalogResource} resource type is used to describe a
 resource containing astronomical data or metadata in a set of one or
 more tables.  It extends \xmlel{vs:DataResource} and thus has metadata
-on coverage and the facilities and instruments that produced the
+on coverage as well as the facilities and instruments that produced the
 resource.  Additionally, \xmlel{vs:CatalogResource} instances SHOULD
 declare of the metadata of the table(s) making up the data
 \xmlel{tableset} element.
@@ -2247,7 +2247,7 @@ derive from a common parent, \xmlel{vs:DataType}.
 \item[Occurrence] optional
 \item[Comment] 
                      If an application does not recognize this
-                     extendedType, it should attempt to handle value
+                     extendedType, it should attempt to handle the value
                      assuming the type given by the element's value.
                      string is a recommended default type.
                   
@@ -2816,14 +2816,25 @@ explain their schema in an IVOA Note.
 
 \section{Changes from previous versions}
 
+\subsection{Changes since PR-20210223}
+
+\begin{itemize}
+\item Sect.~3.1: Added prose on how to pick the appropriate resource
+type.
+\item Schema: Various minor style fixes that should have no impact on
+validation.
+\end{itemize}
+
 \subsection{Changes since PR-20190715}
 
 \begin{itemize}
-\item dropped \verb|vs:Waveband| and changed waveband to being
+\item Sect.~\ref{sect:resext} and schema: 
+dropped \verb|vs:Waveband| and changed waveband to being
 controlled by a vocabulary that initially grows a generic Photon and a
 Neutrino concept over what the previous Waveband had.
-\item table/@nrows is now constrained to be non-negative.
-\item Now allowing any vs:DataType element to define vs:InputParams.
+\item Sect.~\ref{sect:table} and schema: table/@nrows is now constrained to be non-negative.
+\item Sect.~\ref{sect:inputparam} and schema:
+Now allowing any vs:DataType element to define vs:InputParams.
 In order to still ensure schema validation of type names,
 now advising to have an explicit xsi:type in param's dataTypes.
 \end{itemize}
@@ -2831,12 +2842,18 @@ now advising to have an explicit xsi:type in param's dataTypes.
 \subsection{Changes since  WD-20181026}
 
 \begin{itemize}
-\item Adding a summary of the discovering data collections EN.
-\item Spatial coverage now has a frame attribute.
-\item Added a SHOULD requirement on CatalogResources to have a tableset.
-\item Restricted interface/@testQuery to zero or one occurrences (this
+\item Sect.~\ref{sect:discoverdata}: 
+Added a summary of the discovering data collections EN.
+\item Sect.~\ref{sect:cover} and schema: 
+Spatial coverage now has a frame attribute.
+\item Sect.~\ref{sect:CatalogResource}: 
+Added a SHOULD requirement on CatalogResources to 
+have a tableset.
+\item Sect.~\ref{sect:paramif} and schema: 
+Restricted interface/@testQuery to zero or one occurrences (this
 is because there is no clear semantics to having multiple of those).
-\item Sanctioning the use of footprint/@ivo-id to indicate the footprint 
+\item Sect.~\ref{sect:cover}:
+Sanctioning the use of footprint/@ivo-id to indicate the footprint 
 standard used (which, of course, totally goes against the semantics of
 ServiceReference underlying footprint).
 \end{itemize}
@@ -2844,27 +2861,35 @@ ServiceReference underlying footprint).
 \subsection{Changes since REC-1.1}
 
 \begin{itemize}
-\item Deprecated STCResourceProfile and replaced it with
+\item Sect.~\ref{sect:cover} and schema: Deprecated STCResourceProfile and replaced it with
 \xmlel{spatial}, \xmlel{temporal}, and \xmlel{spectral} elements.
-\item Introduced new DataResource and CatalogResource resource types
+\item Sect.~\ref{sect:resext} and schema: 
+Introduced new DataResource and CatalogResource resource types
 and wove them into the inheritance hierarchy to CatalogService; these
 are to be used for ``dependent'' resources.
-\item Deprecated DataCollection and StandardSTC (which are no longer
+\item Sect.~\ref{sect:cover}:
+Deprecated DataCollection and StandardSTC (which are no longer
 needed).
-\item Added an nrows element to \xmlel{vs:Table}.
-\item Required inclusion of quotes for delimited identifiers in a
+\item Sect.~\ref{sect:table} 
+and schema: Added an nrows element to \xmlel{vs:Table}.
+\item Sect.~\ref{sect:table}: 
+Required inclusion of quotes for delimited identifiers in a
 SQL context.
-\item DataType/@arraysize no longer defaults to 1, and the
+\item Sect.~\ref{sect:param} and schema: 
+DataType/@arraysize no longer defaults to 1, and the
 interpretation of arraysize=1 as a scalar is withdrawn.  Use empty
 arraysize for scalars now.
-\item BaseParam's delim attribute no longer defaults to blank.  That
+\item Sect.~\ref{sect:param} and schema:
+BaseParam's delim attribute no longer defaults to blank.  That
 would be very unfortunate with VOTable, where other conventions are in
 place (e.g., for string arrays).  Now discouraging the use of delim
 outside of InputParams.
-\item Deprecated TAPType.
-\item extendedType is now defined to correspond to VOTable xtypes in the
+\item Sect.~\ref{sect:tbldatatypes}: Deprecated TAPType.
+\item Sect.~\ref{sect:tbldatatypes}: 
+extendedType is now defined to correspond to VOTable xtypes in the
 absence of extendedSchema.
-\item No longer requiring unique table names within a tableset;
+\item Sect.~\ref{sect:table}: 
+No longer requiring unique table names within a tableset;
 uniquness is now required within a schema (actually, many services have
 been in violation of the old unique-within-tableset rule for a long time
 without operational difficulties); but then that's largely a moot point
@@ -2884,9 +2909,9 @@ required.
 
 \begin{itemize}
   \item added change history for PR-20100412.
-  \item added Note about STC mark-up in 3.2
+  \item added Note about STC mark-up in \ref{sect:cover}
   \item reworded sentence describing content of \xmlel{vs:DataType} in
-       section 3.5.
+       section \ref{sect:param}.
 \end{itemize}
 
 \subsection{Changes since PR-20100412}
