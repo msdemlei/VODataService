@@ -1209,7 +1209,7 @@ follows:
       	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:ServiceReference} Type Schema Documentation}
 
 \noindent{\small
-           The service URL for a potentially registerd service.  That is,
+           The service URL for a potentially registered service.  That is,
            if an IVOA identifier is also provided, then the service is 
            described in a registry.
          \par}
@@ -1407,10 +1407,9 @@ the \xmlel{vs:TableSchema} type.
 \begin{lstlisting}[language=XML,basicstyle=\footnotesize]
 <xs:complexType name="TableSchema" >
   <xs:sequence >
-    <xs:element name="name" type="xs:token" minOccurs="1" maxOccurs="1" />
+    <xs:element name="name" type="xs:token" minOccurs="1" />
     <xs:element name="title" type="xs:token" minOccurs="0" />
-    <xs:element name="description" type="xs:token" minOccurs="0"
-              maxOccurs="1" />
+    <xs:element name="description" type="xs:token" minOccurs="0" />
     <xs:element name="utype" type="xs:token" minOccurs="0" />
     <xs:element name="table" type="vs:Table" minOccurs="0"
               maxOccurs="unbounded" />
@@ -1516,12 +1515,11 @@ Each table in a schema is described in detail using the
 \begin{lstlisting}[language=XML,basicstyle=\footnotesize]
 <xs:complexType name="Table" >
   <xs:sequence >
-    <xs:element name="name" type="xs:token" minOccurs="1" maxOccurs="1" />
+    <xs:element name="name" type="xs:token" minOccurs="1" />
     <xs:element name="title" type="xs:token" minOccurs="0" />
     <xs:element name="description" type="xs:token" minOccurs="0" />
     <xs:element name="utype" type="xs:token" minOccurs="0" />
-    <xs:element name="nrows" type="xs:nonNegativeInteger" minOccurs="0"
-              maxOccurs="1" />
+    <xs:element name="nrows" type="xs:nonNegativeInteger" minOccurs="0" />
     <xs:element name="column" type="vs:TableParam" minOccurs="0"
               maxOccurs="unbounded" />
     <xs:element name="foreignKey" type="vs:ForeignKey" minOccurs="0"
@@ -1892,12 +1890,10 @@ containers.
       <xs:sequence >
         <xs:element name="queryType" type="vs:HTTPQueryType" minOccurs="0"
                   maxOccurs="2" />
-        <xs:element name="resultType" type="xs:token" minOccurs="0"
-                  maxOccurs="1" />
+        <xs:element name="resultType" type="xs:token" minOccurs="0" />
         <xs:element name="param" type="vs:InputParam" minOccurs="0"
                   maxOccurs="unbounded" />
-        <xs:element name="testQuery" type="xs:string" minOccurs="0"
-                  maxOccurs="1" />
+        <xs:element name="testQuery" type="xs:string" minOccurs="0" />
       </xs:sequence>
     </xs:extension>
   </xs:complexContent>
@@ -2646,8 +2642,12 @@ a table.
                      
 \item[Occurrence] optional; multiple occurrences allowed.
 \item[Comment] 
-                        See the specification document for definitions 
-                        of recognized keywords.
+                     	While other values are allowed, the following semantics
+                     	is defined by this specification: indexed – The column
+                     	has an index on it for faster search against its values;
+                     	primary – The values column in the column represent in
+                     	total or in part a primary key for its table; nullable –
+                     	the column may contain null or empty values. 
                      
 
 \end{description}
