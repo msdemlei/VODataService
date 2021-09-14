@@ -467,6 +467,7 @@ interfaces) and
 \xmlel{vs:VOTableType} (for table columns) should be used.
 
 \subsubsection{VODataService Resource Classes}
+\label{sect:rescls}
 
 \begin{figure}
 \includegraphics{resclasses.pdf}
@@ -619,34 +620,8 @@ VODataService extension schema and describes their meaning.
 \subsection{VODataService Resource Types}
 \label{sect:resext}
 
-VODataService defines four non-deprecated resource types that differ in
-whether they admit a natural relational description (i.e., have or do
-not have a tableset) and whether they have services exclusive to them.
-The classical counterexamples to the latter would be a table published
-within a large TAP service or a collection of datasets published through
-an observatory's obscore table.
-
-In 2021, almost all Resources in the VO were
-\xmlel{vs:CatalogService}-s, including in particular essentially all
-services implementing the VO's S-protocols (SCS, SIAP, SSAP), as all of
-these assume an underlying relational representation.  We expect the use
-of \xmlel{vs:CatalogResources}-s to increase as more data collections
-are published exclusively through advanced, naturally multi-resource
-protocols like TAP and Obscore.
-
-See Fig.~\ref{tab:restypes} for a sketch of when to use what resource
-class.
-
-\begin{figure}
-\begin{tabular}{p{0.27\textwidth}|p{0.27\textwidth}p{0.4\textwidth}}
-&dedicated service&served through another service\\
-\sptablerule
-non-relational data&\xmlel{vs:DataService}&\xmlel{vs:DataResource}\\
-relational-data&\xmlel{vs:CatalogService}&\xmlel{vs:CatalogResource}\\
-\end{tabular}
-\caption{Usage matrix of the four main VODataService resource types.}
-\label{tab:restypes}
-\end{figure}
+For an overview of the systematics of the following resource types,
+please see Sect.~\ref{sect:rescls}.
 
 \subsubsection{DataResource}
 \label{sect:DataResource}
