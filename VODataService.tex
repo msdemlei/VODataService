@@ -1140,7 +1140,67 @@ This element is imported from another schema.  See
 
 % /GENERATED
 
-The coverage uses three new types, \xmlel{vs:FloatInterval},
+In order to avoid future ambiguity in the spatial coverage, we already
+add a \xmlel{frame} attribute to the \xmlel{spatial} element.  In its
+absence, the MOC contained is for ICRS coordinates.  Any value indicates
+non-celestial coordinates, where actual, interoperable values are not
+defined here.
+
+
+% GENERATED: !schemadoc VODataService-v1.2.xsd SpatialCoverage
+\begin{generated}
+\begingroup
+      	\renewcommand*\descriptionlabel[1]{%
+      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:SpatialCoverage} Type Schema Documentation}
+
+\noindent{\small
+            A coverage on a sphere.  By default, this refers to the
+            celestial sphere in the ICRS frame.  Non-celestial frames
+            are indicated by non-NULL values of the frame attribute.
+         \par}
+
+\vspace{1ex}\noindent\textbf{\xmlel{vs:SpatialCoverage} Type Schema Definition}
+
+\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
+<xs:complexType name="SpatialCoverage" >
+  <xs:simpleContent >
+    <xs:extension base="xs:token" >
+      <xs:attribute name="frame" type="xs:token" />
+    </xs:extension>
+  </xs:simpleContent>
+</xs:complexType>
+\end{lstlisting}
+
+\vspace{0.5ex}\noindent\textbf{\xmlel{vs:SpatialCoverage} Attributes}
+
+\begingroup\small\begin{bigdescription}
+\item[frame]
+\begin{description}
+\item[Type] string: \xmlel{xs:token}
+\item[Meaning] 
+                     When present, the MOC is written in a non-celestial (e.g., 
+                     planetary) frame.  Note that for celestial coverages,
+                     ICRS must be used.
+                  
+\item[Occurrence] optional
+\item[Comment] 
+                     VODataService 1.2 does not prescribe a vocabulary for 
+                     what values are allowed here.  As
+                     long as no such vocabulary is agreed upon, the frame
+                     attribute should not be set.
+                  
+\end{description}
+
+
+\end{bigdescription}\endgroup
+
+\endgroup
+\end{generated}
+
+% /GENERATED
+
+
+Coverage declaration makes use of three types, \xmlel{vs:FloatInterval},
 \xmlel{vs:ServiceReference}, and \xmlel{vs:SpatialCoverage}, defined as
 follows:
 
@@ -1222,64 +1282,6 @@ follows:
 
 % /GENERATED
 
-In order to avoid future ambiguity in the spatial coverage, we already
-add a \xmlel{frame} attribute to the \xmlel{spatial} element.  In its
-absence, the MOC contained is for ICRS coordinates.  Any value indicates
-non-celestial coordinates, where actual, interoperable values are not
-defined here.
-
-
-% GENERATED: !schemadoc VODataService-v1.2.xsd SpatialCoverage
-\begin{generated}
-\begingroup
-      	\renewcommand*\descriptionlabel[1]{%
-      	\hbox to 5.5em{\emph{#1}\hfil}}\vspace{2ex}\noindent\textbf{\xmlel{vs:SpatialCoverage} Type Schema Documentation}
-
-\noindent{\small
-            A coverage on a sphere.  By default, this refers to the
-            celestial sphere in the ICRS frame.  Non-celestial frames
-            are indicated by non-NULL values of the frame attribute.
-         \par}
-
-\vspace{1ex}\noindent\textbf{\xmlel{vs:SpatialCoverage} Type Schema Definition}
-
-\begin{lstlisting}[language=XML,basicstyle=\footnotesize]
-<xs:complexType name="SpatialCoverage" >
-  <xs:simpleContent >
-    <xs:extension base="xs:token" >
-      <xs:attribute name="frame" type="xs:token" />
-    </xs:extension>
-  </xs:simpleContent>
-</xs:complexType>
-\end{lstlisting}
-
-\vspace{0.5ex}\noindent\textbf{\xmlel{vs:SpatialCoverage} Attributes}
-
-\begingroup\small\begin{bigdescription}
-\item[frame]
-\begin{description}
-\item[Type] string: \xmlel{xs:token}
-\item[Meaning] 
-                     When present, the MOC is written in a non-celestial (e.g., 
-                     planetary) frame.  Note that for celestial coverages,
-                     ICRS must be used.
-                  
-\item[Occurrence] optional
-\item[Comment] 
-                     VODataService 1.2 does not prescribe a vocabulary for 
-                     what values are allowed here.  As
-                     long as no such vocabulary is agreed upon, the frame
-                     attribute should not be set.
-                  
-\end{description}
-
-
-\end{bigdescription}\endgroup
-
-\endgroup
-\end{generated}
-
-% /GENERATED
 
 \subsection{Tabular Data}
 \label{sect:table}
