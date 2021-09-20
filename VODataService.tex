@@ -543,7 +543,7 @@ services\dots'') needs to be performed.  For data discovery (``Where are
 images from instrument X of object Y?''), a selection over all
 \emph{collections} needs to be made.
 
-The solution eventually adopted for these problems are auxiliary
+The solution eventually adopted for these problems is auxiliary
 capabilities as introduced in DDC.  They provide stubs merely
 identifying an access protocol -- at the same time identifying the
 capability as an auxiliary one --  and access URLs, delegating all
@@ -1977,7 +1977,7 @@ interface type when it is applicable.
 
 
 Normally, a VOResource
-description indicates its support for a standard protocol with
+description indicates its support for a standard protocol with a
 \xmlel{capability} element having a
 \xmlel{standardID} attribute set to specific URI representing the
 standard.  The standard will usually spell out the HTTP query type,
@@ -2000,7 +2000,7 @@ interface.  In particular, description may include
 
 
 Listing required parameters is allowed, even when
-describing a standard interface as long as these are consistent with
+describing a standard interface, as long as these are consistent with
 the service specification and the corresponding \xmlel{param}
 elements include the attribute \verb|std="true"| (see
 section~\ref{sect:inputparam}).  The \xmlel{param}
@@ -2857,7 +2857,7 @@ DataType/@arraysize no longer defaults to 1, and the
 interpretation of arraysize=1 as a scalar is withdrawn.  Use empty
 arraysize for scalars now.
 \item Sect.~\ref{sect:param} and schema:
-BaseParam's delim attribute no longer defaults to blank.  That
+DataType's delim attribute no longer defaults to blank.  That
 would be very unfortunate with VOTable, where other conventions are in
 place (e.g., for string arrays).  Now discouraging the use of delim
 outside of InputParams.
