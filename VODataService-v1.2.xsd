@@ -867,9 +867,7 @@
                </xs:documentation>
                <xs:documentation>
                   There are no requirements for compliance with any 
-                  particular UCD standard.  The format of the UCD can
-                  be used to distinguish between UCD1, UCD1+, and
-                  SIA-UCD.
+                  particular UCD standard.
                </xs:documentation>
             </xs:annotation>
          </xs:element>

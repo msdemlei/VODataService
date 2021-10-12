@@ -89,7 +89,7 @@ http://nedwww.ipac.caltech.edu/cgi-bin/nph-datasearch?search_type=Redshifts&amp;
              The object's name in NED's standard format, of the object 
              to which the data apply.
           </description>
-          <ucd>meta.id;name</ucd>
+          <ucd>meta.id</ucd>
           <dataType xsi:type="vs:VOTableType" arraysize="*">char</dataType>
         </column>
         <column>
@@ -99,7 +99,7 @@ http://nedwww.ipac.caltech.edu/cgi-bin/nph-datasearch?search_type=Redshifts&amp;
             of some spectral feature, in km/sec
           </description>
           <unit>km/sec</unit>
-          <ucd>src.spect.dopplerVeloc</ucd>
+          <ucd>spect.dopplerVeloc</ucd>
           <dataType xsi:type="vs:VOTableType">int</dataType>
         </column>
       </table>
