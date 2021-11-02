@@ -40,6 +40,7 @@ Collections and Services}
 \editor{Markus Demleitner}
 \editor{Ray Plante}
 
+\previousversion[https://ivoa.net/documents/VODataService/20190715/PR-VODataService-1.2-20210223.html]{PR-2021-02-23}
 \previousversion[https://ivoa.net/documents/VODataService/20190715/PR-VODataService-1.2-20190715.html]{PR-2019-07-15}
 \previousversion[https://ivoa.net/documents/VODataService/20181026/]{WD-2018-10-26}
 \previousversion[http://www.ivoa.net/Documents/VODataService/20101202]{REC
@@ -1201,7 +1202,7 @@ defined here.
 
 
 Coverage declaration makes use of three types, \xmlel{vs:FloatInterval},
-\xmlel{vs:ServiceReference}, and \xmlel{vs:SpatialCoverage}, defined as
+\xmlel{vs:Service\-Reference}, and \xmlel{vs:SpatialCoverage}, defined as
 follows:
 
 
@@ -1810,7 +1811,7 @@ desired:
 
 \item Apply a globally-defined attribute from a schema other than
        VODataService (i.e. from a namespace other than
-       \url{http://www.ivoa.net/xml/VODataService/v1.1}) to any of the
+       \url{http://www.ivoa.net/xml/VODataSer\-vice/v1.1}) to any of the
        \xmlel{tableset}, \xmlel{schema},
        \xmlel{table}, and/or \xmlel{column}
        elements.
@@ -2794,10 +2795,10 @@ explain their schema in an IVOA Note.
 \subsection{Changes since PR-20210223}
 
 \begin{itemize}
-\item Sect.~3.1: Added prose on how to pick the appropriate resource
-type.
-\item Schema: Various minor style fixes that should have no impact on
-validation.
+\item Numerous editorial changes after RFC comments without
+impact on the normative content.
+\item Schema: Minor style fixes (e.g., removing gratuitous maxOccurs)
+without impact on document validity.
 \end{itemize}
 
 \subsection{Changes since PR-20190715}
