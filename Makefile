@@ -18,7 +18,7 @@ SOURCES = $(DOCNAME).tex role_diagram.pdf ipac-resource.xml
 
 # List of image files to be included in submitted package (anything that
 # can be rendered directly by common web browsers)
-FIGURES = role_diagram.svg 
+FIGURES = role_diagram.svg
 
 # List of PDF figures (figures that must be converted to pixel images to
 # work in web browsers).
@@ -29,9 +29,6 @@ AUX_FILES = VODataService-v1.2.xsd
 
 AUTHOR_EMAIL=msdemlei@ari.uni-heidelberg.de
 
-%.pdf: %.tex
-	pdflatex $<
-
 %.pdf: %.psfig
 	ps2pdf -dEPSCrop $*.psfig $*.pdf
 
@@ -41,4 +38,12 @@ AUTHOR_EMAIL=msdemlei@ari.uni-heidelberg.de
 	ps2epsi $*.ps $*.psfig
 	rm $*.ps
 
-include ivoatex/Makefile
+-include ivoatex/Makefile
+
+ivoatex/Makefile:
+	@echo "*** ivoatex submodule not found.  Initialising submodules."
+	@echo
+	git submodule update --init
+
+test:
+	@echo "No tests defined yet"
